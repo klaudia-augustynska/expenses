@@ -29,7 +29,9 @@
                              x:Name="password"></PasswordBox>
             </Grid>
 
-            <Button  Style="{StaticResource field}" x:Name="logowanie">Zaloguj</Button>
+            <Button  Style="{StaticResource field}" x:Name="logowanie"
+                     Command="{Binding Zaloguj}"
+                     CommandParameter="{Binding ElementName=password}">Zaloguj</Button>
         </StackPanel>
     </Grid>
 </UserControl>

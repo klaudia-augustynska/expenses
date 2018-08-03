@@ -9,27 +9,26 @@ using Microsoft.Azure.WebJobs.Host;
 
 namespace Expenses.Api.Users
 {
-    public static class AddUser
+    public static class LogIn
     {
-        [FunctionName("AddUser")]
+        [FunctionName("LogIn")]
         public static HttpResponseMessage Run(
-            [HttpTrigger( 
-                AuthorizationLevel.Function,
+            [HttpTrigger(
+                AuthorizationLevel.Function, 
                 "get", 
-                "post", 
-                Route = "users/add/{login}/{password}")
-            ]HttpRequestMessage req, 
+                "post",
+                Route = "users/login/{login}/{password}")
+            ]HttpRequestMessage req,
             string login,
             string password,
-            [Table("ExpensesApp")]ICollector<User> outTable,
             [Table("ExpensesApp", "user_{login}", "{password}")] User entity,
             TraceWriter log)
         {
-            log.Info("Request to AddUser");
+            log.Info("Request to LogIn");
 
             if (login == null)
             {
-                log.Info("AddUser response: BadRequest - login is null");
+                log.Info("LogIn response: BadRequest - login is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a login on the query string or in the request body");
@@ -37,30 +36,22 @@ namespace Expenses.Api.Users
             }
             if (password == null)
             {
-                log.Info("AddUser response: BadRequest - password is null");
+                log.Info("LogIn response: BadRequest - password is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a password on the query string or in the request body");
             }
-            if (entity != null)
+            if (entity == null)
             {
-                log.Info($"AddUser response: BadRequest - entity with PK=user_{login} and RK={password} already exists");
+                log.Info($"LogIn response: BadRequest - no such entity entity with PK=user_{login} and RK={password}");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "User with given login and password already exists"
+                    value: "User with given login and password does not exist"
                     );
             }
 
-            outTable.Add(new User()
-            {
-                PartitionKey = $"user_{login}",
-                RowKey = password,
-                Login = login,
-                Password = password
-            });
-
-            log.Info($"AddUser response: Created - entity with PK=user_{login} and RK={password}");
-            return req.CreateResponse(HttpStatusCode.Created);
+            log.Info($"LogIn response: OK - user {login} has been authenticated");
+            return req.CreateResponse(HttpStatusCode.OK, "Successfully logged in");
         }
     }
 }

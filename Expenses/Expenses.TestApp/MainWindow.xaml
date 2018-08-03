@@ -17,9 +17,13 @@
         <DataTemplate x:Key="logowanie">
             <views:Logowanie/>
         </DataTemplate>
+        <DataTemplate x:Key="stronaGlowna">
+            <views:StronaGlowna/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
-                              Logowanie="{StaticResource logowanie}"/>
+                              Logowanie="{StaticResource logowanie}"
+                              StronaGlowna="{StaticResource stronaGlowna}"/>
     </Window.Resources>
     
     <Grid>

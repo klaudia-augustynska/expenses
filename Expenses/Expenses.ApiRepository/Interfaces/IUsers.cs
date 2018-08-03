@@ -16,5 +16,13 @@ namespace Expenses.ApiRepository.Interfaces
         /// <param name="password"></param>
         /// <returns>HttpStatusCode.Created jeśli sukces</returns>
         Task<HttpResponseMessage> Add(string login, string password);
+
+        /// <summary>
+        /// HttpStatusCode.OK jeśli sukces
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <returns>HttpStatusCode.OK jeśli sukces</returns>
+        Task<HttpResponseMessage> LogIn(string login, string password);
     }
 }

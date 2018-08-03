@@ -9,18 +9,18 @@ namespace Expenses.TestApp.ViewModels
 {
     class MainWindowVm : BazowyVm
     {
-        private readonly Nawigacja _navigationService;
+        private readonly Nawigacja _nawigacja;
 
-        public MainWindowVm(Nawigacja navigationService)
+        public MainWindowVm(Nawigacja nawigacja)
         {
-            _navigationService = navigationService;
-            _navigationService.ZmianaIlosciOtwartychStron += 
+            _nawigacja = nawigacja;
+            _nawigacja.ZmianaIlosciOtwartychStron += 
                 () =>
                 {
                     NotifyPropertyChanged(nameof(IloscOtwartychStron));
                     Wroc.RaiseCanExecuteChanged();
                 };
-            Wroc = new DelegateCommand(WrocExec, WrocCanExec);
+            Wroc = new DelegateCommand(WrocExecute, WrocCanExecute);
         }
 
         private BazowyVm _vm;
@@ -30,7 +30,7 @@ namespace Expenses.TestApp.ViewModels
             {
                 if (_vm != null)
                     return _vm;
-                return _navigationService.DomyslnyVm;
+                return _nawigacja.DomyslnyVm;
             }
             set
             {
@@ -41,17 +41,17 @@ namespace Expenses.TestApp.ViewModels
 
         public int IloscOtwartychStron
         {
-            get { return _navigationService.IloscOtwartych; }
+            get { return _nawigacja.IloscOtwartych; }
         }
 
         public DelegateCommand Wroc { get; }
-        private void WrocExec()
+        private void WrocExecute()
         {
-            _navigationService.Wroc();
+            _nawigacja.Wroc();
         }
-        private bool WrocCanExec()
+        private bool WrocCanExecute()
         {
-            return _navigationService.IloscOtwartych > 0;
+            return _nawigacja.IloscOtwartych > 0;
         }
     }
 }

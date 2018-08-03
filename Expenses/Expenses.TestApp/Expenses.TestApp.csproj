@@ -68,6 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\StronaGlowna.xaml.cs">
+      <DependentUpon>StronaGlowna.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +97,7 @@
     <Compile Include="ViewModels\LogowanieVm.cs" />
     <Compile Include="ViewModels\MainWindowVm.cs" />
     <Compile Include="ViewModels\RejestracjaVm.cs" />
+    <Compile Include="ViewModels\StronaGlownaVm.cs" />
     <Compile Include="ViewSelector.cs" />
     <Compile Include="Views\Logowanie.xaml.cs">
       <DependentUpon>Logowanie.xaml</DependentUpon>
@@ -103,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StronaGlowna.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

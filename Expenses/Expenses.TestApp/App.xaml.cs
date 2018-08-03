@@ -26,6 +26,8 @@ namespace Expenses.TestApp
             var container = new UnityContainer();
             container.RegisterSingleton<Nawigacja>();
             container.RegisterSingleton<RejestracjaVm>();
+            container.RegisterSingleton<LogowanieVm>();
+            container.RegisterSingleton<StronaGlownaVm>();
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));

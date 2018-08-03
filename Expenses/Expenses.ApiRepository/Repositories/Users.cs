@@ -25,5 +25,14 @@ namespace Expenses.ApiRepository.Repositories
                 return await httpClient.GetAsync(uri);
             }
         }
+
+        public async Task<HttpResponseMessage> LogIn(string login, string password)
+        {
+            var uri = BaseUri.Append("login", login, password);
+            using (var httpClient = new HttpClient())
+            {
+                return await httpClient.GetAsync(uri);
+            }
+        }
     }
 }

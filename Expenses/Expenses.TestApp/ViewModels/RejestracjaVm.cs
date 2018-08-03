@@ -13,16 +13,18 @@ namespace Expenses.TestApp.ViewModels
 
         private readonly Nawigacja _nawigacja;
         private readonly Repository _repozytorium;
+        private readonly LogowanieVm _logowanieVm;
 
-        public RejestracjaVm(Nawigacja navigationService, LogowanieVm logowanieVm, Repository repozytorium)
+        public RejestracjaVm(Nawigacja nawigacja, LogowanieVm logowanieVm, Repository repozytorium)
         {
-            _nawigacja = navigationService;
+            _nawigacja = nawigacja;
             _nawigacja.ZmianaIlosciOtwartychStron += 
                 () => Zarejestruj.RaiseCanExecuteChanged();
             _repozytorium = repozytorium;
+            _logowanieVm = logowanieVm;
+
             Zarejestruj = new DelegateCommand<PasswordBox>(ZarejestrujExecute, ZarejestrujCanExecute);
             PrzejdzDoLogowania = new DelegateCommand(PrzejdzDoLogowaniaExecute, PrzejdzDoLogowaniaCanExecute);
-            LogowanieVm = logowanieVm;
         }
 
         private string _login;
@@ -48,8 +50,6 @@ namespace Expenses.TestApp.ViewModels
             }
         }
 
-        private LogowanieVm LogowanieVm { get; }
-
         private PasswordBox ostatnioSledzonyPasswordBox;
         public DelegateCommand<PasswordBox> Zarejestruj { get; }
         private async void ZarejestrujExecute(PasswordBox passwordBox)
@@ -67,7 +67,7 @@ namespace Expenses.TestApp.ViewModels
                         {
                             Application.Current.Dispatcher.Invoke(() => {
                                 PokazProgress = false;
-                                _nawigacja.IdzDo(LogowanieVm);
+                                _nawigacja.IdzDo(_logowanieVm);
                             });
                         }
                         else
@@ -87,7 +87,7 @@ namespace Expenses.TestApp.ViewModels
                     {
                         Application.Current.Dispatcher.Invoke(() => {
                             PokazProgress = false;
-                            var msg = string.Format("Błąd logowania. Status: {0}, Błędy: {1}", x.Status, x.Exception);
+                            var msg = string.Format("Błąd przy tworzeniu użytkownika. Status: {0}, Błędy: {1}", x.Status, x.Exception);
                             MessageBox.Show(msg);
                             Log.Debug(msg);
                         });
@@ -121,11 +121,11 @@ namespace Expenses.TestApp.ViewModels
         public DelegateCommand PrzejdzDoLogowania { get; }
         private void PrzejdzDoLogowaniaExecute()
         {
-            _nawigacja.IdzDo(LogowanieVm);
+            _nawigacja.IdzDo(_logowanieVm);
         }
         private bool PrzejdzDoLogowaniaCanExecute()
         {
-            return _nawigacja != null && LogowanieVm != null;
+            return _nawigacja != null && _logowanieVm != null;
         }
     }
 }

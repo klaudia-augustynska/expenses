@@ -42,5 +42,11 @@ namespace Expenses.TestApp
         {
             get { return _otwarteStrony.Count; }
         }
+
+        public void KasujHistorie()
+        {
+            _otwarteStrony.Clear();
+            ZmianaIlosciOtwartychStron?.Invoke();
+        }
     }
 }

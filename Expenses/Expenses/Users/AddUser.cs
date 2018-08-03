@@ -12,7 +12,7 @@ namespace Expenses.Api.Users
     public static class AddUser
     {
         [FunctionName("AddUser")]
-        public static async Task<HttpResponseMessage> Run(
+        public static HttpResponseMessage Run(
             [HttpTrigger( 
                 AuthorizationLevel.Function,
                 "get", 

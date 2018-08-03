@@ -4,7 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Expenses.TestApp"
-        mc:Ignorable="d">
+             xmlns:converters="clr-namespace:Expenses.TestApp.Converters"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"
+                                              CollapsedNotHidden="False"/>
+    </UserControl.Resources>
+    
     <Grid Style="{StaticResource mainGrid}">
         <StackPanel>
             <TextBlock Style="{StaticResource h1}">Rejestracja</TextBlock>
@@ -20,21 +27,26 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Style="{StaticResource field}">Login:</TextBlock>
-                <TextBox  Style="{StaticResource field}" Grid.Column="1" 
-                          x:Name="login" Text="{Binding Login}"></TextBox>
+                <TextBox  Style="{StaticResource field}" Grid.Column="1" x:Name="login" 
+                          Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 <TextBlock  Style="{StaticResource field}" Grid.Row="1">Hasło:</TextBlock>
-                <PasswordBox Style="{StaticResource field}"  Grid.Row="1" Grid.Column="1" 
-                             x:Name="password"></PasswordBox>
+                <PasswordBox Style="{StaticResource field}"  Grid.Row="1" Grid.Column="1" x:Name="password"></PasswordBox>
             </Grid>
+
+            <ProgressBar IsIndeterminate="True"
+                         Margin="0,0,0,10"
+                         Visibility="{Binding PokazProgress, Converter={StaticResource boolToVisibilityConverter}}"/>
 
             <Button  Style="{StaticResource field}" 
                      x:Name="zarejestruj"
-                     Command="{Binding Zarejestruj}">Zarejestruj</Button>
+                     Command="{Binding Zarejestruj}"
+                     CommandParameter="{Binding ElementName=password}">Zarejestruj</Button>
 
             <Button  Style="{StaticResource field}" 
                      x:Name="przejdźDoLogowania"
                      Command="{Binding PrzejdzDoLogowania}">Przejdź do logowania</Button>
+            
         </StackPanel>
     </Grid>
 </UserControl>

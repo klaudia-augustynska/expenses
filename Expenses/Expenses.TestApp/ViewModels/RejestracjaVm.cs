@@ -56,14 +56,30 @@ namespace Expenses.TestApp.ViewModels
                 PokazProgress = true;
             });
             await _repozytorium.UsersRepository.Add(Login, passwordBox.Password)
-                .ContinueWith(x =>
+                .ContinueWith(async x =>
                 {
                     if (x.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
                     {
-                        Application.Current.Dispatcher.Invoke(() => {
-                            PokazProgress = false;
-                            _nawigacja.IdzDo(LogowanieVm);
-                        });
+                        if (x.Result != null 
+                        && x.Result.StatusCode == System.Net.HttpStatusCode.Created)
+                        {
+                            Application.Current.Dispatcher.Invoke(() => {
+                                PokazProgress = false;
+                                _nawigacja.IdzDo(LogowanieVm);
+                            });
+                        }
+                        else
+                        {
+                            var blad = await x.Result.Content.ReadAsStringAsync();
+                            Application.Current.Dispatcher.Invoke(() => {
+                                PokazProgress = false;
+                                var msg = string.Format("Nie można utworzyć użytkownika. Status http: {0}, Błąd: {1}",
+                                    x.Result.StatusCode.ToString(),
+                                    blad);
+                                MessageBox.Show(msg);
+                                Log.Debug(msg);
+                            });
+                        }
                     }
                     else
                     {

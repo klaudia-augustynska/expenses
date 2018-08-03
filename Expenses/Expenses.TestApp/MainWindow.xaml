@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:testapp="clr-namespace:Expenses.TestApp"
         xmlns:views="clr-namespace:Expenses.TestApp.Views"
+        xmlns:converters="clr-namespace:Expenses.TestApp.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <Window.Resources>
-        <testapp:IloscStronVisibilityConverter x:Key="iloscStronVisibilityConverter"/>
+        <converters:IloscStronVisibilityConverter x:Key="iloscStronVisibilityConverter"/>
         <DataTemplate x:Key="rejestracja">
             <views:Rejestracja/>
         </DataTemplate>

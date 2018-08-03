@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Expenses.TestApp
+namespace Expenses.TestApp.Converters
 {
     class IloscStronVisibilityConverter : IValueConverter
     {

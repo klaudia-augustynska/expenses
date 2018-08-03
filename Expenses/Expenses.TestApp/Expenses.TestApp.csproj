@@ -130,5 +130,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Expenses.ApiRepository\Expenses.ApiRepository.csproj">
+      <Project>{b63974fb-8d81-49c3-a071-64c032c914fe}</Project>
+      <Name>Expenses.ApiRepository</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

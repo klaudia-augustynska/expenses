@@ -17,6 +17,8 @@ namespace Expenses.TestApp.ViewModels
         public RejestracjaVm(Nawigacja navigationService, LogowanieVm logowanieVm, Repository repozytorium)
         {
             _nawigacja = navigationService;
+            _nawigacja.ZmianaIlosciOtwartychStron += 
+                () => Zarejestruj.RaiseCanExecuteChanged();
             _repozytorium = repozytorium;
             Zarejestruj = new DelegateCommand<PasswordBox>(ZarejestrujExecute, ZarejestrujCanExecute);
             PrzejdzDoLogowania = new DelegateCommand(PrzejdzDoLogowaniaExecute, PrzejdzDoLogowaniaCanExecute);
@@ -48,7 +50,7 @@ namespace Expenses.TestApp.ViewModels
 
         private LogowanieVm LogowanieVm { get; }
 
-        private bool czySledziszZmianyWPasswordBox;
+        private PasswordBox ostatnioSledzonyPasswordBox;
         public DelegateCommand<PasswordBox> Zarejestruj { get; }
         private async void ZarejestrujExecute(PasswordBox passwordBox)
         {
@@ -94,14 +96,26 @@ namespace Expenses.TestApp.ViewModels
         }
         private bool ZarejestrujCanExecute(PasswordBox passwordBox)
         {
-            if (passwordBox != null && !czySledziszZmianyWPasswordBox)
+            if (passwordBox != ostatnioSledzonyPasswordBox)
             {
-                passwordBox.PasswordChanged += (x, y) => Zarejestruj.RaiseCanExecuteChanged();
-                czySledziszZmianyWPasswordBox = true;
+                if (ostatnioSledzonyPasswordBox != null)
+                {
+                    ostatnioSledzonyPasswordBox.PasswordChanged -= OstatnioSledzonyPasswordBox_PasswordChanged;
+                }
+                if (passwordBox != null)
+                {
+                    passwordBox.PasswordChanged += OstatnioSledzonyPasswordBox_PasswordChanged;
+                }
+                ostatnioSledzonyPasswordBox = passwordBox;
             }
 
             return !string.IsNullOrEmpty(Login)
                 && !string.IsNullOrEmpty(passwordBox.Password);
+        }
+
+        private void OstatnioSledzonyPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Zarejestruj.RaiseCanExecuteChanged();
         }
 
         public DelegateCommand PrzejdzDoLogowania { get; }

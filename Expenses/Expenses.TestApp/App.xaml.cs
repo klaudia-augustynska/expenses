@@ -29,7 +29,6 @@ namespace Expenses.TestApp
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));
-                //new InjectionProperty("host", "http://localhost:7071/"));
             var nawigacja = container.Resolve<Nawigacja>();
             nawigacja.DomyslnyVm = container.Resolve<RejestracjaVm>();
             nawigacja.GlownyVm = container.Resolve<MainWindowVm>();

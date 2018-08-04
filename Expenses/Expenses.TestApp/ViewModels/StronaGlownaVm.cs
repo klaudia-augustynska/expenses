@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prism.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,19 @@ namespace Expenses.TestApp.ViewModels
     {
         private string klucz;
 
+        public StronaGlownaVm()
+        {
+            PokazProfil = new DelegateCommand(PokazProfilExecute, PokazProfilCanExecute);
+            PokazListeDlugow = new DelegateCommand(PokazListeDlugowExecute, PokazListeDlugowCanExecute);
+            PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, PokazListeStalychWydatkowCanExecute);
+            PokazListeOsobWGospodarstwie = new DelegateCommand(PokazListeOsobWGospodarstwieExecute, PokazListeOsobWGospodarstwieCanExecute);
+            PokazKategorie = new DelegateCommand(PokazKategorieExecute, PokazKategorieCanExecute);
+            PokazHistorie = new DelegateCommand(PokazHistorieExecute, PokazHistorieCanExecute);
+            PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, PokazUstawieniaCanExecute);
+            Wyloguj = new DelegateCommand(WylogujExecute, WylogujCanExecute);
+            DodajParagon = new DelegateCommand(DodajParagonExecute, DodajParagonCanExecute);
+        }
+
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
         {
             base.PodczasLadowania(poprzedniaStrona);
@@ -20,5 +34,115 @@ namespace Expenses.TestApp.ViewModels
                 MessageBox.Show(klucz);
             }
         }
+
+        public DelegateCommand PokazProfil { get; }
+        
+        private bool PokazProfilCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazProfilExecute()
+        {
+
+        }
+
+        public DelegateCommand PokazListeDlugow { get; }
+
+        private bool PokazListeDlugowCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazListeDlugowExecute()
+        {
+
+        }
+        
+        public DelegateCommand PokazListeStalychWydatkow { get; }
+
+        private bool PokazListeStalychWydatkowCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazListeStalychWydatkowExecute()
+        {
+
+        }
+
+        public DelegateCommand PokazListeOsobWGospodarstwie { get; }
+
+        private bool PokazListeOsobWGospodarstwieCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazListeOsobWGospodarstwieExecute()
+        {
+
+        }
+
+        public DelegateCommand PokazKategorie { get; }
+
+        private bool PokazKategorieCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazKategorieExecute()
+        {
+
+        }
+
+        public DelegateCommand PokazHistorie { get; }
+
+        private bool PokazHistorieCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazHistorieExecute()
+        {
+
+        }
+
+        public DelegateCommand PokazUstawienia { get; }
+
+        private bool PokazUstawieniaCanExecute()
+        {
+            return false;
+        }
+
+        private void PokazUstawieniaExecute()
+        {
+
+        }
+
+        public DelegateCommand Wyloguj { get; }
+
+        private bool WylogujCanExecute()
+        {
+            return false;
+        }
+
+        private void WylogujExecute()
+        {
+
+        }
+
+        public DelegateCommand DodajParagon { get; }
+
+        private bool DodajParagonCanExecute()
+        {
+            return false;
+        }
+
+        private void DodajParagonExecute()
+        {
+
+        }
+
+
     }
 }

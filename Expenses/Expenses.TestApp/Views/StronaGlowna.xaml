@@ -19,25 +19,33 @@
 
         <Border Background="Gray">
 
-            <Button Style="{StaticResource button}">Profil</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazProfil}">Profil</Button>
             
         </Border>
 
         <StackPanel Grid.Row="1" Grid.RowSpan="2" Background="LightGray">
 
-            <Button Style="{StaticResource button}">Lista długów</Button>
-            <Button Style="{StaticResource button}">Lista stałych wydatków</Button>
-            <Button Style="{StaticResource button}">Lista osób w gosp. domowym</Button>
-            <Button Style="{StaticResource button}">Kategorie</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazListeDlugow}">Lista długów</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazListeStalychWydatkow}">Lista stałych wydatków</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazListeOsobWGospodarstwie}">Lista osób w gosp. domowym</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazKategorie}">Kategorie</Button>
 
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Column="1" Background="DarkGray">
 
-            <Button Style="{StaticResource button}">Powiadomienia</Button>
-            <Button Style="{StaticResource button}">Historia</Button>
-            <Button Style="{StaticResource button}">Ustawienia</Button>
-            <Button Style="{StaticResource button}">Wyloguj</Button>
+            <ToggleButton Style="{StaticResource togglebutton}" IsEnabled="False">Powiadomienia</ToggleButton>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazHistorie}">Historia</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazUstawienia}">Ustawienia</Button>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding Wyloguj}">Wyloguj</Button>
             
         </StackPanel>
 
@@ -68,7 +76,8 @@
         </ScrollViewer>
 
         <Border Grid.Column="1" Grid.Row="2"  Background="LightSlateGray">
-            <Button HorizontalAlignment="Right" Style="{StaticResource button}">
+            <Button HorizontalAlignment="Right" Style="{StaticResource button}"
+                    Command="{Binding DodajParagon}">
                 Dodaj paragon</Button>
         </Border>
 

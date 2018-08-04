@@ -18,7 +18,7 @@ namespace Expenses.ApiRepository.Interfaces
         Task<HttpResponseMessage> Add(string login, string password);
 
         /// <summary>
-        /// HttpStatusCode.OK jeśli sukces
+        /// HttpStatusCode.OK jeśli sukces. Zwraca wówczas klucz potrzebny do uzyskania dostępu do funkcji po zalogowaniu
         /// </summary>
         /// <param name="login"></param>
         /// <param name="password"></param>

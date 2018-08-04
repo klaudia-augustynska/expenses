@@ -14,7 +14,7 @@ namespace Expenses.Api.Users
         [FunctionName("LogIn")]
         public static HttpResponseMessage Run(
             [HttpTrigger(
-                AuthorizationLevel.Function, 
+                AuthorizationLevel.Anonymous, 
                 "get", 
                 "post",
                 Route = "users/login/{login}/{password}")
@@ -51,7 +51,7 @@ namespace Expenses.Api.Users
             }
 
             log.Info($"LogIn response: OK - user {login} has been authenticated");
-            return req.CreateResponse(HttpStatusCode.OK, "Successfully logged in");
+            return req.CreateResponse(HttpStatusCode.OK, entity.Key);
         }
     }
 }

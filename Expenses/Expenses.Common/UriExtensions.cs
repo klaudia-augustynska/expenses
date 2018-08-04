@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 
-namespace Expenses.ApiRepository
+namespace Expenses.Common
 {
     /// <summary>
     /// https://stackoverflow.com/a/7993235
     /// </summary>
-    static class UriExtensions
+    public static class UriExtensions
     {
         public static Uri Append(this Uri uri, params string[] paths)
         {

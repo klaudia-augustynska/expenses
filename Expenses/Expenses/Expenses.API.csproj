@@ -21,6 +21,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Expenses.Common\Expenses.Common.csproj" />
     <ProjectReference Include="..\Expenses.Model\Expenses.Model.csproj" />
   </ItemGroup>
 </Project>

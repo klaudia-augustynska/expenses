@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.ApiRepository", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.Model", "Expenses.Model\Expenses.Model.csproj", "{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.Common", "Expenses.Common\Expenses.Common.csproj", "{5E23C47A-F53A-47EF-A835-7AB0C500115C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

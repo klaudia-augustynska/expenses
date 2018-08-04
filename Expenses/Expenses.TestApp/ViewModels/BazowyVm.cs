@@ -8,13 +8,18 @@ using Prism.Commands;
 
 namespace Expenses.TestApp.ViewModels
 {
-    class BazowyVm : INotifyPropertyChanged
+    abstract class BazowyVm : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public virtual void PodczasLadowania(BazowyVm poprzedniaStrona)
+        {
+
         }
     }
 }

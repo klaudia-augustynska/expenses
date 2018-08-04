@@ -14,7 +14,16 @@ namespace Expenses.TestApp
             _otwarteStrony = new Stack<BazowyVm>();
         }
 
-        public BazowyVm DomyslnyVm { get; set; }
+        private BazowyVm _domyslnyVm;
+        public BazowyVm DomyslnyVm
+        {
+            get { return _domyslnyVm; }
+            set
+            {
+                _domyslnyVm = value;
+                _domyslnyVm.PodczasLadowania(poprzedniaStrona: null);
+            }
+        }
 
         public MainWindowVm GlownyVm { get; set; }
 
@@ -24,6 +33,7 @@ namespace Expenses.TestApp
 
         public void IdzDo(BazowyVm vm)
         {
+            vm.PodczasLadowania(poprzedniaStrona: GlownyVm.Vm);
             GlownyVm.Vm = vm;
             _otwarteStrony.Push(vm);
             ZmianaIlosciOtwartychStron?.Invoke();

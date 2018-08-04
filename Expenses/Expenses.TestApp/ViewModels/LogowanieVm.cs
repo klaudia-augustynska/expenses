@@ -68,6 +68,9 @@ namespace Expenses.TestApp.ViewModels
                         if (x.Result != null
                         && x.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
+                            RegistryPomocnik.ZapiszKlucz(
+                                nazwaKlucza: RegistryPomocnik.KluczUzytkownikaRegistryKey,
+                                wartoscKlucza: await x.Result.Content.ReadAsStringAsync());
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;

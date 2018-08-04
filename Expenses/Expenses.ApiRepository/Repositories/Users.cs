@@ -1,10 +1,6 @@
 ﻿using Expenses.ApiRepository.Interfaces;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Expenses.Common;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Expenses.ApiRepository.Repositories

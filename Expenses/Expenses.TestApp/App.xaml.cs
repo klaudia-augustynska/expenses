@@ -31,8 +31,12 @@ namespace Expenses.TestApp
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));
+
             var nawigacja = container.Resolve<Nawigacja>();
-            nawigacja.DomyslnyVm = container.Resolve<RejestracjaVm>();
+            var klucz = RegistryPomocnik.CzytajKlucz<string>(RegistryPomocnik.KluczUzytkownikaRegistryKey);
+            nawigacja.DomyslnyVm = string.IsNullOrEmpty(klucz) 
+                ? container.Resolve<RejestracjaVm>() as BazowyVm
+                : container.Resolve<StronaGlownaVm>();
             nawigacja.GlownyVm = container.Resolve<MainWindowVm>();
 
             var mainWindow = new MainWindow

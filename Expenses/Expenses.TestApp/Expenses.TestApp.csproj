@@ -148,6 +148,10 @@
       <Project>{b63974fb-8d81-49c3-a071-64c032c914fe}</Project>
       <Name>Expenses.ApiRepository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Expenses.Common\Expenses.Common.csproj">
+      <Project>{5E23C47A-F53A-47EF-A835-7AB0C500115C}</Project>
+      <Name>Expenses.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

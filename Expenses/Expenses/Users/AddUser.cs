@@ -20,12 +20,13 @@ namespace Expenses.Api.Users
                 AuthorizationLevel.Anonymous,
                 "get", 
                 "post", 
-                Route = "users/add/{login}/{password}")
+                Route = "users/add/{login}/{hashedPasswordConverted}/{saltConverted}")
             ]HttpRequestMessage req, 
             string login,
-            string password,
+            string hashedPasswordConverted,
+            string saltConverted,
             [Table("ExpensesApp")]ICollector<User> outTable,
-            [Table("ExpensesApp", "user_{login}", "{password}")] User entity,
+            [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
             TraceWriter log)
         {
             log.Info("Request to AddUser");
@@ -38,36 +39,38 @@ namespace Expenses.Api.Users
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a login on the query string or in the request body");
-
             }
-            if (password == null)
+            if (hashedPasswordConverted == null)
             {
-                log.Info("AddUser response: BadRequest - password is null");
+                log.Info("AddUser response: BadRequest - hashedPassword is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "Please pass a password on the query string or in the request body");
+                    value: "Please pass a hashedPassword on the query string or in the request body");
             }
             if (entity != null)
             {
-                log.Info($"AddUser response: BadRequest - entity with PK={dbUser} and RK={password} already exists");
+                log.Info($"AddUser response: BadRequest - entity with PK={dbUser} and RK={dbUser} already exists");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "User with given login and password already exists"
+                    value: "User with given login already exists"
                     );
             }
 
             var key = await RequestANewKeyForUser(dbUser, log);
+            var hashedPassword = HashUtil.RetrieveQueryStringSpecialCharacters(hashedPasswordConverted);
+            var salt = HashUtil.RetrieveQueryStringSpecialCharacters(saltConverted);
 
             outTable.Add(new User()
             {
                 PartitionKey = dbUser,
-                RowKey = password,
+                RowKey = dbUser,
                 Login = login,
-                Password = password,
-                Key = key
+                PasswordHash = hashedPassword,
+                Key = key,
+                Salt = salt
             });
 
-            log.Info($"AddUser response: Created - entity with PK={dbUser} and RK={password}");
+            log.Info($"AddUser response: Created - entity with PK={dbUser} and RK={dbUser}");
             return req.CreateResponse(HttpStatusCode.Created);
         }
 

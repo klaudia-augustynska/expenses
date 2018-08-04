@@ -10,7 +10,8 @@ namespace Expenses.Model
     public class User : TableEntity
     {
         public string Login { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public string Key { get; set; }
+        public string Salt { get; set; }
     }
 }

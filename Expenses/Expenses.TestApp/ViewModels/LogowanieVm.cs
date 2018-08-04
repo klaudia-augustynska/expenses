@@ -1,4 +1,5 @@
 ﻿using Expenses.ApiRepository;
+using Expenses.Common;
 using log4net;
 using Prism.Commands;
 using System;
@@ -60,8 +61,19 @@ namespace Expenses.TestApp.ViewModels
             {
                 PokazProgress = true;
             });
-            await _repozytorium.UsersRepository.LogIn(Login, passwordBox.Password)
-                .ContinueWith(async x =>
+
+            string hasloZahaszowane = null;
+            await Task.Run(async () =>
+            {
+                var solOdpowiedz = await _repozytorium.UsersRepository.GetSalt(Login);
+                if (solOdpowiedz.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var sol = await solOdpowiedz.Content.ReadAsStringAsync();
+                    hasloZahaszowane = HashUtil.Hash(passwordBox.Password, sol);
+                    return await _repozytorium.UsersRepository.LogIn(Login, hasloZahaszowane);
+                };
+                throw new Exception("Źle skonstruowane zapytanie o sól");
+            }).ContinueWith(async x =>
                 {
                     if (x.Status == TaskStatus.RanToCompletion)
                     {
@@ -71,6 +83,12 @@ namespace Expenses.TestApp.ViewModels
                             RegistryPomocnik.ZapiszKlucz(
                                 nazwaKlucza: RegistryPomocnik.KluczUzytkownikaRegistryKey,
                                 wartoscKlucza: await x.Result.Content.ReadAsStringAsync());
+                            RegistryPomocnik.ZapiszKlucz(
+                                nazwaKlucza: RegistryPomocnik.NazwaZalogowanegoUzytkownikaRegistryKey,
+                                wartoscKlucza: Login);
+                            RegistryPomocnik.ZapiszKlucz(
+                                nazwaKlucza: RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey,
+                                wartoscKlucza: hasloZahaszowane);
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;

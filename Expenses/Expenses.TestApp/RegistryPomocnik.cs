@@ -9,7 +9,9 @@ namespace Expenses.TestApp
 {
     static class RegistryPomocnik
     {
-        public const string KluczUzytkownikaRegistryKey = "LoggedUserKey";
+        public const string KluczUzytkownikaRegistryKey = "KluczZalogowanegoUzytkownika";
+        public const string NazwaZalogowanegoUzytkownikaRegistryKey = "NazwaZalogowanegoUzytkownika";
+        public const string ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey = "ZahaszowaneHasloZalogowanegoUzytkownika";
 
         public static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza)
         {

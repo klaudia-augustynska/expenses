@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using log4net;
+using Expenses.Common;
 
 namespace Expenses.TestApp.ViewModels
 {
@@ -57,7 +58,9 @@ namespace Expenses.TestApp.ViewModels
             Application.Current.Dispatcher.Invoke(() => {
                 PokazProgress = true;
             });
-            await _repozytorium.UsersRepository.Add(Login, passwordBox.Password)
+            var sol = HashUtil.GenerateSalt();
+            var zahaszowaneHaslo = HashUtil.Hash(passwordBox.Password, sol);
+            await _repozytorium.UsersRepository.Add(Login, zahaszowaneHaslo, sol)
                 .ContinueWith(async x =>
                 {
                     if (x.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)

@@ -13,18 +13,29 @@ namespace Expenses.ApiRepository.Repositories
 
         }
 
-        public async Task<HttpResponseMessage> Add(string login, string password)
+        public async Task<HttpResponseMessage> Add(string login, string hashedPassword, string salt)
         {
-            var uri = BaseUri.Append("add", login, password);
+            var hashedPasswordConverted = HashUtil.CutOffQueryStringSpecialCharacters(hashedPassword);
+            var saltConverted = HashUtil.CutOffQueryStringSpecialCharacters(salt);
+            var uri = BaseUri.Append("add", login, hashedPasswordConverted, saltConverted);
             using (var httpClient = new HttpClient())
             {
                 return await httpClient.GetAsync(uri);
             }
         }
 
-        public async Task<HttpResponseMessage> LogIn(string login, string password)
+        public async Task<HttpResponseMessage> LogIn(string login, string hashedPassword)
         {
-            var uri = BaseUri.Append("login", login, password);
+            var uri = BaseUri.Append("login", login, hashedPassword);
+            using (var httpClient = new HttpClient())
+            {
+                return await httpClient.GetAsync(uri);
+            }
+        }
+
+        public async Task<HttpResponseMessage> GetSalt(string login)
+        {
+            var uri = BaseUri.Append("salt", login);
             using (var httpClient = new HttpClient())
             {
                 return await httpClient.GetAsync(uri);

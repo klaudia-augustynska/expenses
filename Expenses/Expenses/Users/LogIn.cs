@@ -2,6 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Expenses.Common;
 using Expenses.Model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -17,11 +18,11 @@ namespace Expenses.Api.Users
                 AuthorizationLevel.Anonymous, 
                 "get", 
                 "post",
-                Route = "users/login/{login}/{password}")
+                Route = "users/login/{login}/{hashedPasswordConverted}")
             ]HttpRequestMessage req,
             string login,
-            string password,
-            [Table("ExpensesApp", "user_{login}", "{password}")] User entity,
+            string hashedPasswordConverted,
+            [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
             TraceWriter log)
         {
             log.Info("Request to LogIn");
@@ -34,19 +35,21 @@ namespace Expenses.Api.Users
                     value: "Please pass a login on the query string or in the request body");
 
             }
-            if (password == null)
+            if (hashedPasswordConverted == null)
             {
-                log.Info("LogIn response: BadRequest - password is null");
+                log.Info("LogIn response: BadRequest - hashedPassword is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "Please pass a password on the query string or in the request body");
+                    value: "Please pass a hashedPassword on the query string or in the request body");
             }
-            if (entity == null)
+            var hashedPassword = HashUtil.RetrieveQueryStringSpecialCharacters(hashedPasswordConverted);
+            if (entity == null
+                || entity.PasswordHash != hashedPassword)
             {
-                log.Info($"LogIn response: BadRequest - no such entity entity with PK=user_{login} and RK={password}");
+                log.Info($"LogIn response: BadRequest - wrong credentials");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "User with given login and password does not exist"
+                    value: "User with given login does not exist or the password was incorrect"
                     );
             }
 

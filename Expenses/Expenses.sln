@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.Model", "Expenses.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.Common", "Expenses.Common\Expenses.Common.csproj", "{5E23C47A-F53A-47EF-A835-7AB0C500115C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expenses.UnitTests", "Expenses.UnitTests\Expenses.UnitTests.csproj", "{BE5B1A41-6125-4610-9066-C1D48E59D11E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E23C47A-F53A-47EF-A835-7AB0C500115C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5B1A41-6125-4610-9066-C1D48E59D11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5B1A41-6125-4610-9066-C1D48E59D11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5B1A41-6125-4610-9066-C1D48E59D11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5B1A41-6125-4610-9066-C1D48E59D11E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,9 +13,10 @@ namespace Expenses.ApiRepository.Interfaces
         /// HttpStatusCode.Created jeśli sukces
         /// </summary>
         /// <param name="login"></param>
-        /// <param name="password"></param>
+        /// <param name="hashedPassword"></param>
+        /// <param name="salt"></param>
         /// <returns>HttpStatusCode.Created jeśli sukces</returns>
-        Task<HttpResponseMessage> Add(string login, string password);
+        Task<HttpResponseMessage> Add(string login, string hashedPassword, string salt);
 
         /// <summary>
         /// HttpStatusCode.OK jeśli sukces. Zwraca wówczas klucz potrzebny do uzyskania dostępu do funkcji po zalogowaniu
@@ -23,6 +24,13 @@ namespace Expenses.ApiRepository.Interfaces
         /// <param name="login"></param>
         /// <param name="password"></param>
         /// <returns>HttpStatusCode.OK jeśli sukces</returns>
-        Task<HttpResponseMessage> LogIn(string login, string password);
+        Task<HttpResponseMessage> LogIn(string login, string hashedPassword);
+
+        /// <summary>
+        /// Dla poprawnego requestu HttpStatusCode.OK, ale jeśli nie ma loginu to zostanie podana inna sól dla zmyły.
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> GetSalt(string login);
     }
 }

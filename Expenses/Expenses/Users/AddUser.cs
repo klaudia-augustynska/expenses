@@ -6,9 +6,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Expenses.Common;
 using Expenses.Model;
+using Expenses.Model.Dto;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Newtonsoft.Json;
 
 namespace Expenses.Api.Users
 {
@@ -18,13 +20,10 @@ namespace Expenses.Api.Users
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger( 
                 AuthorizationLevel.Anonymous,
-                "get", 
                 "post", 
-                Route = "users/add/{login}/{hashedPasswordConverted}/{saltConverted}")
+                Route = "users/add/{login}/")
             ]HttpRequestMessage req, 
             string login,
-            string hashedPasswordConverted,
-            string saltConverted,
             [Table("ExpensesApp")]ICollector<User> outTable,
             [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
             TraceWriter log)
@@ -32,6 +31,18 @@ namespace Expenses.Api.Users
             log.Info("Request to AddUser");
 
             var dbUser = $"user_{login}";
+            AddUserDto addUserDto = null;
+            try
+            {
+                addUserDto = JsonConvert.DeserializeObject<AddUserDto>(await req.Content.ReadAsStringAsync());
+            }
+            catch
+            {
+                log.Info("AddUser response: BadRequest - cannot read dto object");
+                return req.CreateResponse(
+                    statusCode: HttpStatusCode.BadRequest,
+                    value: "Please pass a valid dto object in the request content");
+            }
 
             if (login == null)
             {
@@ -40,12 +51,14 @@ namespace Expenses.Api.Users
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a login on the query string or in the request body");
             }
-            if (hashedPasswordConverted == null)
+            if (addUserDto == null
+                || string.IsNullOrWhiteSpace(addUserDto.HashedPassword)
+                || string.IsNullOrWhiteSpace(addUserDto.Salt))
             {
-                log.Info("AddUser response: BadRequest - hashedPassword is null");
+                log.Info("AddUser response: BadRequest - dto object content is not valid");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "Please pass a hashedPassword on the query string or in the request body");
+                    value: "Please pass correct values to the dto object");
             }
             if (entity != null)
             {
@@ -57,17 +70,15 @@ namespace Expenses.Api.Users
             }
 
             var key = await RequestANewKeyForUser(dbUser, log);
-            var hashedPassword = HashUtil.RetrieveQueryStringSpecialCharacters(hashedPasswordConverted);
-            var salt = HashUtil.RetrieveQueryStringSpecialCharacters(saltConverted);
 
             outTable.Add(new User()
             {
                 PartitionKey = dbUser,
                 RowKey = dbUser,
                 Login = login,
-                PasswordHash = hashedPassword,
+                PasswordHash = addUserDto.HashedPassword,
                 Key = key,
-                Salt = salt
+                Salt = addUserDto.Salt
             });
 
             log.Info($"AddUser response: Created - entity with PK={dbUser} and RK={dbUser}");

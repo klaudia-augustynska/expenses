@@ -60,6 +60,7 @@ namespace Expenses.TestApp
 
         public void KasujHistorie()
         {
+            DomyslnyVm = _otwarteStrony.Peek();
             _otwarteStrony.Clear();
             ZmianaIlosciOtwartychStron?.Invoke();
         }

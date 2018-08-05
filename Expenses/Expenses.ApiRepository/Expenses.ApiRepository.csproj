@@ -57,6 +57,10 @@
       <Project>{5e23c47a-f53a-47ef-a835-7ab0c500115c}</Project>
       <Name>Expenses.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Expenses.Model\Expenses.Model.csproj">
+      <Project>{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}</Project>
+      <Name>Expenses.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

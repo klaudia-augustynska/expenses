@@ -23,15 +23,5 @@ namespace Expenses.Common
             var bytes = pbkdf2.GetBytes(20);
             return Convert.ToBase64String(bytes);
         }
-
-        public static string CutOffQueryStringSpecialCharacters(string str)
-        {
-            return str.Replace('\\', '#').Replace('/', '$');
-        }
-
-        public static string RetrieveQueryStringSpecialCharacters(string strConverted)
-        {
-            return strConverted.Replace('#', '\\').Replace('$','/');
-        }
     }
 }

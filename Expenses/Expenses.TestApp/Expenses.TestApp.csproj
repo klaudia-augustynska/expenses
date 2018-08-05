@@ -69,6 +69,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RegistryPomocnik.cs" />
+    <Compile Include="ViewModels\ProfilVm.cs" />
+    <Compile Include="Views\Profil.xaml.cs">
+      <DependentUpon>Profil.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StronaGlowna.xaml.cs">
       <DependentUpon>StronaGlowna.xaml</DependentUpon>
     </Compile>
@@ -77,6 +81,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Logowanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Profil.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

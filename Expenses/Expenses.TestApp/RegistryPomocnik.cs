@@ -16,25 +16,25 @@ namespace Expenses.TestApp
 
         public static string KluczUzytkownika
         {
-            get { return CzytajKlucz<string>(KluczUzytkownikaRegistryKey); }
+            get { return CzytajKlucz(KluczUzytkownikaRegistryKey); }
             set { ZapiszKlucz(KluczUzytkownikaRegistryKey, value); }
         }
 
         public static string NazwaZalogowanegoUzytkownika
         {
-            get { return CzytajKlucz<string>(NazwaZalogowanegoUzytkownikaRegistryKey); }
+            get { return CzytajKlucz(NazwaZalogowanegoUzytkownikaRegistryKey); }
             set { ZapiszKlucz(NazwaZalogowanegoUzytkownikaRegistryKey, value); }
         }
 
         public static string ZahaszowaneHasloZalogowanegoUzytkownika
         {
-            get { return CzytajKlucz<string>(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey); }
+            get { return CzytajKlucz(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey); }
             set { ZapiszKlucz(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey, value); }
         }
 
         public static bool CzyZalogowany
         {
-            get { return CzytajKlucz<bool>(CzyZalogowanyRegistryKey, domyslnaWartosc: false); }
+            get { return CzytajKlucz(CzyZalogowanyRegistryKey, domyslnaWartosc: false); }
             set { ZapiszKlucz(CzyZalogowanyRegistryKey, value); }
         }
 
@@ -45,17 +45,19 @@ namespace Expenses.TestApp
             subKey.Close();
         }
 
-        private static T CzytajKlucz<T>(string nazwaKlucza) where T : class
+        private static string CzytajKlucz(string nazwaKlucza) 
         {
             RegistryKey subKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\ExpensesTestApp");
-            return (T)(subKey.GetValue(nazwaKlucza));
+            return subKey.GetValue(nazwaKlucza) as string;
         }
 
-        private static T CzytajKlucz<T>(string nazwaKlucza, T domyslnaWartosc) where T : struct
+        private static bool CzytajKlucz(string nazwaKlucza, bool domyslnaWartosc)
         {
             RegistryKey subKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\ExpensesTestApp");
-            var value = subKey.GetValue(nazwaKlucza);
-            return value != null ? (T)value : domyslnaWartosc;
+            var value = subKey.GetValue(nazwaKlucza) as string;
+            return value == null
+                ? domyslnaWartosc
+                : value == "True";
         }
     }
 }

@@ -36,12 +36,12 @@ namespace Expenses.TestApp.ViewModels
         
         private bool PokazProfilCanExecute()
         {
-            return false;
+            return true;
         }
 
         private void PokazProfilExecute()
         {
-
+            _nawigacja.IdzDo<ProfilVm>();
         }
 
         public DelegateCommand PokazListeDlugow { get; }

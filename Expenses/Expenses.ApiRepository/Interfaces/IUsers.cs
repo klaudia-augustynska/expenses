@@ -32,5 +32,13 @@ namespace Expenses.ApiRepository.Interfaces
         /// <param name="login"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> GetSalt(string login);
+
+        /// <summary>
+        /// OK jeśli zadziałało
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> Delete(string login, string key);
     }
 }

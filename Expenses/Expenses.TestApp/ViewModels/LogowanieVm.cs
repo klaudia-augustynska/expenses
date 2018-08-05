@@ -25,6 +25,7 @@ namespace Expenses.TestApp.ViewModels
             _repozytorium = repozytorium;
 
             Zaloguj = new DelegateCommand<PasswordBox>(ZalogujExecute, ZalogujCanExecute);
+            PrzejdzDoRejestracji = new DelegateCommand(PrzejdzDoRejestracjiExecute);
         }
 
         private string _login;
@@ -137,6 +138,12 @@ namespace Expenses.TestApp.ViewModels
         private void OstatnioSledzonyPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             Zaloguj.RaiseCanExecuteChanged();
+        }
+
+        public DelegateCommand PrzejdzDoRejestracji { get; }
+        private void PrzejdzDoRejestracjiExecute()
+        {
+            _nawigacja.IdzDo<RejestracjaVm>();
         }
     }
 }

@@ -19,11 +19,14 @@ namespace Expenses.TestApp
                 return Logowanie;
             if (item is StronaGlownaVm)
                 return StronaGlowna;
+            if (item is ProfilVm)
+                return Profil;
             return base.SelectTemplate(item, container);
         }
 
         public DataTemplate Rejestracja { get; set; }
         public DataTemplate Logowanie { get; set; }
         public DataTemplate StronaGlowna { get; set; }
+        public DataTemplate Profil { get; set; }
     }
 }

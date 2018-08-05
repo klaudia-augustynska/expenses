@@ -20,10 +20,14 @@
         <DataTemplate x:Key="stronaGlowna">
             <views:StronaGlowna/>
         </DataTemplate>
+        <DataTemplate x:Key="profil">
+            <views:Profil/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
                               Logowanie="{StaticResource logowanie}"
-                              StronaGlowna="{StaticResource stronaGlowna}"/>
+                              StronaGlowna="{StaticResource stronaGlowna}"
+                              Profil="{StaticResource profil}"/>
     </Window.Resources>
     
     <Grid>

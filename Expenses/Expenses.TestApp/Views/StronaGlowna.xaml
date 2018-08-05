@@ -14,7 +14,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Border Background="Gray">
@@ -50,36 +49,44 @@
         </StackPanel>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1">
-            <Border BorderBrush="LightGray" BorderThickness="1" Padding="10">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+            
+                <Border BorderBrush="LightGray" BorderThickness="1" Padding="10">
+                <StackPanel>
 
-                <TextBlock>Podsumowanie</TextBlock>
-                <TextBlock>
-                    <Run Text="Wydane: "/>
-                    <Run Text="XXX" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="Dostępne: "/>
-                    <Run Text="XXX" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="Zaplanowane: "/>
-                    <Run Text="XXX" />
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="Stan portfela: "/>
-                    <Run Text="XXX" />
-                </TextBlock>
+                    <TextBlock>Podsumowanie</TextBlock>
+                    <TextBlock>
+                        <Run Text="Wydane: "/>
+                        <Run Text="XXX" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Dostępne: "/>
+                        <Run Text="XXX" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Zaplanowane: "/>
+                        <Run Text="XXX" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Stan portfela: "/>
+                        <Run Text="XXX" />
+                    </TextBlock>
                 
-            </StackPanel>
-            </Border>
-        </ScrollViewer>
+                </StackPanel>
+                </Border>
 
-        <Border Grid.Column="1" Grid.Row="2"  Background="LightSlateGray">
-            <Button HorizontalAlignment="Right" Style="{StaticResource button}"
-                    Command="{Binding DodajParagon}">
-                Dodaj paragon</Button>
-        </Border>
+
+                <Border Grid.Row="1"  Background="LightSlateGray">
+                    <Button HorizontalAlignment="Right" Style="{StaticResource button}"
+                        Command="{Binding DodajParagon}">
+                        Dodaj paragon</Button>
+                </Border>
+            </Grid>
+        </ScrollViewer>
 
     </Grid>
 </UserControl>

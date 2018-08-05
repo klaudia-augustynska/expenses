@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity;
 
 namespace Expenses.TestApp
 {
     class Nawigacja
     {
-        public Nawigacja()
+        private readonly UnityContainer _unityContainer;
+
+        public Nawigacja(UnityContainer unityContainer)
         {
+            _unityContainer = unityContainer;
             _otwarteStrony = new Stack<BazowyVm>();
         }
 
@@ -31,8 +35,9 @@ namespace Expenses.TestApp
 
         public event Action ZmianaIlosciOtwartychStron;
 
-        public void IdzDo(BazowyVm vm)
+        public void IdzDo<T>() where T : BazowyVm
         {
+            var vm = _unityContainer.Resolve<T>();
             vm.PodczasLadowania(poprzedniaStrona: GlownyVm.Vm);
             GlownyVm.Vm = vm;
             _otwarteStrony.Push(vm);

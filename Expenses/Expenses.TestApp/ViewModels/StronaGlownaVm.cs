@@ -10,10 +10,12 @@ namespace Expenses.TestApp.ViewModels
 {
     class StronaGlownaVm : BazowyVm
     {
-        private string klucz;
+        private readonly Nawigacja _nawigacja;
 
-        public StronaGlownaVm()
+        public StronaGlownaVm(Nawigacja nawigacja)
         {
+            _nawigacja = nawigacja;
+
             PokazProfil = new DelegateCommand(PokazProfilExecute, PokazProfilCanExecute);
             PokazListeDlugow = new DelegateCommand(PokazListeDlugowExecute, PokazListeDlugowCanExecute);
             PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, PokazListeStalychWydatkowCanExecute);
@@ -28,11 +30,6 @@ namespace Expenses.TestApp.ViewModels
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
         {
             base.PodczasLadowania(poprzedniaStrona);
-            if (poprzedniaStrona is LogowanieVm)
-            {
-                klucz = RegistryPomocnik.CzytajKlucz<string>(RegistryPomocnik.KluczUzytkownikaRegistryKey);
-                MessageBox.Show(klucz);
-            }
         }
 
         public DelegateCommand PokazProfil { get; }
@@ -123,12 +120,14 @@ namespace Expenses.TestApp.ViewModels
 
         private bool WylogujCanExecute()
         {
-            return false;
+            return true;
         }
 
         private void WylogujExecute()
         {
-
+            RegistryPomocnik.CzyZalogowany = false;
+            _nawigacja.IdzDo<LogowanieVm>();
+            _nawigacja.KasujHistorie();
         }
 
         public DelegateCommand DodajParagon { get; }

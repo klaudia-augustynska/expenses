@@ -24,19 +24,19 @@ namespace Expenses.TestApp
             base.OnStartup(e);
 
             var container = new UnityContainer();
-            container.RegisterSingleton<Nawigacja>();
+            var nawigacja = new Nawigacja(container);
+            container.RegisterInstance(nawigacja);
             container.RegisterSingleton<RejestracjaVm>();
             container.RegisterSingleton<LogowanieVm>();
             container.RegisterSingleton<StronaGlownaVm>();
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));
-
-            var nawigacja = container.Resolve<Nawigacja>();
-            var klucz = RegistryPomocnik.CzytajKlucz<string>(RegistryPomocnik.KluczUzytkownikaRegistryKey);
-            nawigacja.DomyslnyVm = string.IsNullOrEmpty(klucz) 
-                ? container.Resolve<RejestracjaVm>() as BazowyVm
-                : container.Resolve<StronaGlownaVm>();
+            
+            var czyZalogowany = RegistryPomocnik.CzyZalogowany;
+            nawigacja.DomyslnyVm = czyZalogowany
+                ? container.Resolve<StronaGlownaVm>() as BazowyVm
+                : container.Resolve<RejestracjaVm>();
             nawigacja.GlownyVm = container.Resolve<MainWindowVm>();
 
             var mainWindow = new MainWindow

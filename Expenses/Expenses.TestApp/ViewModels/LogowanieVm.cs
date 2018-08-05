@@ -18,13 +18,11 @@ namespace Expenses.TestApp.ViewModels
 
         private readonly Nawigacja _nawigacja;
         private readonly Repository _repozytorium;
-        private readonly StronaGlownaVm _stronaGlownaVm;
 
-        public LogowanieVm(Nawigacja nawigacja, Repository repozytorium, StronaGlownaVm stronaGlownaVm)
+        public LogowanieVm(Nawigacja nawigacja, Repository repozytorium)
         {
             _nawigacja = nawigacja;
             _repozytorium = repozytorium;
-            _stronaGlownaVm = stronaGlownaVm;
 
             Zaloguj = new DelegateCommand<PasswordBox>(ZalogujExecute, ZalogujCanExecute);
         }
@@ -80,19 +78,14 @@ namespace Expenses.TestApp.ViewModels
                         if (x.Result != null
                         && x.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            RegistryPomocnik.ZapiszKlucz(
-                                nazwaKlucza: RegistryPomocnik.KluczUzytkownikaRegistryKey,
-                                wartoscKlucza: await x.Result.Content.ReadAsStringAsync());
-                            RegistryPomocnik.ZapiszKlucz(
-                                nazwaKlucza: RegistryPomocnik.NazwaZalogowanegoUzytkownikaRegistryKey,
-                                wartoscKlucza: Login);
-                            RegistryPomocnik.ZapiszKlucz(
-                                nazwaKlucza: RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey,
-                                wartoscKlucza: hasloZahaszowane);
+                            RegistryPomocnik.KluczUzytkownika = await x.Result.Content.ReadAsStringAsync();
+                            RegistryPomocnik.NazwaZalogowanegoUzytkownika = Login;
+                            RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownika = hasloZahaszowane;
+                            RegistryPomocnik.CzyZalogowany = true;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;
-                                _nawigacja.IdzDo(_stronaGlownaVm);
+                                _nawigacja.IdzDo<StronaGlownaVm>();
                                 _nawigacja.KasujHistorie();
                             });
                         }

@@ -14,15 +14,13 @@ namespace Expenses.TestApp.ViewModels
 
         private readonly Nawigacja _nawigacja;
         private readonly Repository _repozytorium;
-        private readonly LogowanieVm _logowanieVm;
 
-        public RejestracjaVm(Nawigacja nawigacja, LogowanieVm logowanieVm, Repository repozytorium)
+        public RejestracjaVm(Nawigacja nawigacja, Repository repozytorium)
         {
             _nawigacja = nawigacja;
             _nawigacja.ZmianaIlosciOtwartychStron += 
                 () => Zarejestruj.RaiseCanExecuteChanged();
             _repozytorium = repozytorium;
-            _logowanieVm = logowanieVm;
 
             Zarejestruj = new DelegateCommand<PasswordBox>(ZarejestrujExecute, ZarejestrujCanExecute);
             PrzejdzDoLogowania = new DelegateCommand(PrzejdzDoLogowaniaExecute, PrzejdzDoLogowaniaCanExecute);
@@ -70,7 +68,7 @@ namespace Expenses.TestApp.ViewModels
                         {
                             Application.Current.Dispatcher.Invoke(() => {
                                 PokazProgress = false;
-                                _nawigacja.IdzDo(_logowanieVm);
+                                _nawigacja.IdzDo<LogowanieVm>();
                             });
                         }
                         else
@@ -124,11 +122,11 @@ namespace Expenses.TestApp.ViewModels
         public DelegateCommand PrzejdzDoLogowania { get; }
         private void PrzejdzDoLogowaniaExecute()
         {
-            _nawigacja.IdzDo(_logowanieVm);
+            _nawigacja.IdzDo<LogowanieVm>();
         }
         private bool PrzejdzDoLogowaniaCanExecute()
         {
-            return _nawigacja != null && _logowanieVm != null;
+            return _nawigacja != null;
         }
     }
 }

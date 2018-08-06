@@ -30,13 +30,17 @@ namespace Expenses.TestApp
             container.RegisterSingleton<LogowanieVm>();
             container.RegisterSingleton<StronaGlownaVm>();
             container.RegisterSingleton<ProfilVm>();
+            container.RegisterSingleton<WstepnaKonfiguracjaVm>();
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));
             
             var czyZalogowany = RegistryPomocnik.CzyZalogowany;
+            var czySkonfigurowany = RegistryPomocnik.CzySkonfigurowany;
             nawigacja.DomyslnyVm = czyZalogowany
-                ? container.Resolve<StronaGlownaVm>() as BazowyVm
+                ? czySkonfigurowany
+                     ? container.Resolve<StronaGlownaVm>() as BazowyVm
+                     : container.Resolve<WstepnaKonfiguracjaVm>()
                 : container.Resolve<RejestracjaVm>();
             nawigacja.GlownyVm = container.Resolve<MainWindowVm>();
 

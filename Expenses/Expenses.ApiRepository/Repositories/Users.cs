@@ -56,8 +56,19 @@ namespace Expenses.ApiRepository.Repositories
             var uri = BaseUri.Append("delete", login);
             using (var httpClient = new HttpClient())
             {
-                //httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
                 return await httpClient.GetAsync(uri);
+            }
+        }
+
+        public async Task<HttpResponseMessage> ConfigureUser(string login, string key, ConfigureUserDto configureUserDto)
+        {
+            var uri = BaseUri.Append("configure", login);
+            var content = new StringContent(JsonConvert.SerializeObject(configureUserDto));
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                return await httpClient.PostAsync(uri, content);
             }
         }
     }

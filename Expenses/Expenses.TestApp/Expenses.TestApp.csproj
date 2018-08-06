@@ -68,13 +68,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BoolToPlecConverter.cs" />
     <Compile Include="RegistryPomocnik.cs" />
     <Compile Include="ViewModels\ProfilVm.cs" />
+    <Compile Include="ViewModels\WstepnaKonfiguracjaVm.cs" />
     <Compile Include="Views\Profil.xaml.cs">
       <DependentUpon>Profil.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StronaGlowna.xaml.cs">
       <DependentUpon>StronaGlowna.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WstepnaKonfiguracja.xaml.cs">
+      <DependentUpon>WstepnaKonfiguracja.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -123,6 +128,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\WstepnaKonfiguracja.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -159,6 +168,10 @@
     <ProjectReference Include="..\Expenses.Common\Expenses.Common.csproj">
       <Project>{5E23C47A-F53A-47EF-A835-7AB0C500115C}</Project>
       <Name>Expenses.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Expenses.Model\Expenses.Model.csproj">
+      <Project>{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}</Project>
+      <Name>Expenses.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

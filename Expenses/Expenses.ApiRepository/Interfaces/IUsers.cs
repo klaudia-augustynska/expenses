@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Expenses.Model.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -19,7 +20,7 @@ namespace Expenses.ApiRepository.Interfaces
         Task<HttpResponseMessage> Add(string login, string hashedPassword, string salt);
 
         /// <summary>
-        /// HttpStatusCode.OK jeśli sukces. Zwraca wówczas klucz potrzebny do uzyskania dostępu do funkcji po zalogowaniu
+        /// HttpStatusCode.OK jeśli sukces. Zwraca wówczas LogInResponseDto
         /// </summary>
         /// <param name="login"></param>
         /// <param name="password"></param>
@@ -40,5 +41,14 @@ namespace Expenses.ApiRepository.Interfaces
         /// <param name="key"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> Delete(string login, string key);
+
+        /// <summary>
+        /// OK jeśli zadziałało
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="key"></param>
+        /// <param name="configureUserDto"></param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> ConfigureUser(string login, string key, ConfigureUserDto configureUserDto);
     }
 }

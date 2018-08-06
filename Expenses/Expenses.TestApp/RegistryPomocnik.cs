@@ -13,6 +13,7 @@ namespace Expenses.TestApp
         private const string NazwaZalogowanegoUzytkownikaRegistryKey = "NazwaZalogowanegoUzytkownika";
         private const string ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey = "ZahaszowaneHasloZalogowanegoUzytkownika";
         private const string CzyZalogowanyRegistryKey = "CzyZalogowany";
+        private const string CzySkonfigurowanyRegistryKey = "CzySkonfigurowany";
 
         public static string KluczUzytkownika
         {
@@ -36,6 +37,12 @@ namespace Expenses.TestApp
         {
             get { return CzytajKlucz(CzyZalogowanyRegistryKey, domyslnaWartosc: false); }
             set { ZapiszKlucz(CzyZalogowanyRegistryKey, value); }
+        }
+
+        public static bool CzySkonfigurowany
+        {
+            get { return CzytajKlucz(CzySkonfigurowanyRegistryKey, domyslnaWartosc: false); }
+            set { ZapiszKlucz(CzySkonfigurowanyRegistryKey, value); }
         }
 
         private static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza)

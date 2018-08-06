@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Expenses.Common;
-using Expenses.Model;
 using Expenses.Model.Dto;
+using Expenses.Model.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -30,7 +30,7 @@ namespace Expenses.Api.Users
             LogInDto logInDto = null;
             try
             {
-                logInDto = JsonConvert.DeserializeObject<LogInDto>(await req.Content.ReadAsStringAsync());
+                logInDto = await req.Content.ReadAsDeserializedJson<LogInDto>();
             }
             catch
             {
@@ -67,7 +67,12 @@ namespace Expenses.Api.Users
             }
 
             log.Info($"LogIn response: OK - user {login} has been authenticated");
-            return req.CreateResponse(HttpStatusCode.OK, entity.Key);
+            var responseDto = new LogInResponseDto()
+            {
+                Key = entity.Key,
+                Configured = !string.IsNullOrEmpty(entity.Login)
+            };
+            return req.CreateResponse(HttpStatusCode.OK, responseDto);
         }
     }
 }

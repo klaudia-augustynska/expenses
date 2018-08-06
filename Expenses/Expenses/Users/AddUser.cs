@@ -5,8 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Expenses.Common;
-using Expenses.Model;
 using Expenses.Model.Dto;
+using Expenses.Model.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -34,7 +34,7 @@ namespace Expenses.Api.Users
             AddUserDto addUserDto = null;
             try
             {
-                addUserDto = JsonConvert.DeserializeObject<AddUserDto>(await req.Content.ReadAsStringAsync());
+                addUserDto = await req.Content.ReadAsDeserializedJson<AddUserDto>();
             }
             catch
             {

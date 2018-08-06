@@ -1,5 +1,6 @@
 ﻿using Expenses.ApiRepository;
 using Expenses.Common;
+using Expenses.Model.Dto;
 using log4net;
 using Prism.Commands;
 using System;
@@ -79,14 +80,19 @@ namespace Expenses.TestApp.ViewModels
                         if (x.Result != null
                         && x.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            RegistryPomocnik.KluczUzytkownika = await x.Result.Content.ReadAsStringAsync();
+                            var logInResponseDto = await x.Result.Content.ReadAsDeserializedJson<LogInResponseDto>();
+                            RegistryPomocnik.KluczUzytkownika = logInResponseDto.Key;
                             RegistryPomocnik.NazwaZalogowanegoUzytkownika = Login;
                             RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownika = hasloZahaszowane;
                             RegistryPomocnik.CzyZalogowany = true;
+                            RegistryPomocnik.CzySkonfigurowany = logInResponseDto.Configured;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;
-                                _nawigacja.IdzDo<StronaGlownaVm>();
+                                if (logInResponseDto.Configured)
+                                    _nawigacja.IdzDo<StronaGlownaVm>();
+                                else
+                                    _nawigacja.IdzDo<WstepnaKonfiguracjaVm>();
                                 _nawigacja.KasujHistorie();
                             });
                         }

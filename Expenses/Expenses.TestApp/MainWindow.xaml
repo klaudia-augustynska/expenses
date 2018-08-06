@@ -23,11 +23,15 @@
         <DataTemplate x:Key="profil">
             <views:Profil/>
         </DataTemplate>
+        <DataTemplate x:Key="wstepnaKonfiguracja">
+            <views:WstepnaKonfiguracja/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
                               Logowanie="{StaticResource logowanie}"
                               StronaGlowna="{StaticResource stronaGlowna}"
-                              Profil="{StaticResource profil}"/>
+                              Profil="{StaticResource profil}"
+                              WstepnaKonfiguracja="{StaticResource wstepnaKonfiguracja}"/>
     </Window.Resources>
     
     <Grid>

@@ -70,13 +70,21 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToPlecConverter.cs" />
     <Compile Include="RegistryPomocnik.cs" />
+    <Compile Include="ViewModels\GospodarstwoVm.cs" />
     <Compile Include="ViewModels\ProfilVm.cs" />
+    <Compile Include="ViewModels\WiadomosciVm.cs" />
     <Compile Include="ViewModels\WstepnaKonfiguracjaVm.cs" />
+    <Compile Include="Views\Gospodarstwo.xaml.cs">
+      <DependentUpon>Gospodarstwo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Profil.xaml.cs">
       <DependentUpon>Profil.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StronaGlowna.xaml.cs">
       <DependentUpon>StronaGlowna.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wiadomosci.xaml.cs">
+      <DependentUpon>Wiadomosci.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WstepnaKonfiguracja.xaml.cs">
       <DependentUpon>WstepnaKonfiguracja.xaml</DependentUpon>
@@ -84,6 +92,10 @@
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Gospodarstwo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Logowanie.xaml">
       <SubType>Designer</SubType>
@@ -125,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\StronaGlowna.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wiadomosci.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -17,7 +17,17 @@ namespace Expenses.Model.Entities
         public string Name { get; set; }
         public double? Weight { get; set; }
         public double? Height { get; set; }
+        /// <summary>
+        /// true for female
+        /// </summary>
         public bool? Sex { get; set; }
+        /// <summary>
+        /// List of Wallet
+        /// </summary>
         public string Wallets { get; set; }
+        /// <summary>
+        /// PK of household
+        /// </summary>
+        public string HouseholdId { get; set; }
     }
 }

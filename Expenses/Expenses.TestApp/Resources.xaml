@@ -10,6 +10,10 @@
         <Setter Property="FontSize" Value="30"/>
     </Style>
 
+    <Style x:Key="h2" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource field}">
+        <Setter Property="FontSize" Value="24"/>
+    </Style>
+
     <Style x:Key="mainGrid" TargetType="{x:Type Grid}">
         <Setter Property="Margin" Value="20"/>
     </Style>
@@ -20,6 +24,11 @@
 
     <Style x:Key="togglebutton" TargetType="{x:Type ToggleButton}">
         <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <Style x:Key="bigButton" TargetType="{x:Type Button}" BasedOn="{StaticResource button}">
+        <Setter Property="MinWidth" Value="200"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
     
 </ResourceDictionary>

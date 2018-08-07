@@ -15,8 +15,10 @@ namespace Expenses.ApiRepository
         public Repository(string host)
         {
             UsersRepository = new Users(host, Path);
+            HouseholdsRepository = new Households(host, Path);
         }
 
         public IUsers UsersRepository { get; }
+        public IHouseholds HouseholdsRepository { get; }
     }
 }

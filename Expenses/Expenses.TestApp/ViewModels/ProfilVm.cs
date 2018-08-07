@@ -13,15 +13,14 @@ namespace Expenses.TestApp.ViewModels
     class ProfilVm : BazowyVm
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly Nawigacja _nawigacja;
+        
         private readonly Repository _repozytorium;
         private readonly StronaGlownaVm _stronaGlownaVm;
 
         public ProfilVm(Nawigacja nawigacja, Repository repozytorium, StronaGlownaVm stronaGlownaVm)
+            : base(nawigacja)
         {
             _repozytorium = repozytorium;
-            _nawigacja = nawigacja;
             _stronaGlownaVm = stronaGlownaVm;
             UsunKonto = new DelegateCommand(UsunKontoExecute);
         }

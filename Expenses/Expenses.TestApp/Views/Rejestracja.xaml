@@ -38,12 +38,12 @@
                          Margin="0,0,0,10"
                          Visibility="{Binding PokazProgress, Converter={StaticResource boolToVisibilityConverter}}"/>
 
-            <Button  Style="{StaticResource field}" 
+            <Button  Style="{StaticResource bigButton}" 
                      x:Name="zarejestruj"
                      Command="{Binding Zarejestruj}"
                      CommandParameter="{Binding ElementName=password}">Zarejestruj</Button>
 
-            <Button  Style="{StaticResource field}" 
+            <Button  Style="{StaticResource bigButton}" 
                      x:Name="przejdźDoLogowania"
                      Command="{Binding PrzejdzDoLogowania}">Przejdź do logowania</Button>
             

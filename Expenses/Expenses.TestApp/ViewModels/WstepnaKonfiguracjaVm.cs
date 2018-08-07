@@ -15,13 +15,12 @@ namespace Expenses.TestApp.ViewModels
     class WstepnaKonfiguracjaVm : BazowyVm
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly Nawigacja _nawigacja;
+        
         private readonly Repository _repozytorium;
 
         public WstepnaKonfiguracjaVm(Nawigacja nawigacja, Repository repozytorium)
+            : base(nawigacja)
         {
-            _nawigacja = nawigacja;
             _repozytorium = repozytorium;
 
             UzupelnijDane = new DelegateCommand(UzupelnijDaneExecute, UzupelnijDaneCanExecute);

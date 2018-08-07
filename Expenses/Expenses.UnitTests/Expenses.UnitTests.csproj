@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="HashUtilTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RowKeyUtilsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

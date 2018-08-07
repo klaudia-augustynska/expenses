@@ -11,13 +11,12 @@ namespace Expenses.TestApp.ViewModels
     class RejestracjaVm : BazowyVm
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly Nawigacja _nawigacja;
+        
         private readonly Repository _repozytorium;
 
         public RejestracjaVm(Nawigacja nawigacja, Repository repozytorium)
+            : base(nawigacja)
         {
-            _nawigacja = nawigacja;
             _nawigacja.ZmianaIlosciOtwartychStron += 
                 () => Zarejestruj.RaiseCanExecuteChanged();
             _repozytorium = repozytorium;

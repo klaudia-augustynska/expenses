@@ -16,13 +16,12 @@ namespace Expenses.TestApp.ViewModels
     class LogowanieVm : BazowyVm
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly Nawigacja _nawigacja;
+        
         private readonly Repository _repozytorium;
 
         public LogowanieVm(Nawigacja nawigacja, Repository repozytorium)
+            : base(nawigacja)
         {
-            _nawigacja = nawigacja;
             _repozytorium = repozytorium;
 
             Zaloguj = new DelegateCommand<PasswordBox>(ZalogujExecute, ZalogujCanExecute);

@@ -70,7 +70,7 @@ namespace Expenses.Api.Users
             var responseDto = new LogInResponseDto()
             {
                 Key = entity.Key,
-                Configured = !string.IsNullOrEmpty(entity.Login)
+                Configured = !string.IsNullOrEmpty(entity.Name)
             };
             return req.CreateResponse(HttpStatusCode.OK, responseDto);
         }

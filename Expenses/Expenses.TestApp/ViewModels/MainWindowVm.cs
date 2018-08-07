@@ -9,11 +9,8 @@ namespace Expenses.TestApp.ViewModels
 {
     class MainWindowVm : BazowyVm
     {
-        private readonly Nawigacja _nawigacja;
-
-        public MainWindowVm(Nawigacja nawigacja)
+        public MainWindowVm(Nawigacja nawigacja) : base(nawigacja)
         {
-            _nawigacja = nawigacja;
             _nawigacja.ZmianaIlosciOtwartychStron += 
                 () =>
                 {

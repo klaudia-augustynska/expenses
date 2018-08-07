@@ -38,11 +38,11 @@
 
                 <TextBlock Style="{StaticResource field}">Waga:</TextBlock>
                 <TextBox  Style="{StaticResource field}" Grid.Column="1" 
-                          Text="{Binding Waga}"></TextBox>
+                          Text="{Binding Waga, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 <TextBlock  Style="{StaticResource field}" Grid.Row="1">Wzrost:</TextBlock>
                 <TextBox  Style="{StaticResource field}" Grid.Row="1" Grid.Column="1"  
-                          Text="{Binding Wzrost}"></TextBox>
+                          Text="{Binding Wzrost, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 <TextBlock  Style="{StaticResource field}" Grid.Row="2">Płeć:</TextBlock>
                 <StackPanel Style="{StaticResource field}" Orientation="Horizontal"
@@ -59,7 +59,7 @@
 
                 <TextBlock  Style="{StaticResource field}" Grid.Row="3">Imię:</TextBlock>
                 <TextBox  Style="{StaticResource field}" Grid.Row="3" Grid.Column="1" 
-                          Text="{Binding Imie}"></TextBox>
+                          Text="{Binding Imie, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 <TextBlock  Style="{StaticResource field}" Grid.Row="4">Ile masz kasy:</TextBlock>
 
@@ -76,21 +76,21 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Style="{StaticResource field}">Bank PLN:</TextBlock>
-                    <TextBox Style="{StaticResource field}" Text="{Binding BankPln}"
+                    <TextBox Style="{StaticResource field}" Text="{Binding BankPln, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="1"></TextBox>
 
                     <TextBlock Style="{StaticResource field}" Grid.Column="2">Gotówka PLN:</TextBlock>
-                    <TextBox Style="{StaticResource field}" Text="{Binding GotowkaPln}"
+                    <TextBox Style="{StaticResource field}" Text="{Binding GotowkaPln, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="3"></TextBox>
 
                     <TextBlock Style="{StaticResource field}"
                                Grid.Row="1">Bank EUR:</TextBlock>
-                    <TextBox Style="{StaticResource field}" Text="{Binding BankEur}"
+                    <TextBox Style="{StaticResource field}" Text="{Binding BankEur, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Row="1" Grid.Column="1"></TextBox>
 
                     <TextBlock Style="{StaticResource field}"
                                Grid.Row="1" Grid.Column="2">Gotówka EUR:</TextBlock>
-                    <TextBox Style="{StaticResource field}" Text="{Binding GotowkaEur}"
+                    <TextBox Style="{StaticResource field}" Text="{Binding GotowkaEur, UpdateSourceTrigger=PropertyChanged}"
                                Grid.Row="1" Grid.Column="3"></TextBox>
                 </Grid>
 
@@ -101,7 +101,7 @@
                          Margin="0,0,0,10"
                          Visibility="{Binding PokazProgress, Converter={StaticResource boolToVisibilityConverter}}"/>
 
-            <Button Style="{StaticResource field}"
+            <Button Style="{StaticResource bigButton}"
                         Command="{Binding UzupelnijDane}">Uzupełnij dane</Button>
         </StackPanel>
 

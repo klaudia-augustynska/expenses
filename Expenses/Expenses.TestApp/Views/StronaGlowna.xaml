@@ -38,7 +38,8 @@
 
         <StackPanel Orientation="Horizontal" Grid.Column="1" Background="DarkGray">
 
-            <ToggleButton Style="{StaticResource togglebutton}" IsEnabled="False">Powiadomienia</ToggleButton>
+            <Button Style="{StaticResource button}"
+                    Command="{Binding PokazWiadomosci}">Wiadomości</Button>
             <Button Style="{StaticResource button}"
                     Command="{Binding PokazHistorie}">Historia</Button>
             <Button Style="{StaticResource button}"

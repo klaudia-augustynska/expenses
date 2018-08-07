@@ -10,21 +10,18 @@ namespace Expenses.TestApp.ViewModels
 {
     class StronaGlownaVm : BazowyVm
     {
-        private readonly Nawigacja _nawigacja;
-
-        public StronaGlownaVm(Nawigacja nawigacja)
+        public StronaGlownaVm(Nawigacja nawigacja) : base(nawigacja)
         {
-            _nawigacja = nawigacja;
-
-            PokazProfil = new DelegateCommand(PokazProfilExecute, PokazProfilCanExecute);
-            PokazListeDlugow = new DelegateCommand(PokazListeDlugowExecute, PokazListeDlugowCanExecute);
-            PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, PokazListeStalychWydatkowCanExecute);
-            PokazListeOsobWGospodarstwie = new DelegateCommand(PokazListeOsobWGospodarstwieExecute, PokazListeOsobWGospodarstwieCanExecute);
-            PokazKategorie = new DelegateCommand(PokazKategorieExecute, PokazKategorieCanExecute);
-            PokazHistorie = new DelegateCommand(PokazHistorieExecute, PokazHistorieCanExecute);
-            PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, PokazUstawieniaCanExecute);
-            Wyloguj = new DelegateCommand(WylogujExecute, WylogujCanExecute);
-            DodajParagon = new DelegateCommand(DodajParagonExecute, DodajParagonCanExecute);
+            PokazProfil = new DelegateCommand(PokazProfilExecute, () => true);
+            PokazListeDlugow = new DelegateCommand(PokazListeDlugowExecute, () => false);
+            PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, () => false);
+            PokazListeOsobWGospodarstwie = new DelegateCommand(PokazListeOsobWGospodarstwieExecute, () => true);
+            PokazKategorie = new DelegateCommand(PokazKategorieExecute, () => false);
+            PokazWiadomosci = new DelegateCommand(PokazWiadomosciExecute, () => false);
+            PokazHistorie = new DelegateCommand(PokazHistorieExecute, () => false);
+            PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, () => false);
+            Wyloguj = new DelegateCommand(WylogujExecute, () => true);
+            DodajParagon = new DelegateCommand(DodajParagonExecute, () => false);
         }
 
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
@@ -33,11 +30,6 @@ namespace Expenses.TestApp.ViewModels
         }
 
         public DelegateCommand PokazProfil { get; }
-        
-        private bool PokazProfilCanExecute()
-        {
-            return true;
-        }
 
         private void PokazProfilExecute()
         {
@@ -46,22 +38,12 @@ namespace Expenses.TestApp.ViewModels
 
         public DelegateCommand PokazListeDlugow { get; }
 
-        private bool PokazListeDlugowCanExecute()
-        {
-            return false;
-        }
-
         private void PokazListeDlugowExecute()
         {
 
         }
         
         public DelegateCommand PokazListeStalychWydatkow { get; }
-
-        private bool PokazListeStalychWydatkowCanExecute()
-        {
-            return false;
-        }
 
         private void PokazListeStalychWydatkowExecute()
         {
@@ -70,34 +52,26 @@ namespace Expenses.TestApp.ViewModels
 
         public DelegateCommand PokazListeOsobWGospodarstwie { get; }
 
-        private bool PokazListeOsobWGospodarstwieCanExecute()
-        {
-            return false;
-        }
-
         private void PokazListeOsobWGospodarstwieExecute()
         {
-
+            _nawigacja.IdzDo<GospodarstwoVm>();
         }
 
         public DelegateCommand PokazKategorie { get; }
-
-        private bool PokazKategorieCanExecute()
-        {
-            return false;
-        }
 
         private void PokazKategorieExecute()
         {
 
         }
 
-        public DelegateCommand PokazHistorie { get; }
+        public DelegateCommand PokazWiadomosci { get; }
 
-        private bool PokazHistorieCanExecute()
+        private void PokazWiadomosciExecute()
         {
-            return false;
+            _nawigacja.IdzDo<WiadomosciVm>();
         }
+
+        public DelegateCommand PokazHistorie { get; }
 
         private void PokazHistorieExecute()
         {
@@ -106,11 +80,6 @@ namespace Expenses.TestApp.ViewModels
 
         public DelegateCommand PokazUstawienia { get; }
 
-        private bool PokazUstawieniaCanExecute()
-        {
-            return false;
-        }
-
         private void PokazUstawieniaExecute()
         {
 
@@ -118,24 +87,18 @@ namespace Expenses.TestApp.ViewModels
 
         public DelegateCommand Wyloguj { get; }
 
-        private bool WylogujCanExecute()
-        {
-            return true;
-        }
-
         private void WylogujExecute()
         {
             RegistryPomocnik.CzyZalogowany = false;
+            RegistryPomocnik.CzySkonfigurowany = false;
+            RegistryPomocnik.KluczUzytkownika = string.Empty;
+            RegistryPomocnik.NazwaZalogowanegoUzytkownika = string.Empty;
+            RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownika = string.Empty;
             _nawigacja.IdzDo<LogowanieVm>();
             _nawigacja.KasujHistorie();
         }
 
         public DelegateCommand DodajParagon { get; }
-
-        private bool DodajParagonCanExecute()
-        {
-            return false;
-        }
 
         private void DodajParagonExecute()
         {

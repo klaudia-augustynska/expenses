@@ -26,12 +26,20 @@
         <DataTemplate x:Key="wstepnaKonfiguracja">
             <views:WstepnaKonfiguracja/>
         </DataTemplate>
+        <DataTemplate x:Key="wiadomosci">
+            <views:Wiadomosci/>
+        </DataTemplate>
+        <DataTemplate x:Key="gospodarstwo">
+            <views:Gospodarstwo/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
                               Logowanie="{StaticResource logowanie}"
                               StronaGlowna="{StaticResource stronaGlowna}"
                               Profil="{StaticResource profil}"
-                              WstepnaKonfiguracja="{StaticResource wstepnaKonfiguracja}"/>
+                              WstepnaKonfiguracja="{StaticResource wstepnaKonfiguracja}"
+                              Wiadomosci="{StaticResource wiadomosci}"
+                              Gospodarstwo="{StaticResource gospodarstwo}"/>
     </Window.Resources>
     
     <Grid>

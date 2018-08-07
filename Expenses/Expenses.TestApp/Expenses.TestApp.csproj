@@ -72,6 +72,7 @@
     <Compile Include="RegistryPomocnik.cs" />
     <Compile Include="ViewModels\GospodarstwoVm.cs" />
     <Compile Include="ViewModels\ProfilVm.cs" />
+    <Compile Include="ViewModels\PropertyChangedVm.cs" />
     <Compile Include="ViewModels\WiadomosciVm.cs" />
     <Compile Include="ViewModels\WstepnaKonfiguracjaVm.cs" />
     <Compile Include="Views\Gospodarstwo.xaml.cs">

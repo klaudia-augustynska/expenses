@@ -17,7 +17,7 @@ namespace Expenses.TestApp.ViewModels
             PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, () => false);
             PokazListeOsobWGospodarstwie = new DelegateCommand(PokazListeOsobWGospodarstwieExecute, () => true);
             PokazKategorie = new DelegateCommand(PokazKategorieExecute, () => false);
-            PokazWiadomosci = new DelegateCommand(PokazWiadomosciExecute, () => false);
+            PokazWiadomosci = new DelegateCommand(PokazWiadomosciExecute, () => true);
             PokazHistorie = new DelegateCommand(PokazHistorieExecute, () => false);
             PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, () => false);
             Wyloguj = new DelegateCommand(WylogujExecute, () => true);

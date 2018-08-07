@@ -15,6 +15,5 @@ namespace Expenses.Model.Entities
         public string From { get; set; }
         public string Topic { get; set; }
         public string Content { get; set; }
-        public bool WasRead { get; }
     }
 }

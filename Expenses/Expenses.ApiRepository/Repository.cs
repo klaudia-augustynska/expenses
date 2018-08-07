@@ -16,9 +16,11 @@ namespace Expenses.ApiRepository
         {
             UsersRepository = new Users(host, Path);
             HouseholdsRepository = new Households(host, Path);
+            MessagesRepository = new Messages(host, Path);
         }
 
         public IUsers UsersRepository { get; }
         public IHouseholds HouseholdsRepository { get; }
+        public IMessages MessagesRepository { get; }
     }
 }

@@ -14,6 +14,7 @@ namespace Expenses.TestApp
         private const string ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey = "ZahaszowaneHasloZalogowanegoUzytkownika";
         private const string CzyZalogowanyRegistryKey = "CzyZalogowany";
         private const string CzySkonfigurowanyRegistryKey = "CzySkonfigurowany";
+        private const string DataOstatniegoPobieraniaWiadomosciRegistryKey = "DataOstatniegoPobieraniaWiadomosci";
 
         public static string KluczUzytkownika
         {
@@ -45,6 +46,12 @@ namespace Expenses.TestApp
             set { ZapiszKlucz(CzySkonfigurowanyRegistryKey, value); }
         }
 
+        public static DateTime DataOstatniegoPobieraniaWiadomosci
+        {
+            get { return CzytajKlucz(DataOstatniegoPobieraniaWiadomosciRegistryKey, domyslnaWartosc: DateTime.MinValue); }
+            set { ZapiszKlucz(DataOstatniegoPobieraniaWiadomosciRegistryKey, value); }
+        }
+
         private static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza)
         {
             RegistryKey subKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\ExpensesTestApp");
@@ -65,6 +72,15 @@ namespace Expenses.TestApp
             return value == null
                 ? domyslnaWartosc
                 : value == "True";
+        }
+
+        private static DateTime CzytajKlucz(string nazwaKlucza, DateTime domyslnaWartosc)
+        {
+            RegistryKey subKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\ExpensesTestApp");
+            var value = subKey.GetValue(nazwaKlucza) as string;
+            return value == null
+                ? domyslnaWartosc
+                : DateTime.Parse(value);
         }
     }
 }

@@ -53,8 +53,9 @@ namespace Expenses.TestApp.ViewModels
                             MessageBox.Show("Zaproszenie zostało wysłane do wybranego użytkownika. Poczekaj aż potwierdzi.");
                             LoginOsoby = string.Empty;
                         }
-                        else if (x.Result != null
-                        && x.Result.StatusCode != System.Net.HttpStatusCode.OK)
+                        else if (x.Status == TaskStatus.RanToCompletion
+                            && x.Result != null
+                            && x.Result.StatusCode != System.Net.HttpStatusCode.OK)
                         {
                             var msg = $"Błąd przy zapraszaniu. StatusCode: {x.Result.StatusCode}, Message: {x.Result.Content.ReadAsStringAsync()}";
                             Log.Info(msg);

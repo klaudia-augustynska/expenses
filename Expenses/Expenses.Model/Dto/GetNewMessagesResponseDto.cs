@@ -11,5 +11,6 @@ namespace Expenses.Model.Dto
         public UserShort From { get; set; }
         public string Topic { get; set; }
         public string Content { get; set; }
+        public string RowKey { get; set; }
     }
 }

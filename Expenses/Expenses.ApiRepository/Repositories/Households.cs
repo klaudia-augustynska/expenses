@@ -25,5 +25,15 @@ namespace Expenses.ApiRepository.Repositories
                 return await httpClient.GetAsync(uri);
             }
         }
+
+        public async Task<HttpResponseMessage> AcceptInvitation(string from, string to, string rowKey, string key)
+        {
+            var uri = BaseUri.Append("accept", from, to, rowKey);
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                return await httpClient.GetAsync(uri);
+            }
+        }
     }
 }

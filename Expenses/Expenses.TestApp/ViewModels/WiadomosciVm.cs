@@ -6,8 +6,10 @@ using log4net;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -23,6 +25,7 @@ namespace Expenses.TestApp.ViewModels
         {
             _repozytorium = repozytorium;
             Potwierdz = new DelegateCommand<string>(PotwierdzExecute, PotwierdzCanExecute);
+            potwierdzRegex = new Regex(@"\/[a-z]+\/households\/accept\/(?<from>[a-z]+)\/(?<to>[a-z]+)\/(?<rowKey>[0-9\._:]+)");
         }
 
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
@@ -70,29 +73,31 @@ namespace Expenses.TestApp.ViewModels
                 });
         }
 
-        private List<Message> GetMessagesFromDto(List<GetNewMessagesResponseDto> dtoList)
+        private ObservableCollection<Message> GetMessagesFromDto(List<GetNewMessagesResponseDto> dtoList)
         {
-            var list = new List<Message>();
+            var list = new ObservableCollection<Message>();
             foreach (var item in dtoList)
             {
                 list.Add(new Message()
                 {
                     From = item.From,
                     Topic = item.Topic,
-                    Content = item.Content
+                    Content = item.Content,
+                    RowKey = item.RowKey
                 });
             }
             return list;
         }
 
-        private List<Message> _messages;
-        public List<Message> Messages
+        private ObservableCollection<Message> _messages;
+        public ObservableCollection<Message> Messages
         {
             get { return _messages; }
             private set
             {
                 _messages = value;
                 NotifyPropertyChanged(nameof(Messages));
+                Potwierdz.RaiseCanExecuteChanged();
             }
         }
 
@@ -107,14 +112,52 @@ namespace Expenses.TestApp.ViewModels
             }
         }
 
+        internal readonly Regex potwierdzRegex;
         public DelegateCommand<string> Potwierdz { get; }
-        private void PotwierdzExecute(string apiPath)
+        private async void PotwierdzExecute(string apiPath)
         {
+            // note: nie podoba mi się ten kod ale na ten moment życia 
+            // wydało mi się to najbardziej banalne do wdrożenia
 
+            var groups = potwierdzRegex.Match(apiPath).Groups;
+            var from = groups["from"].Value as string;
+            var to = groups["to"].Value as string;
+            var rowKey = groups["rowKey"].Value as string;
+
+            PokazProgress = true;
+            await _repozytorium.HouseholdsRepository.AcceptInvitation(from, to, rowKey, RegistryPomocnik.KluczUzytkownika)
+                .ContinueWith(task =>
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (task.Status == TaskStatus.RanToCompletion
+                            && task.Result != null
+                            && task.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            MessageBox.Show("Hurra od teraz należysz do tego gospodarstwa razem z tą osobą");
+                            var messagesToDelete = Messages.Where(x => x.Content == apiPath);
+                            foreach (var msg in messagesToDelete)
+                                Messages.Remove(msg);
+                        }
+                        else if (task.Status == TaskStatus.RanToCompletion
+                            && task.Result != null
+                            && task.Result.StatusCode != System.Net.HttpStatusCode.OK)
+                        {
+                            var msg = $"Błąd w akceptacji zaproszenia, status {task.Result.StatusCode}, błąd {task.Result.Content.ReadAsStringAsync()}";
+                            Log.Error(msg);
+                        }
+                        else
+                        {
+                            Log.Error("Błąd w akceptacji zaproszenia", task.Exception);
+                            MessageBox.Show("Błąd w akceptacji zaproszenia: " + task.Exception);
+                        }
+                    });
+                });
         }
         private bool PotwierdzCanExecute(string apiPath)
         {
-            return false;
+            return apiPath != null
+                && potwierdzRegex.IsMatch(apiPath);
         }
 
         public class Message : PropertyChangedVm
@@ -122,6 +165,7 @@ namespace Expenses.TestApp.ViewModels
             public UserShort From { get; set; }
             public string Topic { get; set; }
             public string Content { get; set; }
+            public string RowKey { get; set; }
 
             private bool _wasRead;
             public bool WasRead

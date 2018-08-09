@@ -10,5 +10,6 @@ namespace Expenses.ApiRepository.Interfaces
     public interface IHouseholds
     {
         Task<HttpResponseMessage> Invite(string invitersLogin, string invitedLogin, string key);
+        Task<HttpResponseMessage> AcceptInvitation(string from, string to, string rowKey, string key);
     }
 }

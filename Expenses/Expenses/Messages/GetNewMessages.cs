@@ -61,7 +61,8 @@ namespace Expenses.Api.Messages
                 {
                     From = JsonConvert.DeserializeObject<UserShort>(x.From),
                     Topic = x.Topic,
-                    Content = x.Content
+                    Content = x.Content,
+                    RowKey = x.RowKey
                 }).ToList();
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.OK,

@@ -111,7 +111,7 @@ namespace Expenses.Api.Households
                     Login = inviter.Login
                 }),
                 Topic = $"{inviter.Name} invites you to household",
-                Content = $"/api/households/accept/{inviter.Login}/{receiver.Login}"
+                Content = $"/api/households/accept/{inviter.HouseholdId ?? inviter.Login}/{receiver.Login}/{rowKey}"
             };
 
             log.Info("InviteToHousehold: proceeding with inserting invitation message");

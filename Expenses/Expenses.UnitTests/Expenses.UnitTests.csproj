@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregationTests.cs" />
     <Compile Include="HashUtilTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RowKeyUtilsTests.cs" />
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\Expenses.Common\Expenses.Common.csproj">
       <Project>{5E23C47A-F53A-47EF-A835-7AB0C500115C}</Project>
       <Name>Expenses.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Expenses.Model\Expenses.Model.csproj">
+      <Project>{AD74D96A-C1AE-4B2B-9708-6DD7F6A16D5E}</Project>
+      <Name>Expenses.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Expenses.TestApp\Expenses.TestApp.csproj">
       <Project>{0A76ED29-B423-4F75-8F81-094CCB98F3F1}</Project>

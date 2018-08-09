@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregation.cs" />
     <Compile Include="Dto\GetNewMessagesDto.cs" />
     <Compile Include="Dto\GetNewMessagesResponseDto.cs" />
     <Compile Include="Entities\Household.cs" />

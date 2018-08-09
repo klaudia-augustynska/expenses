@@ -130,6 +130,7 @@ namespace Expenses.TestApp.ViewModels
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
+                        PokazProgress = false;
                         if (task.Status == TaskStatus.RanToCompletion
                             && task.Result != null
                             && task.Result.StatusCode == System.Net.HttpStatusCode.OK)

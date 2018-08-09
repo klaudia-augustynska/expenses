@@ -136,9 +136,12 @@ namespace Expenses.TestApp.ViewModels
                             && task.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             MessageBox.Show("Hurra od teraz należysz do tego gospodarstwa razem z tą osobą");
-                            var messagesToDelete = Messages.Where(x => x.Content == apiPath);
-                            foreach (var msg in messagesToDelete)
+                            var messagesToDelete = Messages.Where(x => x.Content == apiPath).ToList();
+                            for (var i = 0; i < messagesToDelete.Count(); ++i)
+                            {
+                                var msg = messagesToDelete[i];
                                 Messages.Remove(msg);
+                            }
                         }
                         else if (task.Status == TaskStatus.RanToCompletion
                             && task.Result != null

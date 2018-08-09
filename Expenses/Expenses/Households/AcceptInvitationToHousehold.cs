@@ -48,7 +48,7 @@ namespace Expenses.Api.Households
                     value: "Please pass a receiver's login on the query string or in the request body");
             }
 
-            if (!(await SetThatReceiverIsConfirmed(household, to, table, log))
+            if (!(await SetThatReceiverIsConfirmedAndAddHisWallets(household, invitedUser, table, log))
                 || !(await SetUserBelongsToHousehold(household.PartitionKey, invitedUser, table, log))
                 || !(await DeleteInvitationMessage(message, table, log)))
             {
@@ -94,14 +94,22 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<bool> SetThatReceiverIsConfirmed(Household household, string to, CloudTable table, TraceWriter log)
+        private static async Task<bool> SetThatReceiverIsConfirmedAndAddHisWallets(Household household, User to, CloudTable table, TraceWriter log)
         {
             try
             {
-                log.Info("SetThatReceiverIsConfirmed");
+                log.Info("SetThatReceiverIsConfirmedAndAddHisWallets");
+
+                // members
                 var members = JsonConvert.DeserializeObject<List<Member>>(household.Members);
-                members.First(x => x.Login == to).Uncorfirmed = null;
+                members.First(x => x.Login == to.Login).Uncorfirmed = null;
                 household.Members = JsonConvert.SerializeObject(members);
+
+                // wallets
+                var householdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
+                var userWallets = JsonConvert.DeserializeObject<List<Wallet>>(to.Wallets);
+                var merged = Aggregation.MergeWallets(householdMoney, userWallets);
+                household.MoneyAggregated = JsonConvert.SerializeObject(merged);
 
                 var updateTableOperation = TableOperation.Replace(household);
                 await table.ExecuteAsync(updateTableOperation);
@@ -109,7 +117,7 @@ namespace Expenses.Api.Households
             }
             catch (Exception ex)
             {
-                log.Error("Cannot activate user", ex);
+                log.Error("Cannot add user to a household", ex);
                 return false;
             }
         }

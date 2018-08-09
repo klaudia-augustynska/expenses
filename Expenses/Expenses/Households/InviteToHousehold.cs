@@ -136,6 +136,7 @@ namespace Expenses.Api.Households
                 await CreateNewHousehold(
                     newHouseholdPk: householdPk,
                     owner: source.Login,
+                    wallets: source.Wallets,
                     notConfirmedMemberLogin: notConfirmedMember.Login,
                     table: table, log: log);
                 return await UpdateUserHouseholdInfo(
@@ -169,8 +170,22 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<TableResult> CreateNewHousehold(string newHouseholdPk, string owner, string notConfirmedMemberLogin, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> CreateNewHousehold(string newHouseholdPk, string owner, string wallets, string notConfirmedMemberLogin, CloudTable table, TraceWriter log)
         {
+            string money = null;
+            try
+            {
+                log.Info("InviteToHousehold: converting user wallets to household money");
+                var walletsList = JsonConvert.DeserializeObject<List<Wallet>>(wallets);
+                var moneyList = Aggregation.MergeWallets(walletsList);
+                money = JsonConvert.SerializeObject(moneyList);
+            }
+            catch (Exception ex)
+            {
+                log.Error("InviteToHousehold: cannot convert user wallets to household money", ex);
+                return null;
+            }
+
             var household = new Household()
             {
                 PartitionKey = newHouseholdPk,
@@ -186,7 +201,8 @@ namespace Expenses.Api.Households
                         Login = notConfirmedMemberLogin,
                         Uncorfirmed = true
                     }
-                })
+                }),
+                MoneyAggregated = money
             };
 
             try

@@ -1,5 +1,4 @@
-﻿using Expenses.Api.Helpers;
-using Expenses.Model;
+﻿using Expenses.Model;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -124,11 +123,40 @@ namespace Expenses.UnitTests
         [Test]
         public void MergeWallets_ArgumentNull_EmptyList()
         {
-            var merged = Aggregation.MergeWallets(null);
+            var merged = Aggregation.MergeWallets();
 
             Assert.IsNotNull(merged);
             Assert.AreEqual(0, merged.Count);
             Assert.AreEqual(typeof(List<Money>), merged.GetType());
+        }
+
+        [Test]
+        public void MergeWallets_InitialMoneySpecified_Aggregates()
+        {
+            var moneyList = new List<Money>()
+            {
+                new Money()
+                {
+                    Currency = Model.Enums.Currency.EUR,
+                    Amount = 2
+                }
+            };
+            var walletList = new List<Wallet>()
+            {
+                new Wallet()
+                {
+                    Name = "Gotówka w EUR",
+                    Money = new Money()
+                    {
+                        Currency = Model.Enums.Currency.EUR,
+                        Amount = 2
+                    }
+                }
+            };
+
+            Aggregation.MergeWallets(moneyList, walletList);
+
+            Assert.AreEqual(4, moneyList[0].Amount);
         }
     }
 }

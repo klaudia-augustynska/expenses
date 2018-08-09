@@ -5,13 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Expenses.Api.Helpers
+namespace Expenses.Model
 {
     public class Aggregation
     {
         public static List<Money> MergeWallets(params List<Wallet>[] wallets)
         {
-            var merged = new List<Money>();
+            return MergeWallets(null, wallets);
+        }
+
+        public static List<Money> MergeWallets(List<Money> initialMoney, params List<Wallet>[] wallets)
+        {
+            var merged = initialMoney ?? new List<Money>();
             if (wallets != null)
             {
                 foreach (var item in wallets)

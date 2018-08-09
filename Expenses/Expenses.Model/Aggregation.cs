@@ -42,5 +42,36 @@ namespace Expenses.Model
                 }
             }
         }
+
+
+        public static List<Money> ExcludeWallets(params List<Wallet>[] wallets)
+        {
+            return ExcludeWallets(null, wallets);
+        }
+
+        public static List<Money> ExcludeWallets(List<Money> initialMoney, params List<Wallet>[] wallets)
+        {
+            var merged = initialMoney ?? new List<Money>();
+            if (wallets != null)
+            {
+                foreach (var item in wallets)
+                {
+                    ExcludeWallets(merged, item);
+                }
+            }
+            return merged;
+        }
+
+        private static void ExcludeWallets(List<Money> merged, List<Wallet> wallets)
+        {
+            foreach (var item in wallets)
+            {
+                var mergedListElement = merged.FirstOrDefault(x => x.Currency == item.Money.Currency);
+                if (mergedListElement != null)
+                {
+                    mergedListElement.Amount -= item.Money.Amount;
+                }
+            }
+        }
     }
 }

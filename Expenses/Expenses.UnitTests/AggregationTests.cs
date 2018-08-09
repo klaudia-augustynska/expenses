@@ -158,5 +158,43 @@ namespace Expenses.UnitTests
 
             Assert.AreEqual(4, moneyList[0].Amount);
         }
+
+        [Test]
+        public void ExcludeWallets_Test()
+        {
+            var merged = new List<Money>()
+            {
+                new Money()
+                {
+                    Currency = Model.Enums.Currency.EUR,
+                    Amount = 20
+                }
+            };
+            var wallets = new List<Wallet>()
+            {
+                new Wallet()
+                {
+                    Name = "ssdsdsa",
+                    Money = new Money()
+                    {
+                        Currency = Model.Enums.Currency.EUR,
+                        Amount = 1
+                    }
+                },
+                new Wallet()
+                {
+                    Name = "poidg",
+                    Money = new Money()
+                    {
+                        Currency = Model.Enums.Currency.EUR,
+                        Amount = 2
+                    }
+                }
+            };
+
+            Aggregation.ExcludeWallets(merged, wallets);
+
+            Assert.AreEqual(17, merged[0].Amount);
+        }
     }
 }

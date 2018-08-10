@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Expenses.Model.Dto
 {
-    public class LogInResponseDto
+    public class AcceptInvitationToHouseholdResponseDto
     {
-        public string Key { get; set; }
-        public bool Configured { get; set; }
         public string HouseholdId { get; set; }
     }
 }

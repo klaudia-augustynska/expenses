@@ -35,5 +35,15 @@ namespace Expenses.ApiRepository.Repositories
                 return await httpClient.GetAsync(uri);
             }
         }
+
+        public async Task<HttpResponseMessage> GetMembers(string householdId, string key)
+        {
+            var uri = BaseUri.Append("members", householdId);
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                return await httpClient.GetAsync(uri);
+            }
+        }
     }
 }

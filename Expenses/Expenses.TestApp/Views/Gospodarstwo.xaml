@@ -11,9 +11,15 @@
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"
                                               CollapsedNotHidden="False"/>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityCollapsedConverter"
+                                              CollapsedNotHidden="True"/>
+        <converters:BoolToVisibilityConverter x:Key="reverseBoolToVisibilityCollapsedConverter"
+                                              CollapsedNotHidden="True" Reverse="True"/>
+        <converters:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Style="{StaticResource mainGrid}">
+        <ScrollViewer>
 
         <StackPanel>
             <TextBlock Style="{StaticResource h1}">Gospodarstwo domowe</TextBlock>
@@ -44,7 +50,30 @@
             <Button Style="{StaticResource bigButton}"
                     Command="{Binding WyslijZaproszenie}">Wyślij zaproszenie</Button>
 
-            <!--<TextBlock Style="{StaticResource h2}">Lista osób</TextBlock>-->
+            <TextBlock Style="{StaticResource h2}">Lista osób</TextBlock>
+
+
+
+            <ProgressBar IsIndeterminate="True"
+                         Margin="0,0,0,10"
+                         Visibility="{Binding PokazProgress2, Converter={StaticResource boolToVisibilityCollapsedConverter}}"/>
+
+            <TextBlock Visibility="{Binding CzyJest, Converter={StaticResource reverseBoolToVisibilityCollapsedConverter}}">Nie masz jeszcze gospodarstwa domowego. Zaproś kogoś...</TextBlock>
+
+            <Border Visibility="{Binding Osoby, Mode=OneWay, Converter={StaticResource nullToVisibilityConverter}}">
+            <Border Visibility="{Binding PokazProgress2, Converter={StaticResource reverseBoolToVisibilityCollapsedConverter}}">
+            <ListView ItemsSource="{Binding Osoby}"
+                      Visibility="{Binding CzyJest, Mode=OneWay, Converter={StaticResource boolToVisibilityCollapsedConverter}}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Imię" Width="120" DisplayMemberBinding="{Binding Imie}" />
+                        <GridViewColumn Header="Podsumowanie" Width="200" DisplayMemberBinding="{Binding Podsumowanie}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            </Border>
+            </Border>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

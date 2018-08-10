@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace Expenses.TestApp.Converters
 {
-    class BoolToVisibilityConverter : IValueConverter
+    class NullToVisibilityConverter : IValueConverter
     {
         public bool CollapsedNotHidden { get; set; }
         public bool Reverse { get; set; }
@@ -26,7 +26,7 @@ namespace Expenses.TestApp.Converters
                 negative = temp;
             }
 
-            return (bool)value ? positive : negative;
+            return value != null ? positive : negative;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

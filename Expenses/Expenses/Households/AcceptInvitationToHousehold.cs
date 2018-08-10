@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Expenses.Model;
+using Expenses.Model.Dto;
 using Expenses.Model.Entities;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -58,7 +59,12 @@ namespace Expenses.Api.Households
                     value: "Problem with activating user");
             }
 
-            return req.CreateResponse(HttpStatusCode.OK);
+            var responseDto = new AcceptInvitationToHouseholdResponseDto()
+            {
+                HouseholdId = household.PartitionKey
+            };
+
+            return req.CreateResponse(HttpStatusCode.OK, responseDto);
         }
 
         private static async Task<bool> DeleteInvitationMessage(Message message, CloudTable table, TraceWriter log)
@@ -99,15 +105,18 @@ namespace Expenses.Api.Households
             try
             {
                 log.Info("SetThatReceiverIsConfirmedAndAddHisWallets");
-
+                var userWallets = JsonConvert.DeserializeObject<List<Wallet>>(to.Wallets);
+                
                 // members
                 var members = JsonConvert.DeserializeObject<List<Member>>(household.Members);
-                members.First(x => x.Login == to.Login).Uncorfirmed = null;
+                var member = members.First(x => x.Login == to.Login);
+                member.Uncorfirmed = null;
+                var walletAggregated = Aggregation.MergeWallets(userWallets);
+                member.WalletSummary = walletAggregated;
                 household.Members = JsonConvert.SerializeObject(members);
 
                 // wallets
                 var householdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
-                var userWallets = JsonConvert.DeserializeObject<List<Wallet>>(to.Wallets);
                 var merged = Aggregation.MergeWallets(householdMoney, userWallets);
                 household.MoneyAggregated = JsonConvert.SerializeObject(merged);
 

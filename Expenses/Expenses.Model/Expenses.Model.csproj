@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregation.cs" />
+    <Compile Include="Dto\AcceptInvitationToHouseholdResponseDto.cs" />
+    <Compile Include="Dto\GetMembersResponseDto.cs" />
     <Compile Include="Dto\GetNewMessagesDto.cs" />
     <Compile Include="Dto\GetNewMessagesResponseDto.cs" />
     <Compile Include="Entities\Household.cs" />

@@ -10,5 +10,6 @@ namespace Expenses.Model
     {
         public string Login { get; set; }
         public bool? Uncorfirmed { get; set; }
+        public List<Money> WalletSummary { get; set; }
     }
 }

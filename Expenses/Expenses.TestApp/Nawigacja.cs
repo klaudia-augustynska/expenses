@@ -64,5 +64,10 @@ namespace Expenses.TestApp
             _otwarteStrony.Clear();
             ZmianaIlosciOtwartychStron?.Invoke();
         }
+
+        public bool CzyWidoczny(BazowyVm vm)
+        {
+            return GlownyVm.Vm == vm;
+        }
     }
 }

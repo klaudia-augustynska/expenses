@@ -94,6 +94,7 @@ namespace Expenses.TestApp.ViewModels
             RegistryPomocnik.KluczUzytkownika = string.Empty;
             RegistryPomocnik.NazwaZalogowanegoUzytkownika = string.Empty;
             RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownika = string.Empty;
+            RegistryPomocnik.GospodarstwoId = string.Empty;
             _nawigacja.IdzDo<LogowanieVm>();
             _nawigacja.KasujHistorie();
         }

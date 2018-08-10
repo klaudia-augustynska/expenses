@@ -15,48 +15,58 @@ namespace Expenses.TestApp
         private const string CzyZalogowanyRegistryKey = "CzyZalogowany";
         private const string CzySkonfigurowanyRegistryKey = "CzySkonfigurowany";
         private const string DataOstatniegoPobieraniaWiadomosciRegistryKey = "DataOstatniegoPobieraniaWiadomosci";
+        private const string GospodarstwoIdRegistryKey = "GospodarstwoId";
 
         public static string KluczUzytkownika
         {
             get { return CzytajKlucz(KluczUzytkownikaRegistryKey); }
-            set { ZapiszKlucz(KluczUzytkownikaRegistryKey, value); }
+            set { ZapiszKlucz(KluczUzytkownikaRegistryKey, value, nameof(KluczUzytkownika)); }
         }
 
         public static string NazwaZalogowanegoUzytkownika
         {
             get { return CzytajKlucz(NazwaZalogowanegoUzytkownikaRegistryKey); }
-            set { ZapiszKlucz(NazwaZalogowanegoUzytkownikaRegistryKey, value); }
+            set { ZapiszKlucz(NazwaZalogowanegoUzytkownikaRegistryKey, value, nameof(NazwaZalogowanegoUzytkownika)); }
         }
 
         public static string ZahaszowaneHasloZalogowanegoUzytkownika
         {
             get { return CzytajKlucz(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey); }
-            set { ZapiszKlucz(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey, value); }
+            set { ZapiszKlucz(ZahaszowaneHasloZalogowanegoUzytkownikaRegistryKey, value, nameof(ZahaszowaneHasloZalogowanegoUzytkownika)); }
         }
 
         public static bool CzyZalogowany
         {
             get { return CzytajKlucz(CzyZalogowanyRegistryKey, domyslnaWartosc: false); }
-            set { ZapiszKlucz(CzyZalogowanyRegistryKey, value); }
+            set { ZapiszKlucz(CzyZalogowanyRegistryKey, value, nameof(CzyZalogowany)); }
         }
 
         public static bool CzySkonfigurowany
         {
             get { return CzytajKlucz(CzySkonfigurowanyRegistryKey, domyslnaWartosc: false); }
-            set { ZapiszKlucz(CzySkonfigurowanyRegistryKey, value); }
+            set { ZapiszKlucz(CzySkonfigurowanyRegistryKey, value, nameof(CzySkonfigurowany)); }
         }
 
         public static DateTime DataOstatniegoPobieraniaWiadomosci
         {
             get { return CzytajKlucz(DataOstatniegoPobieraniaWiadomosciRegistryKey, domyslnaWartosc: DateTime.MinValue); }
-            set { ZapiszKlucz(DataOstatniegoPobieraniaWiadomosciRegistryKey, value); }
+            set { ZapiszKlucz(DataOstatniegoPobieraniaWiadomosciRegistryKey, value, nameof(DataOstatniegoPobieraniaWiadomosci)); }
         }
 
-        private static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza)
+        public static string GospodarstwoId
         {
+            get { return CzytajKlucz(GospodarstwoIdRegistryKey); }
+            set { ZapiszKlucz(GospodarstwoIdRegistryKey, value, nameof(GospodarstwoId)); }
+        }
+
+        private static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza, string nazwaWlasciwosci)
+        {
+            if (wartoscKlucza == null)
+                wartoscKlucza = string.Empty;
             RegistryKey subKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\ExpensesTestApp");
             subKey.SetValue(nazwaKlucza, wartoscKlucza);
             subKey.Close();
+            ZmianaWartosci?.Invoke(nazwaWlasciwosci);
         }
 
         private static string CzytajKlucz(string nazwaKlucza) 
@@ -82,5 +92,7 @@ namespace Expenses.TestApp
                 ? domyslnaWartosc
                 : DateTime.Parse(value);
         }
+
+        public static event Action<string> ZmianaWartosci;
     }
 }

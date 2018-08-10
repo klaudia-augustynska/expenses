@@ -101,6 +101,17 @@ namespace Expenses.Api.Households
             var date = DateTime.UtcNow;
             var rowKey = RowKeyUtils.GetInvertedDateString(date);
 
+            string householdOwner = null;
+            if (string.IsNullOrEmpty(inviter.HouseholdId))
+            {
+                householdOwner = inviter.Login;
+            }
+            else
+            {
+                var splited = inviter.HouseholdId.Split('_');
+                householdOwner = splited.Last();
+            }
+
             var message = new Message()
             {
                 PartitionKey = $"message_{receiver.Login}",
@@ -111,7 +122,7 @@ namespace Expenses.Api.Households
                     Login = inviter.Login
                 }),
                 Topic = $"{inviter.Name} invites you to household",
-                Content = $"/api/households/accept/{inviter.HouseholdId ?? inviter.Login}/{receiver.Login}/{rowKey}"
+                Content = $"/api/households/accept/{householdOwner}/{receiver.Login}/{rowKey}"
             };
 
             log.Info("InviteToHousehold: proceeding with inserting invitation message");
@@ -173,11 +184,12 @@ namespace Expenses.Api.Households
         private static async Task<TableResult> CreateNewHousehold(string newHouseholdPk, string owner, string wallets, string notConfirmedMemberLogin, CloudTable table, TraceWriter log)
         {
             string money = null;
+            List<Money> moneyList = null;
             try
             {
                 log.Info("InviteToHousehold: converting user wallets to household money");
                 var walletsList = JsonConvert.DeserializeObject<List<Wallet>>(wallets);
-                var moneyList = Aggregation.MergeWallets(walletsList);
+                moneyList = Aggregation.MergeWallets(walletsList);
                 money = JsonConvert.SerializeObject(moneyList);
             }
             catch (Exception ex)
@@ -194,7 +206,8 @@ namespace Expenses.Api.Households
                 {
                     new Member()
                     {
-                        Login = owner
+                        Login = owner,
+                        WalletSummary = moneyList
                     },
                     new Member()
                     {

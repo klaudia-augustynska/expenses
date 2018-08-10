@@ -11,5 +11,6 @@ namespace Expenses.ApiRepository.Interfaces
     {
         Task<HttpResponseMessage> Invite(string invitersLogin, string invitedLogin, string key);
         Task<HttpResponseMessage> AcceptInvitation(string from, string to, string rowKey, string key);
+        Task<HttpResponseMessage> GetMembers(string householdId, string key);
     }
 }

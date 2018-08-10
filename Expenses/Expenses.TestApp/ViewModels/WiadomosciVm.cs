@@ -25,7 +25,7 @@ namespace Expenses.TestApp.ViewModels
         {
             _repozytorium = repozytorium;
             Potwierdz = new DelegateCommand<string>(PotwierdzExecute, PotwierdzCanExecute);
-            potwierdzRegex = new Regex(@"\/[a-z]+\/households\/accept\/(?<from>[a-z]+)\/(?<to>[a-z]+)\/(?<rowKey>[0-9\._:]+)");
+            potwierdzRegex = new Regex(@"\/[a-z]+\/households\/accept\/(?<from>[a-z_]+)\/(?<to>[a-z]+)\/(?<rowKey>[0-9\._:]+)");
         }
 
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
@@ -128,7 +128,7 @@ namespace Expenses.TestApp.ViewModels
             await _repozytorium.HouseholdsRepository.AcceptInvitation(from, to, rowKey, RegistryPomocnik.KluczUzytkownika)
                 .ContinueWith(task =>
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
+                    Application.Current.Dispatcher.Invoke(async () =>
                     {
                         PokazProgress = false;
                         if (task.Status == TaskStatus.RanToCompletion
@@ -136,6 +136,7 @@ namespace Expenses.TestApp.ViewModels
                             && task.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             MessageBox.Show("Hurra od teraz należysz do tego gospodarstwa razem z tą osobą");
+                            RegistryPomocnik.GospodarstwoId = (await task.Result.Content.ReadAsDeserializedJson<AcceptInvitationToHouseholdResponseDto>())?.HouseholdId;
                             var messagesToDelete = Messages.Where(x => x.Content == apiPath).ToList();
                             for (var i = 0; i < messagesToDelete.Count(); ++i)
                             {

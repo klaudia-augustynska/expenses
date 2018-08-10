@@ -69,6 +69,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToPlecConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="RegistryPomocnik.cs" />
     <Compile Include="ViewModels\GospodarstwoVm.cs" />
     <Compile Include="ViewModels\ProfilVm.cs" />

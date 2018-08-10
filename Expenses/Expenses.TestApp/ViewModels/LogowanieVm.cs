@@ -85,6 +85,7 @@ namespace Expenses.TestApp.ViewModels
                             RegistryPomocnik.ZahaszowaneHasloZalogowanegoUzytkownika = hasloZahaszowane;
                             RegistryPomocnik.CzyZalogowany = true;
                             RegistryPomocnik.CzySkonfigurowany = logInResponseDto.Configured;
+                            RegistryPomocnik.GospodarstwoId = logInResponseDto.HouseholdId;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;

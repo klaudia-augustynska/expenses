@@ -136,7 +136,7 @@ namespace Expenses.TestApp.ViewModels
                             && task.Result.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             MessageBox.Show("Hurra od teraz należysz do tego gospodarstwa razem z tą osobą");
-                            RegistryPomocnik.GospodarstwoId = (await task.Result.Content.ReadAsDeserializedJson<AcceptInvitationToHouseholdResponseDto>())?.HouseholdId;
+                            RegistryPomocnik.GospodarstwoId = await task.Result.Content.ReadAsStringAsync();
                             var messagesToDelete = Messages.Where(x => x.Content == apiPath).ToList();
                             for (var i = 0; i < messagesToDelete.Count(); ++i)
                             {

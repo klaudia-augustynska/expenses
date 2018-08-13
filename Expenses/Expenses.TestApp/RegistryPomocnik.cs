@@ -16,6 +16,7 @@ namespace Expenses.TestApp
         private const string CzySkonfigurowanyRegistryKey = "CzySkonfigurowany";
         private const string DataOstatniegoPobieraniaWiadomosciRegistryKey = "DataOstatniegoPobieraniaWiadomosci";
         private const string GospodarstwoIdRegistryKey = "GospodarstwoId";
+        private const string CzyNalezyDoGospodarstwaRegistryKey = "CzyNalezyDoGospodarstwa";
 
         public static string KluczUzytkownika
         {
@@ -57,6 +58,12 @@ namespace Expenses.TestApp
         {
             get { return CzytajKlucz(GospodarstwoIdRegistryKey); }
             set { ZapiszKlucz(GospodarstwoIdRegistryKey, value, nameof(GospodarstwoId)); }
+        }
+
+        public static bool CzyNalezyDoGospodarstwa
+        {
+            get { return CzytajKlucz(CzyNalezyDoGospodarstwaRegistryKey, false); }
+            set { ZapiszKlucz(CzyNalezyDoGospodarstwaRegistryKey, value, nameof(CzyNalezyDoGospodarstwa)); }
         }
 
         private static void ZapiszKlucz(string nazwaKlucza, object wartoscKlucza, string nazwaWlasciwosci)

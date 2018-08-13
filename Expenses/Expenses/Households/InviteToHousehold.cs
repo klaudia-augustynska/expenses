@@ -28,8 +28,8 @@ namespace Expenses.Api.Households
             string invitersLogin,
             string receiverLogin,
             [Table("ExpensesApp")] CloudTable table,
-            [Table("ExpensesApp", "user_{invitersLogin}", "user_{invitersLogin}")] User invitersEntity,
-            [Table("ExpensesApp", "user_{receiverLogin}", "user_{receiverLogin}")] User receiverEntity,
+            [Table("ExpensesApp", "user_{invitersLogin}", "user_{invitersLogin}")] UserLogInData invitersEntity,
+            [Table("ExpensesApp", "user_{receiverLogin}", "user_{receiverLogin}")] UserLogInData receiverEntity,
             TraceWriter log)
         {
 
@@ -63,16 +63,13 @@ namespace Expenses.Api.Households
                     value: $"User with login {receiverEntity} does not exist"
                     );
             }
-            if (!string.IsNullOrEmpty(receiverEntity.HouseholdId))
-            {
-                log.Info($"InviteToHousehold response: BadRequest - user {receiverEntity} already belongs to a household");
-                return req.CreateResponse(
-                    statusCode: HttpStatusCode.BadRequest,
-                    value: $"User with login {receiverEntity} already belongs to a household"
-                    );
-            }
+            
+            var retrieveTableOperation = TableOperation.Retrieve<UserDetails>(invitersEntity.HouseholdId, invitersEntity.PartitionKey);
+            var retrieveResult = await table.ExecuteAsync(retrieveTableOperation);
+            var userDetails = retrieveResult.Result as UserDetails;
 
             if (await InsertInvitationMessage(
+                invitersDetails: userDetails,
                 inviter: invitersEntity, 
                 receiver: receiverEntity, 
                 table: table, log: log) == null)
@@ -83,6 +80,7 @@ namespace Expenses.Api.Households
                     );
             }
             if (await UpsertHousehold(
+                invitersDetails: userDetails,
                 source: invitersEntity,
                 notConfirmedMember: receiverEntity,
                 table: table, log: log) == null)
@@ -96,7 +94,7 @@ namespace Expenses.Api.Households
             return req.CreateResponse(HttpStatusCode.OK);
         }
 
-        private static async Task<TableResult> InsertInvitationMessage(User inviter, User receiver, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> InsertInvitationMessage(UserDetails invitersDetails, UserLogInData inviter, UserLogInData receiver, CloudTable table, TraceWriter log)
         {
             var date = DateTime.UtcNow;
             var rowKey = RowKeyUtils.GetInvertedDateString(date);
@@ -118,10 +116,10 @@ namespace Expenses.Api.Households
                 RowKey = rowKey,
                 From = JsonConvert.SerializeObject(new UserShort()
                 {
-                    Name = inviter.Name,
+                    Name = invitersDetails.Name,
                     Login = inviter.Login
                 }),
-                Topic = $"{inviter.Name} invites you to household",
+                Topic = $"{invitersDetails.Name} invites you to household",
                 Content = $"/api/households/accept/{householdOwner}/{receiver.Login}/{rowKey}"
             };
 
@@ -138,24 +136,12 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<TableResult> UpsertHousehold(User source, User notConfirmedMember, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> UpsertHousehold(UserDetails invitersDetails, UserLogInData source, UserLogInData notConfirmedMember, CloudTable table, TraceWriter log)
         {
-            if (string.IsNullOrEmpty(source.HouseholdId))
-            {
-                log.Info($"InviteToHousehold: the inviter does not belong to any household yet. Creating a new one.");
-                var householdPk = $"household_{source.Login}";
-                await CreateNewHousehold(
-                    newHouseholdPk: householdPk,
-                    owner: source.Login,
-                    wallets: source.Wallets,
-                    notConfirmedMemberLogin: notConfirmedMember.Login,
-                    table: table, log: log);
-                return await UpdateUserHouseholdInfo(
-                    user: source, 
-                    household: householdPk, 
-                    table: table, log: log);
-            }
-            else
+            var retrieveHouseholdOperation = TableOperation.Retrieve<Household>(source.HouseholdId, source.HouseholdId);
+            var result = await table.ExecuteAsync(retrieveHouseholdOperation);
+
+            if (result != null && result.Result != null && result.Result is Household)
             {
                 log.Info($"InviteToHousehold: the inviter belongs to a household {source.HouseholdId}");
                 return await UpdateExistingHousehold(
@@ -163,9 +149,24 @@ namespace Expenses.Api.Households
                     notConfirmedMemberLogin: notConfirmedMember.Login,
                     table: table, log: log);
             }
+            else
+            {
+                log.Info($"InviteToHousehold: the inviter does not belong to any household yet. Creating a new one.");
+                var householdPk = $"household_{source.Login}";
+                await CreateNewHousehold(
+                    newHouseholdPk: householdPk,
+                    owner: source.Login,
+                    wallets: invitersDetails.Wallets,
+                    notConfirmedMemberLogin: notConfirmedMember.Login,
+                    table: table, log: log);
+                return await UpdateUserHouseholdInfo(
+                    user: source,
+                    household: householdPk,
+                    table: table, log: log);
+            }
         }
 
-        private static async Task<TableResult> UpdateUserHouseholdInfo(User user, string household, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> UpdateUserHouseholdInfo(UserLogInData user, string household, CloudTable table, TraceWriter log)
         {
             user.HouseholdId = household;
             try

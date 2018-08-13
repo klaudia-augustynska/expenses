@@ -123,7 +123,7 @@ namespace Expenses.TestApp.ViewModels
 
         public bool CzyJest
         {
-            get { return !string.IsNullOrEmpty(RegistryPomocnik.GospodarstwoId); }
+            get { return RegistryPomocnik.CzyNalezyDoGospodarstwa; }
         }
 
         public List<Osoba> Osoby { get; private set; }

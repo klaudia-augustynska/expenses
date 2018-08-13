@@ -86,6 +86,7 @@ namespace Expenses.TestApp.ViewModels
                             RegistryPomocnik.CzyZalogowany = true;
                             RegistryPomocnik.CzySkonfigurowany = logInResponseDto.Configured;
                             RegistryPomocnik.GospodarstwoId = logInResponseDto.HouseholdId;
+                            RegistryPomocnik.CzyNalezyDoGospodarstwa = false;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 PokazProgress = false;

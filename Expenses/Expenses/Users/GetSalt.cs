@@ -21,7 +21,7 @@ namespace Expenses.Api.Users
                 Route = "users/salt/{login}/")
             ]HttpRequestMessage req,
             string login,
-            [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
+            [Table("ExpensesApp", "user_{login}", "user_{login}")] UserLogInData entity,
             TraceWriter log)
         {
             log.Info("Request to GetSalt");
@@ -40,14 +40,14 @@ namespace Expenses.Api.Users
             if (entity == null)
             {
                 salt = HashUtil.GenerateSalt();
-                log.Info($"GetSalt response: no entity with PK={dbUser} and RK={dbUser} in the database. Responding with fake salt: {salt}");
+                log.Info($"GetSalt response: no entity with PK={entity.PartitionKey} and RK={entity.RowKey} in the database. Responding with fake salt: {salt}");
             }
             else
             {
                 salt = entity.Salt;
-                log.Info($"GetSalt response: successfully found entity with PK={dbUser} and RK={dbUser} in the database. Responding with corresponding salt: {salt}");
+                log.Info($"GetSalt response: successfully found entity with PK={entity.PartitionKey} and RK={entity.RowKey} in the database. Responding with corresponding salt: {salt}");
             }
-            //return req.CreateResponse(HttpStatusCode.OK, salt);
+
             return new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,

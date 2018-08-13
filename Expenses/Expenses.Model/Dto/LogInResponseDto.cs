@@ -11,5 +11,6 @@ namespace Expenses.Model.Dto
         public string Key { get; set; }
         public bool Configured { get; set; }
         public string HouseholdId { get; set; }
+        public bool BelongsToHousehold { get; set; }
     }
 }

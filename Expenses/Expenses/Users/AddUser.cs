@@ -24,13 +24,14 @@ namespace Expenses.Api.Users
                 Route = "users/add/{login}/")
             ]HttpRequestMessage req, 
             string login,
-            [Table("ExpensesApp")]ICollector<User> outTable,
-            [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
+            [Table("ExpensesApp")]ICollector<UserLogInData> outTable,
+            [Table("ExpensesApp", "user_{login}", "user_{login}")] UserLogInData entity,
             TraceWriter log)
         {
             log.Info("Request to AddUser");
 
             var dbUser = $"user_{login}";
+            var householdId = $"household_{login}";
             AddUserDto addUserDto = null;
             try
             {
@@ -62,7 +63,7 @@ namespace Expenses.Api.Users
             }
             if (entity != null)
             {
-                log.Info($"AddUser response: BadRequest - entity with PK={dbUser} and RK={dbUser} already exists");
+                log.Info($"AddUser response: BadRequest - entity with PK={entity.PartitionKey} and RK={entity.RowKey} already exists");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "User with given login already exists"
@@ -71,17 +72,19 @@ namespace Expenses.Api.Users
 
             var key = await RequestANewKeyForUser(dbUser, log);
 
-            outTable.Add(new User()
+            var newUser = new UserLogInData()
             {
                 PartitionKey = dbUser,
                 RowKey = dbUser,
                 Login = login,
                 PasswordHash = addUserDto.HashedPassword,
                 Key = key,
-                Salt = addUserDto.Salt
-            });
+                Salt = addUserDto.Salt,
+                HouseholdId = householdId
+            };
+            outTable.Add(newUser);
 
-            log.Info($"AddUser response: Created - entity with PK={dbUser} and RK={dbUser}");
+            log.Info($"AddUser response: Created - entity with PK={newUser.PartitionKey} and RK={newUser.RowKey}");
             return req.CreateResponse(HttpStatusCode.Created);
         }
 

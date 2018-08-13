@@ -24,7 +24,7 @@ namespace Expenses.Api.Users
             ]HttpRequestMessage req,
             string login,
             [Table("ExpensesApp")] CloudTable table,
-            [Table("ExpensesApp", "user_{login}", "user_{login}")] User entity,
+            [Table("ExpensesApp", "user_{login}", "user_{login}")] UserLogInData entity,
             TraceWriter log)
         {
             log.Info("Request to ConfigureUser");
@@ -57,16 +57,22 @@ namespace Expenses.Api.Users
                     );
             }
 
-            entity.Height = dto.Height;
-            entity.Name = dto.Name;
-            entity.Sex = dto.Sex == Model.Enums.Sex.Female ? true : false;
-            entity.Wallets = JsonConvert.SerializeObject(dto.Wallets);
-            entity.Weight = dto.Weight;
-            TableOperation tableOperation = TableOperation.Replace(entity);
-            await table.ExecuteAsync(tableOperation);
+            var userDetails = new UserDetails()
+            {
+                PartitionKey = entity.HouseholdId,
+                RowKey = entity.PartitionKey,
+                Height = dto.Height,
+                Name = dto.Name,
+                Sex = dto.Sex == Model.Enums.Sex.Female ? true : false,
+                Wallets = JsonConvert.SerializeObject(dto.Wallets),
+                Weight = dto.Weight,
+                Login = entity.Login
+            };
+            TableOperation insertTableOperation = TableOperation.Insert(userDetails);
+            await table.ExecuteAsync(insertTableOperation);
             
             var dbUser = $"user_{login}";
-            log.Info($"ConfigureUser response: Updated entity with PK={dbUser} and RK={dbUser}");
+            log.Info($"ConfigureUser response: Updated entity with PK={userDetails.PartitionKey} and RK={userDetails.RowKey}");
             return req.CreateResponse(HttpStatusCode.OK);
         }
     }

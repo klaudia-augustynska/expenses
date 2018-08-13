@@ -30,7 +30,8 @@ namespace Expenses.Api.Households
             string rowKey,
             [Table("ExpensesApp")] CloudTable table,
             [Table("ExpensesApp", "household_{from}", "household_{from}")] Household household,
-            [Table("ExpensesApp", "user_{to}", "user_{to}")] User invitedUser,
+            [Table("ExpensesApp", "user_{to}", "user_{to}")] UserLogInData invitedUserLogInData,
+            [Table("ExpensesApp", "household_{to}", "user_{to}")] UserDetails invitedUser,
             [Table("ExpensesApp", "message_{to}", "{rowKey}")] Message message,
             TraceWriter log)
         {
@@ -50,7 +51,7 @@ namespace Expenses.Api.Households
             }
 
             if (!(await SetThatReceiverIsConfirmedAndAddHisWallets(household, invitedUser, table, log))
-                || !(await SetUserBelongsToHousehold(household.PartitionKey, invitedUser, table, log))
+                || !(await SetUserBelongsToHousehold(household.PartitionKey, invitedUserLogInData, table, log))
                 || !(await DeleteInvitationMessage(message, table, log)))
             {
                 log.Info("AcceptInvitationToHousehold response: Problem with activating user");
@@ -78,7 +79,7 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<bool> SetUserBelongsToHousehold(string partitionKey, User invitedUser, CloudTable table, TraceWriter log)
+        private static async Task<bool> SetUserBelongsToHousehold(string partitionKey, UserLogInData invitedUser, CloudTable table, TraceWriter log)
         {
             try
             {
@@ -95,7 +96,7 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<bool> SetThatReceiverIsConfirmedAndAddHisWallets(Household household, User to, CloudTable table, TraceWriter log)
+        private static async Task<bool> SetThatReceiverIsConfirmedAndAddHisWallets(Household household, UserDetails to, CloudTable table, TraceWriter log)
         {
             try
             {

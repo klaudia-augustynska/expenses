@@ -118,6 +118,10 @@ namespace Expenses.Api.Households
 
                 var updateTableOperation = TableOperation.Replace(household);
                 await table.ExecuteAsync(updateTableOperation);
+
+                to.PartitionKey = household.PartitionKey;
+                var insertTableOperation = TableOperation.Insert(to);
+                await table.ExecuteAsync(insertTableOperation);
                 return true;
             }
             catch (Exception ex)

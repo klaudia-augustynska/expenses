@@ -29,6 +29,8 @@ namespace Expenses.TestApp
                 return Gospodarstwo;
             if (item is KategorieVm)
                 return Kategorie;
+            if (item is DodajParagonVm)
+                return DodajParagon;
             return base.SelectTemplate(item, container);
         }
 
@@ -40,5 +42,6 @@ namespace Expenses.TestApp
         public DataTemplate Wiadomosci { get; set; }
         public DataTemplate Gospodarstwo { get; set; }
         public DataTemplate Kategorie { get; set; }
+        public DataTemplate DodajParagon { get; set; }
     }
 }

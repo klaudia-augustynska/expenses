@@ -35,6 +35,9 @@
         <DataTemplate x:Key="kategorie">
             <views:Kategorie/>
         </DataTemplate>
+        <DataTemplate x:Key="dodajParagon">
+            <views:DodajParagon/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
                               Logowanie="{StaticResource logowanie}"
@@ -43,7 +46,8 @@
                               WstepnaKonfiguracja="{StaticResource wstepnaKonfiguracja}"
                               Wiadomosci="{StaticResource wiadomosci}"
                               Gospodarstwo="{StaticResource gospodarstwo}"
-                              Kategorie="{StaticResource kategorie}"/>
+                              Kategorie="{StaticResource kategorie}"
+                              DodajParagon="{StaticResource dodajParagon}"/>
     </Window.Resources>
     
     <Grid>

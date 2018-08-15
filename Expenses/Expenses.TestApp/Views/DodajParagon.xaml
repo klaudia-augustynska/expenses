@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Expenses.TestApp.Views.DodajParagon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Expenses.TestApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Style="{StaticResource mainGrid}">
+        <ScrollViewer>
+
+            <StackPanel Margin="0,0,10,0">
+                <TextBlock Style="{StaticResource h1}">Dodaj paragon</TextBlock>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock  Style="{StaticResource field}">Data na paragonie:</TextBlock>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Style="{StaticResource field}">Dzień:</TextBlock>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Dzien, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1"></TextBox>
+
+                        <TextBlock Style="{StaticResource field}" Grid.Column="2">Miesiąc:</TextBlock>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Miesiac, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="3"></TextBox>
+
+                        <TextBlock Style="{StaticResource field}" Grid.Column="4">Rok:</TextBlock>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Rok, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="5"></TextBox>
+
+                    </Grid>
+
+
+                    <TextBlock Style="{StaticResource field}" Grid.Row="1">Kategoria całego paragonu</TextBlock>
+                    <ComboBox ItemsSource="{Binding Kategorie, Mode=OneWay}"
+                              SelectedItem="{Binding WybranaKategoria}"
+                              Grid.Column="1" Grid.Row="1"  Style="{StaticResource field}"/>
+
+                    <TextBlock Style="{StaticResource field}" Grid.Row="2">Kwota na paragonie</TextBlock>
+                    <Grid Grid.Column="1" Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Ile, UpdateSourceTrigger=PropertyChanged}"
+                             ></TextBox>
+                        <ComboBox ItemsSource="{Binding Waluty}"
+                                  SelectedValue="{Binding Waluta}"
+                                  Grid.Column="1"  Style="{StaticResource field}"/>
+                    </Grid>
+
+                </Grid>
+
+                <TextBlock Style="{StaticResource h2}">Wybrane wydatki z tego paragonu</TextBlock>
+
+                <Border BorderBrush="DarkGray" BorderThickness="1" 
+                        Background="LightGray" Padding="20"
+                        DataContext="{Binding WydatekNowy, Mode=OneWay}">
+
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+
+                        <TextBlock Style="{StaticResource field}" Grid.Row="0">Kategoria wydatku</TextBlock>
+                        <ComboBox ItemsSource="{Binding DataContext.Kategorie, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                              SelectedItem="{Binding WybranaKategoria}"
+                              Grid.Column="1" Grid.Row="0"  Style="{StaticResource field}"/>
+
+
+
+                        <TextBlock Style="{StaticResource field}" Grid.Row="1">Cena tego wydatku</TextBlock>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Ile, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1" Grid.Row="1"></TextBox>
+
+                        <TextBlock Style="{StaticResource field}" Grid.Row="2">Komentarz (opcjonalnie)</TextBlock>
+                        <TextBox Style="{StaticResource field}" Text="{Binding Komentarz, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1" Grid.Row="2"></TextBox>
+
+
+                        <Button Command="{Binding DataContext.DodajWydatek, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" Grid.Row="3"
+                            Style="{StaticResource bigButton}" Grid.ColumnSpan="2">Dodaj wydatek</Button>
+
+                    </Grid>
+
+                </Border>
+
+                <ListView Margin="0,15,0,0"
+                              ItemsSource="{Binding Wydatki}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Ile" Width="120" DisplayMemberBinding="{Binding Ile}" />
+                            <GridViewColumn Header="Kategoria" Width="200" DisplayMemberBinding="{Binding WybranaKategoria}" />
+                            <GridViewColumn Header="Komentarz" Width="200" DisplayMemberBinding="{Binding Komentarz}" />
+                        </GridView>
+                    </ListView.View>
+
+                </ListView>
+
+
+                <Button Style="{StaticResource bigButton}"
+                    Command="{Binding DodajParagon}">Dodaj paragon</Button>
+
+            </StackPanel>
+        </ScrollViewer>
+        
+    </Grid>
+</UserControl>

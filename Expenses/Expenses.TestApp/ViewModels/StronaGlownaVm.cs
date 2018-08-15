@@ -21,7 +21,7 @@ namespace Expenses.TestApp.ViewModels
             PokazHistorie = new DelegateCommand(PokazHistorieExecute, () => false);
             PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, () => false);
             Wyloguj = new DelegateCommand(WylogujExecute, () => true);
-            DodajParagon = new DelegateCommand(DodajParagonExecute, () => false);
+            DodajParagon = new DelegateCommand(DodajParagonExecute, () => true);
         }
 
         public override void PodczasLadowania(BazowyVm poprzedniaStrona)
@@ -104,7 +104,7 @@ namespace Expenses.TestApp.ViewModels
 
         private void DodajParagonExecute()
         {
-
+            _nawigacja.IdzDo<DodajParagonVm>();
         }
 
 

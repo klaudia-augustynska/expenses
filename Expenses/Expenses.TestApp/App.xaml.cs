@@ -34,6 +34,7 @@ namespace Expenses.TestApp
             container.RegisterSingleton<WstepnaKonfiguracjaVm>();
             container.RegisterSingleton<GospodarstwoVm>();
             container.RegisterSingleton<KategorieVm>();
+            container.RegisterSingleton<DodajParagonVm>();
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
                 new InjectionConstructor("http://localhost:7071/"));

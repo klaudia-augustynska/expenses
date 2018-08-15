@@ -25,10 +25,10 @@
 
         <StackPanel Grid.Row="1" Grid.RowSpan="2" Background="LightGray">
 
-            <Button Style="{StaticResource button}"
+            <!--<Button Style="{StaticResource button}"
                     Command="{Binding PokazListeDlugow}">Lista długów</Button>
             <Button Style="{StaticResource button}"
-                    Command="{Binding PokazListeStalychWydatkow}">Lista stałych wydatków</Button>
+                    Command="{Binding PokazListeStalychWydatkow}">Lista stałych wydatków</Button>-->
             <Button Style="{StaticResource button}"
                     Command="{Binding PokazListeOsobWGospodarstwie}">Lista osób w gosp. domowym</Button>
             <Button Style="{StaticResource button}"
@@ -40,8 +40,8 @@
 
             <Button Style="{StaticResource button}"
                     Command="{Binding PokazWiadomosci}">Wiadomości</Button>
-            <Button Style="{StaticResource button}"
-                    Command="{Binding PokazHistorie}">Historia</Button>
+            <!--<Button Style="{StaticResource button}"
+                    Command="{Binding PokazHistorie}">Historia</Button>-->
             <Button Style="{StaticResource button}"
                     Command="{Binding PokazUstawienia}">Ustawienia</Button>
             <Button Style="{StaticResource button}"

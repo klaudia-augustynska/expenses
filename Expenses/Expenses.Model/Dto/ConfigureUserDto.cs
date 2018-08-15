@@ -14,5 +14,7 @@ namespace Expenses.Model.Dto
         public double Height { get; set; }
         public Sex Sex { get; set; }
         public List<Wallet> Wallets { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public double Pal { get; set; }
     }
 }

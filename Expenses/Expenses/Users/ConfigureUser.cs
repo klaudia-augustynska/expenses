@@ -1,10 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Expenses.Common;
+using Expenses.Model;
 using Expenses.Model.Dto;
 using Expenses.Model.Entities;
+using Expenses.Model.Enums;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -66,7 +70,10 @@ namespace Expenses.Api.Users
                 Sex = dto.Sex == Model.Enums.Sex.Female ? true : false,
                 Wallets = JsonConvert.SerializeObject(dto.Wallets),
                 Weight = dto.Weight,
-                Login = entity.Login
+                Login = entity.Login,
+                Categories = JsonConvert.SerializeObject(DefaultCategoryUtils.GetDefaultCategories(entity.Login)),
+                DateOfBirth = dto.DateOfBirth,
+                Pal = dto.Pal
             };
             TableOperation insertTableOperation = TableOperation.Insert(userDetails);
             await table.ExecuteAsync(insertTableOperation);

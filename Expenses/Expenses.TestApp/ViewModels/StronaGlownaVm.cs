@@ -16,7 +16,7 @@ namespace Expenses.TestApp.ViewModels
             PokazListeDlugow = new DelegateCommand(PokazListeDlugowExecute, () => false);
             PokazListeStalychWydatkow = new DelegateCommand(PokazListeStalychWydatkowExecute, () => false);
             PokazListeOsobWGospodarstwie = new DelegateCommand(PokazListeOsobWGospodarstwieExecute, () => true);
-            PokazKategorie = new DelegateCommand(PokazKategorieExecute, () => false);
+            PokazKategorie = new DelegateCommand(PokazKategorieExecute, () => true);
             PokazWiadomosci = new DelegateCommand(PokazWiadomosciExecute, () => true);
             PokazHistorie = new DelegateCommand(PokazHistorieExecute, () => false);
             PokazUstawienia = new DelegateCommand(PokazUstawieniaExecute, () => false);
@@ -61,7 +61,7 @@ namespace Expenses.TestApp.ViewModels
 
         private void PokazKategorieExecute()
         {
-
+            _nawigacja.IdzDo<KategorieVm>();
         }
 
         public DelegateCommand PokazWiadomosci { get; }

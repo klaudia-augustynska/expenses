@@ -27,6 +27,8 @@ namespace Expenses.TestApp
                 return Wiadomosci;
             if (item is GospodarstwoVm)
                 return Gospodarstwo;
+            if (item is KategorieVm)
+                return Kategorie;
             return base.SelectTemplate(item, container);
         }
 
@@ -37,5 +39,6 @@ namespace Expenses.TestApp
         public DataTemplate WstepnaKonfiguracja { get; set; }
         public DataTemplate Wiadomosci { get; set; }
         public DataTemplate Gospodarstwo { get; set; }
+        public DataTemplate Kategorie { get; set; }
     }
 }

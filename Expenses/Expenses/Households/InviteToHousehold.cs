@@ -81,7 +81,7 @@ namespace Expenses.Api.Households
             }
             if (await UpsertHousehold(
                 invitersDetails: userDetails,
-                source: invitersEntity,
+                invitersLogInData: invitersEntity,
                 notConfirmedMember: receiverEntity,
                 table: table, log: log) == null)
             {
@@ -136,31 +136,30 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<TableResult> UpsertHousehold(UserDetails invitersDetails, UserLogInData source, UserLogInData notConfirmedMember, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> UpsertHousehold(UserDetails invitersDetails, UserLogInData invitersLogInData, UserLogInData notConfirmedMember, CloudTable table, TraceWriter log)
         {
-            var retrieveHouseholdOperation = TableOperation.Retrieve<Household>(source.HouseholdId, source.HouseholdId);
+            var retrieveHouseholdOperation = TableOperation.Retrieve<Household>(invitersLogInData.HouseholdId, invitersLogInData.HouseholdId);
             var result = await table.ExecuteAsync(retrieveHouseholdOperation);
 
             if (result != null && result.Result != null && result.Result is Household)
             {
-                log.Info($"InviteToHousehold: the inviter belongs to a household {source.HouseholdId}");
+                log.Info($"InviteToHousehold: the inviter belongs to a household {invitersLogInData.HouseholdId}");
                 return await UpdateExistingHousehold(
-                    householdPk: $"{source.HouseholdId}",
+                    householdPk: $"{invitersLogInData.HouseholdId}",
                     notConfirmedMemberLogin: notConfirmedMember.Login,
                     table: table, log: log);
             }
             else
             {
                 log.Info($"InviteToHousehold: the inviter does not belong to any household yet. Creating a new one.");
-                var householdPk = $"household_{source.Login}";
+                var householdPk = $"household_{invitersLogInData.Login}";
                 await CreateNewHousehold(
                     newHouseholdPk: householdPk,
-                    owner: source.Login,
-                    wallets: invitersDetails.Wallets,
+                    ownerDetails: invitersDetails,  
                     notConfirmedMemberLogin: notConfirmedMember.Login,
                     table: table, log: log);
                 return await UpdateUserHouseholdInfo(
-                    user: source,
+                    user: invitersLogInData,
                     household: householdPk,
                     table: table, log: log);
             }
@@ -182,14 +181,14 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<TableResult> CreateNewHousehold(string newHouseholdPk, string owner, string wallets, string notConfirmedMemberLogin, CloudTable table, TraceWriter log)
+        private static async Task<TableResult> CreateNewHousehold(string newHouseholdPk, UserDetails ownerDetails, string notConfirmedMemberLogin, CloudTable table, TraceWriter log)
         {
             string money = null;
             List<Money> moneyList = null;
             try
             {
                 log.Info("InviteToHousehold: converting user wallets to household money");
-                var walletsList = JsonConvert.DeserializeObject<List<Wallet>>(wallets);
+                var walletsList = JsonConvert.DeserializeObject<List<Wallet>>(ownerDetails.Wallets);
                 moneyList = Aggregation.MergeWallets(walletsList);
                 money = JsonConvert.SerializeObject(moneyList);
             }
@@ -207,8 +206,15 @@ namespace Expenses.Api.Households
                 {
                     new Member()
                     {
-                        Login = owner,
-                        WalletSummary = moneyList
+                        Login = ownerDetails.Login,
+                        WalletSummary = moneyList,
+                        Tmr = CalorieRateCalculator.Tmr(
+                            sex: ownerDetails.Sex.Value,
+                            bodyWeightKg: ownerDetails.Weight.Value,
+                            heightCm: ownerDetails.Height.Value,
+                            ageYears: AgeUtil.GetAge(dateOfBirth: ownerDetails.DateOfBirth.Value),
+                            pal: ownerDetails.Pal.Value
+                            )
                     },
                     new Member()
                     {
@@ -216,7 +222,8 @@ namespace Expenses.Api.Households
                         Uncorfirmed = true
                     }
                 }),
-                MoneyAggregated = money
+                MoneyAggregated = money,
+                CategoriesAggregated = ownerDetails.Categories
             };
 
             try

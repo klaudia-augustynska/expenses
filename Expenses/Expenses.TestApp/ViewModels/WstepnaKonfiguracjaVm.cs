@@ -180,7 +180,9 @@ namespace Expenses.TestApp.ViewModels
                                 Currency = Currency.EUR
                             }
                         }
-                    }
+                    },
+                    DateOfBirth = new DateTime(Rok, Miesiac, Dzien),
+                    Pal = CalculatePal(Pal)
                 })
                 .ContinueWith(x =>
                 {
@@ -201,11 +203,74 @@ namespace Expenses.TestApp.ViewModels
                     });
                 });
         }
+
+        /// <summary>
+        /// rzutowanie przedziału 0..10 na 1.4..2.4
+        /// </summary>
+        /// <param name="pal"></param>
+        /// <returns></returns>
+        private double CalculatePal(int pal)
+        {
+            return pal / 10 + 1.4;
+        }
+
         private bool UzupelnijDaneCanExecute()
         {
+            const int maxWiekZyciaCzlowiekaWgBiblii_xD = 120;
             return Waga > 0
                 && Wzrost > 0
-                && !string.IsNullOrEmpty(Imie);
+                && !string.IsNullOrEmpty(Imie)
+                && Rok > 0
+                && DateTime.Now.AddYears(-maxWiekZyciaCzlowiekaWgBiblii_xD).CompareTo(new DateTime(Rok, Miesiac, Dzien)) < 0
+                && Pal > 0;
+        }
+
+        private int _dzien;
+        public int Dzien
+        {
+            get { return _dzien; }
+            set
+            {
+                _dzien = value;
+                NotifyPropertyChanged(nameof(Dzien));
+                UzupelnijDane.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _miesiac;
+        public int Miesiac
+        {
+            get { return _miesiac; }
+            set
+            {
+                _miesiac = value;
+                NotifyPropertyChanged(nameof(Miesiac));
+                UzupelnijDane.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _rok;
+        public int Rok
+        {
+            get { return _rok; }
+            set
+            {
+                _rok = value;
+                NotifyPropertyChanged(nameof(Rok));
+                UzupelnijDane.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _pal;
+        public int Pal
+        {
+            get { return _pal; }
+            set
+            {
+                _pal = value;
+                NotifyPropertyChanged(nameof(Pal));
+                UzupelnijDane.RaiseCanExecuteChanged();
+            }
         }
     }
     public enum Plec

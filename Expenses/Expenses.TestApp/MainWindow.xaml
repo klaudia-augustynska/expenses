@@ -32,6 +32,9 @@
         <DataTemplate x:Key="gospodarstwo">
             <views:Gospodarstwo/>
         </DataTemplate>
+        <DataTemplate x:Key="kategorie">
+            <views:Kategorie/>
+        </DataTemplate>
         <testapp:ViewSelector x:Key="selector" 
                             Rejestracja="{StaticResource rejestracja}"
                               Logowanie="{StaticResource logowanie}"
@@ -39,7 +42,8 @@
                               Profil="{StaticResource profil}"
                               WstepnaKonfiguracja="{StaticResource wstepnaKonfiguracja}"
                               Wiadomosci="{StaticResource wiadomosci}"
-                              Gospodarstwo="{StaticResource gospodarstwo}"/>
+                              Gospodarstwo="{StaticResource gospodarstwo}"
+                              Kategorie="{StaticResource kategorie}"/>
     </Window.Resources>
     
     <Grid>

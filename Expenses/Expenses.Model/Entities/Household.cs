@@ -13,6 +13,13 @@ namespace Expenses.Model.Entities
         /// List of Member
         /// </summary>
         public string Members { get; set; }
+        /// <summary>
+        /// List of Money
+        /// </summary>
         public string MoneyAggregated { get; set; }
+        /// <summary>
+        /// List of Category
+        /// </summary>
+        public string CategoriesAggregated { get; set; }
     }
 }

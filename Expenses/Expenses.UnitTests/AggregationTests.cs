@@ -196,5 +196,129 @@ namespace Expenses.UnitTests
 
             Assert.AreEqual(17, merged[0].Amount);
         }
+
+        [Test]
+        public void MergeCategories_JoinsDefaultCategoriesOfType_Calories()
+        {
+            var klaudiaLogin = "Klaudia";
+            var paawelLogin = "Paweł";
+            var klaudiaKcal = 1234;
+            var pawelKcal = 2345;
+            var list1 = new List<Category>()
+            {
+                new Category()
+                {
+                    DefaultCategory = Model.Enums.DefaultCategory.NormalFood,
+                    Name = "A",
+                    Factor = new Dictionary<string, double>()
+                    {
+                        { klaudiaLogin, 100 }
+                    }
+                }
+            };
+            var list2 = new List<Category>()
+            {
+                new Category()
+                {
+                    DefaultCategory = Model.Enums.DefaultCategory.NormalFood,
+                    Name = "B",
+                    Factor = new Dictionary<string, double>()
+                    {
+                        { paawelLogin, 100 }
+                    }
+                }
+            };
+            var members = new List<Member>
+            {
+                new Member()
+                {
+                    Login = klaudiaLogin,
+                    Tmr = klaudiaKcal
+                },
+                new Member()
+                {
+                    Login = paawelLogin,
+                    Tmr = pawelKcal
+                }
+            };
+
+            var oneHundredPercent = members.Select(x => x.Tmr).Sum();
+
+            var expected = new Category()
+            {
+                DefaultCategory = Model.Enums.DefaultCategory.NormalFood,
+                Name = "A",
+                Factor = new Dictionary<string, double>()
+                    {
+                        { klaudiaLogin, (klaudiaKcal*100.0)/oneHundredPercent.Value },
+                        { paawelLogin, (pawelKcal*100.0)/oneHundredPercent.Value }
+                    }
+            };
+
+            var result = Aggregation.MergeCategories(members, list1, list2);
+
+            Assert.AreEqual(
+                expected: Math.Round(expected.Factor[klaudiaLogin],2), 
+                actual: Math.Round(result[0].Factor[klaudiaLogin], 2));
+            Assert.AreEqual(
+                expected: Math.Round(expected.Factor[paawelLogin], 2),
+                actual: Math.Round(result[0].Factor[paawelLogin], 2));
+            Assert.AreEqual(
+                expected: "A",
+                actual: result[0].Name);
+            Assert.AreEqual(expected: 1, actual: result.Count);
+        }
+
+
+        [Test]
+        public void MergeCategories_JoinsDefaultCategoriesOfType_EqualDivision()
+        {
+            var klaudiaLogin = "Klaudia";
+            var paawelLogin = "Paweł";
+            var list1 = new List<Category>()
+            {
+                new Category()
+                {
+                    DefaultCategory = Model.Enums.DefaultCategory.Hygiene,
+                }
+            };
+            var list2 = new List<Category>()
+            {
+                new Category()
+                {
+                    DefaultCategory = Model.Enums.DefaultCategory.Hygiene,
+                }
+            };
+            var members = new List<Member>
+            {
+                new Member()
+                {
+                    Login = klaudiaLogin
+                },
+                new Member()
+                {
+                    Login = paawelLogin
+                }
+            };
+
+            var expected = new Category()
+            {
+                DefaultCategory = Model.Enums.DefaultCategory.Hygiene,
+                Factor = new Dictionary<string, double>()
+                    {
+                        { klaudiaLogin,50 },
+                        { paawelLogin, 50 }
+                    }
+            };
+
+            var result = Aggregation.MergeCategories(members, list1, list2);
+
+            Assert.AreEqual(
+                expected: Math.Round(expected.Factor[klaudiaLogin], 2),
+                actual: Math.Round(result[0].Factor[klaudiaLogin], 2));
+            Assert.AreEqual(
+                expected: Math.Round(expected.Factor[paawelLogin], 2),
+                actual: Math.Round(result[0].Factor[paawelLogin], 2));
+        }
     }
 }

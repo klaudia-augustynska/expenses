@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ICategories.cs" />
     <Compile Include="Interfaces\IHouseholds.cs" />
     <Compile Include="Interfaces\IMessages.cs" />
     <Compile Include="Interfaces\IUsers.cs" />
+    <Compile Include="Repositories\Categories.cs" />
     <Compile Include="Repositories\Households.cs" />
     <Compile Include="Repositories\Messages.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />

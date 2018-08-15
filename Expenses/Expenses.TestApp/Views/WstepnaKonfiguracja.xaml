@@ -16,6 +16,7 @@
     </UserControl.Resources>
     
     <Grid Style="{StaticResource mainGrid}">
+        <ScrollViewer>
 
         <StackPanel>
             <TextBlock Style="{StaticResource h1}">Wstępna konfiguracja</TextBlock>
@@ -27,6 +28,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -61,9 +63,47 @@
                 <TextBox  Style="{StaticResource field}" Grid.Row="3" Grid.Column="1" 
                           Text="{Binding Imie, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
-                <TextBlock  Style="{StaticResource field}" Grid.Row="4">Ile masz kasy:</TextBlock>
 
-                <Grid Grid.Row="4" Grid.Column="1" >
+                <TextBlock  Style="{StaticResource field}" Grid.Row="4">Data urodzenia:</TextBlock>
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Style="{StaticResource field}">Dzień:</TextBlock>
+                    <TextBox Style="{StaticResource field}" Text="{Binding Dzien, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1"></TextBox>
+
+                    <TextBlock Style="{StaticResource field}" Grid.Column="2">Miesiąc:</TextBlock>
+                    <TextBox Style="{StaticResource field}" Text="{Binding Miesiac, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="3"></TextBox>
+
+                    <TextBlock Style="{StaticResource field}" Grid.Column="4">Rok:</TextBlock>
+                    <TextBox Style="{StaticResource field}" Text="{Binding Rok, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="5"></TextBox>
+
+                </Grid>
+
+                <TextBlock  Style="{StaticResource field}" Grid.Row="5">PAL:</TextBlock>
+                <TextBox Style="{StaticResource field}" Text="{Binding Pal, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"></TextBox>
+                <StackPanel Grid.Row="6" Grid.Column="1">
+                    <TextBlock Style="{StaticResource field}">podaj w skali od 0 do 10 jak oceniasz swoją aktywność fizyczną:</TextBlock>
+                    <TextBlock Style="{StaticResource field}">0 - siedząca praca i dojazd samochodem</TextBlock>
+                    <TextBlock Style="{StaticResource field}">3 - praca fizyczna / bieg 1h dziennie</TextBlock>
+                    <TextBlock Style="{StaticResource field}">6 - ciężka praca fizyczna / pływanie 2h dziennie</TextBlock>
+                    <TextBlock Style="{StaticResource field}">10 - zawodowy sportowiec</TextBlock>
+                </StackPanel>
+
+
+
+                <TextBlock  Style="{StaticResource field}" Grid.Row="7">Ile masz kasy:</TextBlock>
+
+                <Grid Grid.Row="7" Grid.Column="1" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -105,5 +145,6 @@
                         Command="{Binding UzupelnijDane}">Uzupełnij dane</Button>
         </StackPanel>
 
+        </ScrollViewer>
     </Grid>
 </UserControl>

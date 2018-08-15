@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Expenses.Common;
 using Expenses.Model;
 using Expenses.Model.Dto;
 using Expenses.Model.Entities;
@@ -50,7 +51,7 @@ namespace Expenses.Api.Households
                     value: "Please pass a receiver's login on the query string or in the request body");
             }
 
-            if (!(await SetThatReceiverIsConfirmedAndAddHisWallets(household, invitedUser, table, log))
+            if (!(await SetThatReceiverIsConfirmedAndAddHisWalletsAndCategories(household, invitedUser, table, log))
                 || !(await SetUserBelongsToHousehold(household.PartitionKey, invitedUserLogInData, table, log))
                 || !(await DeleteInvitationMessage(message, table, log)))
             {
@@ -96,7 +97,7 @@ namespace Expenses.Api.Households
             }
         }
 
-        private static async Task<bool> SetThatReceiverIsConfirmedAndAddHisWallets(Household household, UserDetails to, CloudTable table, TraceWriter log)
+        private static async Task<bool> SetThatReceiverIsConfirmedAndAddHisWalletsAndCategories(Household household, UserDetails to, CloudTable table, TraceWriter log)
         {
             try
             {
@@ -109,6 +110,7 @@ namespace Expenses.Api.Households
                 member.Uncorfirmed = null;
                 var walletAggregated = Aggregation.MergeWallets(userWallets);
                 member.WalletSummary = walletAggregated;
+                member.Tmr = CalorieRateCalculator.Tmr(to.Sex.Value, to.Weight.Value, to.Height.Value, AgeUtil.GetAge(to.DateOfBirth.Value), to.Pal.Value);
                 household.Members = JsonConvert.SerializeObject(members);
 
                 // wallets
@@ -116,11 +118,18 @@ namespace Expenses.Api.Households
                 var merged = Aggregation.MergeWallets(householdMoney, userWallets);
                 household.MoneyAggregated = JsonConvert.SerializeObject(merged);
 
+                // categories
+                var householdCategories = JsonConvert.DeserializeObject<List<Category>>(household.CategoriesAggregated);
+                var newUserCategories = JsonConvert.DeserializeObject<List<Category>>(to.Categories);
+                var categoriesMerged = Aggregation.MergeCategories(members, householdCategories, newUserCategories);
+                household.CategoriesAggregated = JsonConvert.SerializeObject(categoriesMerged);
+
                 var updateTableOperation = TableOperation.Replace(household);
                 await table.ExecuteAsync(updateTableOperation);
 
-                to.PartitionKey = household.PartitionKey;
-                var insertTableOperation = TableOperation.Insert(to);
+                var userAsHouseholdMember = new UserDetails(to);
+                userAsHouseholdMember.PartitionKey = household.PartitionKey;
+                var insertTableOperation = TableOperation.Insert(userAsHouseholdMember);
                 await table.ExecuteAsync(insertTableOperation);
                 return true;
             }

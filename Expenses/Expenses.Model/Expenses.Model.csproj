@@ -62,13 +62,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregation.cs" />
+    <Compile Include="CashFlowDetail.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="DefaultCategoryUtils.cs" />
+    <Compile Include="Dto\AddCashFlowDto.cs" />
     <Compile Include="Dto\AddCategoryDto.cs" />
+    <Compile Include="Dto\AddMessageToAddCashflowQueueDto.cs" />
     <Compile Include="Dto\GetCategoriesResponseDto.cs" />
     <Compile Include="Dto\GetMembersResponseDto.cs" />
     <Compile Include="Dto\GetNewMessagesDto.cs" />
     <Compile Include="Dto\GetNewMessagesResponseDto.cs" />
+    <Compile Include="Entities\Cashflow.cs" />
     <Compile Include="Entities\Household.cs" />
     <Compile Include="Entities\Message.cs" />
     <Compile Include="Entities\UserDetails.cs" />

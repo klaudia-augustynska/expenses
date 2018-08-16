@@ -50,5 +50,14 @@ namespace Expenses.ApiRepository.Interfaces
         /// <param name="configureUserDto"></param>
         /// <returns></returns>
         Task<HttpResponseMessage> ConfigureUser(string login, string key, ConfigureUserDto configureUserDto);
+
+        /// <summary>
+        /// OK i Lista Wallet jeśli zadzialało
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="householdId"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<HttpResponseMessage> GetWallets(string login, string householdId, string key);
     }
 }

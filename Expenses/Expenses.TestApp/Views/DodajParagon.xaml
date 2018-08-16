@@ -22,6 +22,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock  Style="{StaticResource field}">Data na paragonie:</TextBlock>
@@ -56,17 +57,17 @@
                               Grid.Column="1" Grid.Row="1"  Style="{StaticResource field}"/>
 
                     <TextBlock Style="{StaticResource field}" Grid.Row="2">Kwota na paragonie</TextBlock>
-                    <Grid Grid.Column="1" Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox Style="{StaticResource field}" Text="{Binding Ile, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Style="{StaticResource field}" Text="{Binding Ile, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Row="2" Grid.Column="1"
                              ></TextBox>
-                        <ComboBox ItemsSource="{Binding Waluty}"
-                                  SelectedValue="{Binding Waluta}"
-                                  Grid.Column="1"  Style="{StaticResource field}"/>
-                    </Grid>
+
+                    <TextBlock Style="{StaticResource field}" Grid.Row="3">Czym zapłaciłeś:</TextBlock>
+                    <ComboBox Style="{StaticResource field}" Grid.Row="3" Grid.Column="1"
+                              ItemsSource="{Binding Wallets, Mode=OneWay}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Guid"
+                              SelectedValue="{Binding Portfel}"></ComboBox>
+
 
                 </Grid>
 

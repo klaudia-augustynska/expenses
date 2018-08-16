@@ -71,5 +71,15 @@ namespace Expenses.ApiRepository.Repositories
                 return await httpClient.PostAsync(uri, content);
             }
         }
+
+        public async Task<HttpResponseMessage> GetWallets(string login, string householdId, string key)
+        {
+            var uri = BaseUri.Append("wallets", householdId, login);
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                return await httpClient.GetAsync(uri);
+            }
+        }
     }
 }

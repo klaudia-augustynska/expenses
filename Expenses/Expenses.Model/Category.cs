@@ -11,12 +11,20 @@ namespace Expenses.Model
 {
     public class Category
     {
-        public Category()
+        private Guid _guid;
+        public Guid Guid
         {
-            Guid = Guid.NewGuid();
+            get
+            {
+                if (_guid == null)
+                    _guid = Guid.NewGuid();
+                return _guid;
+            }
+            set
+            {
+                _guid = value;
+            }
         }
-
-        public Guid Guid { get; private set; }
         public DefaultCategory? DefaultCategory { get; set; }
         public string Name { get; set; }
         public Dictionary<MemberLogin, Percent> Factor { get; set; }

@@ -61,7 +61,7 @@ namespace Expenses.Api.Households
                     value: "Problem with activating user");
             }
 
-            return req.CreateResponse(HttpStatusCode.OK, new StringContent(household.PartitionKey));
+            return req.CreateResponse(HttpStatusCode.OK, household.PartitionKey);
         }
 
         private static async Task<bool> DeleteInvitationMessage(Message message, CloudTable table, TraceWriter log)

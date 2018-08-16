@@ -8,6 +8,20 @@ namespace Expenses.Model
 {
     public class Wallet
     {
+        private Guid _guid;
+        public Guid Guid
+        {
+            get
+            {
+                if (_guid == null)
+                    _guid = Guid.NewGuid();
+                return _guid;
+            }
+            set
+            {
+                _guid = value;
+            }
+        }
         public string Name { get; set; }
         public Money Money { get; set; }
     }

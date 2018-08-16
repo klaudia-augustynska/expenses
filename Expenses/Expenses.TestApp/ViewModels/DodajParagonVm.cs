@@ -22,11 +22,6 @@ namespace Expenses.TestApp.ViewModels
             _repozytorium = repository;
             WydatekNowy = new Wydatek();
             Wydatki = new ObservableCollection<Wydatek>();
-            Waluty = Enum.GetValues(typeof(Currency))
-                .Cast<Currency>()
-                .Select(x => x.ToString())
-                .ToList();
-            Waluta = Waluty.FirstOrDefault();
             DodajWydatek = new DelegateCommand(DodajWydatekExecute, DodajWydatekCanExecute);
             DodajParagon = new DelegateCommand(DodajParagonExecute, DodajParagonCanExecute);
         }
@@ -49,8 +44,39 @@ namespace Expenses.TestApp.ViewModels
                             if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
                                 var kategorie = await response.Content.ReadAsDeserializedJson<GetCategoriesResponseDto>();
-                                _kategorieNaSerwerze = kategorie.Categories;
-                                _kategorieNaSerwerze.ForEach(x => Kategorie.Add(x.Name));
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    _kategorieNaSerwerze = kategorie.Categories;
+                                    _kategorieNaSerwerze.ForEach(x => Kategorie.Add(x.Name));
+                                });
+                            }
+                            else
+                            {
+                                MessageBox.Show("Błąd http");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Błąd taska");
+                        }
+                    });
+            }
+
+            if (Wallets == null)
+            {
+                await _repozytorium.UsersRepository.GetWallets(RegistryPomocnik.NazwaZalogowanegoUzytkownika, RegistryPomocnik.GospodarstwoId, RegistryPomocnik.KluczUzytkownika)
+                    .ContinueWith(async task =>
+                    {
+                        if (task.Status == TaskStatus.RanToCompletion)
+                        {
+                            var response = task.Result;
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                            {
+                                var wallets = await response.Content.ReadAsDeserializedJson<List<Wallet>>();
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    Wallets = wallets;
+                                });
                             }
                             else
                             {
@@ -65,7 +91,7 @@ namespace Expenses.TestApp.ViewModels
             }
         }
 
-        private int _dzien;
+        private int _dzien = DateTime.Now.Day;
         public int Dzien
         {
             get { return _dzien; }
@@ -73,10 +99,11 @@ namespace Expenses.TestApp.ViewModels
             {
                 _dzien = value;
                 NotifyPropertyChanged(nameof(Dzien));
+                DodajParagon.RaiseCanExecuteChanged();
             }
         }
 
-        private int _miesiac;
+        private int _miesiac = DateTime.Now.Month;
         public int Miesiac
         {
             get { return _miesiac; }
@@ -84,10 +111,11 @@ namespace Expenses.TestApp.ViewModels
             {
                 _miesiac = value;
                 NotifyPropertyChanged(nameof(Miesiac));
+                DodajParagon.RaiseCanExecuteChanged();
             }
         }
 
-        private int _rok;
+        private int _rok = DateTime.Now.Year;
         public int Rok
         {
             get { return _rok; }
@@ -95,6 +123,7 @@ namespace Expenses.TestApp.ViewModels
             {
                 _rok = value;
                 NotifyPropertyChanged(nameof(Rok));
+                DodajParagon.RaiseCanExecuteChanged();
             }
         }
 
@@ -118,6 +147,7 @@ namespace Expenses.TestApp.ViewModels
             {
                 _wybranaKategoria = value;
                 NotifyPropertyChanged(nameof(WybranaKategoria));
+                DodajParagon.RaiseCanExecuteChanged();
             }
         }
 
@@ -129,6 +159,7 @@ namespace Expenses.TestApp.ViewModels
             {
                 _ile = value;
                 NotifyPropertyChanged(nameof(Ile));
+                DodajParagon.RaiseCanExecuteChanged();
             }
         }
 
@@ -171,27 +202,89 @@ namespace Expenses.TestApp.ViewModels
                 && Kategorie.Contains(WydatekNowy.WybranaKategoria);
         }
 
-        public List<string> Waluty { get; }
-
-        private string _waluta;
-        public string Waluta
+        public DelegateCommand DodajParagon { get; }
+        private async void DodajParagonExecute()
         {
-            get { return _waluta; }
+            var dto = new AddCashFlowDto()
+            {
+                Amount = new Money()
+                {
+                    Amount = Ile,
+                    Currency = Wallets.First(x => x.Guid == Portfel).Money.Currency
+                },
+                CategoryGuid = _kategorieNaSerwerze.First(x => x.Name == WybranaKategoria).Guid,
+                DateTime = new DateTime(Rok, Miesiac, Dzien),
+                Details = InneWydatkiNaListeDto(Wydatki),
+                WalletGuid = Portfel
+            };
+            await _repozytorium.CashFlowsRepository.Add(RegistryPomocnik.NazwaZalogowanegoUzytkownika, RegistryPomocnik.KluczUzytkownika, dto)
+                .ContinueWith(task =>
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (task.Status == TaskStatus.RanToCompletion)
+                        {
+                            var result = task.Result;
+                            if (result != null
+                            && result.StatusCode == System.Net.HttpStatusCode.OK)
+                            {
+                                MessageBox.Show("dodało się");
+                            }
+                            else
+                            {
+                                MessageBox.Show("błąd http");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("błąd taska");
+                        }
+                    });
+                });
+        }
+
+        private List<CashFlowDetail> InneWydatkiNaListeDto(ObservableCollection<Wydatek> wydatki)
+        {
+            var result = new List<CashFlowDetail>();
+            foreach (var item in wydatki)
+            {
+                result.Add(new CashFlowDetail()
+                {
+                    Amount = item.Ile,
+                    CategoryGuid = _kategorieNaSerwerze.First(x => x.Name == item.WybranaKategoria).Guid,
+                    Comment = item.Komentarz
+                });
+            }
+            return result;
+        }
+
+        private bool DodajParagonCanExecute()
+        {
+            return Rok > 0
+                && !string.IsNullOrEmpty(WybranaKategoria)
+                && Ile > 0;
+        }
+
+        private List<Wallet> _wallets;
+        public List<Wallet> Wallets
+        {
+            get { return _wallets; }
             set
             {
-                _waluta = value;
-                NotifyPropertyChanged(nameof(Waluta));
+                _wallets = value;
+                NotifyPropertyChanged(nameof(Wallets));
             }
         }
 
-        public DelegateCommand DodajParagon { get; }
-        private void DodajParagonExecute()
+        private Guid _portfel;
+        public Guid Portfel
         {
-
-        }
-        private bool DodajParagonCanExecute()
-        {
-            return false;
+            get { return _portfel; }
+            set
+            {
+                _portfel = value;
+                NotifyPropertyChanged(nameof(Portfel));
+            }
         }
     }
 

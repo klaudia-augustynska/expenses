@@ -4,8 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Expenses.TestApp.Views"
+             xmlns:converters="clr-namespace:Expenses.TestApp.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"
+                                              CollapsedNotHidden="False"/>
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityCollapsedConverter"
+                                              CollapsedNotHidden="True"/>
+        <converters:BoolToVisibilityConverter x:Key="invertBoolToVisibilityCollapsedConverter"
+                                              CollapsedNotHidden="True"
+                                              Reverse="True"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -36,18 +48,38 @@
 
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Background="DarkGray">
+        <Grid Grid.Column="1" Background="DarkGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <Button Style="{StaticResource button}"
+
+            <StackPanel Orientation="Horizontal" >
+
+                <Button Style="{StaticResource button}"
                     Command="{Binding PokazWiadomosci}">Wiadomości</Button>
-            <!--<Button Style="{StaticResource button}"
+                <!--<Button Style="{StaticResource button}"
                     Command="{Binding PokazHistorie}">Historia</Button>-->
-            <Button Style="{StaticResource button}"
+                <Button Style="{StaticResource button}"
                     Command="{Binding PokazUstawienia}">Ustawienia</Button>
-            <Button Style="{StaticResource button}"
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right"
+                           Margin="0,0,10,0">
+                    <Run Text="Zalogowany jako:"/>
+                    <Run Text="{Binding Login, Mode=OneWay}" FontWeight="Bold"/>
+                </TextBlock>
+
+                <Button Style="{StaticResource button}"
                     Command="{Binding Wyloguj}">Wyloguj</Button>
-            
-        </StackPanel>
+
+            </StackPanel>
+        </Grid>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1">
             <Grid>
@@ -57,27 +89,44 @@
                 </Grid.RowDefinitions>
             
                 <Border BorderBrush="LightGray" BorderThickness="1" Padding="10">
-                <StackPanel>
+                    <StackPanel>
 
-                    <TextBlock>Podsumowanie</TextBlock>
-                    <TextBlock>
-                        <Run Text="Wydane: "/>
-                        <Run Text="XXX" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Dostępne: "/>
-                        <Run Text="XXX" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Zaplanowane: "/>
-                        <Run Text="XXX" />
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Stan portfela: "/>
-                        <Run Text="XXX" />
-                    </TextBlock>
-                
-                </StackPanel>
+                        <TextBlock Style="{StaticResource h2}">Podsumowanie</TextBlock>
+
+                        <ProgressBar IsIndeterminate="True"
+                             Margin="0,0,0,10"
+                             Visibility="{Binding PokazProgress, Converter={StaticResource boolToVisibilityConverter}}"/>
+
+                        <StackPanel Visibility="{Binding CzyPobralo, Converter={StaticResource boolToVisibilityCollapsedConverter}}">
+                            
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="Wydane przez ten miesiąc przez wszystkich:"/>
+                                <Run Text="{Binding WydatkiDomu, Mode=OneWay}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="Pieniądze w domu:"/>
+                                <Run Text="{Binding PieniadzeDomu, Mode=OneWay}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="Ile ty wydałeś w ciągu tego miesiąca:"/>
+                                <Run Text="{Binding WydatkiUz, Mode=OneWay}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="Stan twojego portfela: "/>
+                                <Run Text="{Binding PieniadzeUz, Mode=OneWay}" FontWeight="Bold"/>
+                            </TextBlock>
+                            
+                        </StackPanel>
+                        
+                        <TextBlock Style="{StaticResource field}"
+                                   Visibility="{Binding CzyBlad, Converter={StaticResource boolToVisibilityCollapsedConverter}}">
+                            Nie można pobrać podsumowania
+                        </TextBlock>
+
+                        <Button Command="{Binding Odswiez}"
+                                Style="{StaticResource bigButton}">Odśwież</Button>
+
+                    </StackPanel>
                 </Border>
 
 

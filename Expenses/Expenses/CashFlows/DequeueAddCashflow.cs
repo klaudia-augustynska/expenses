@@ -103,11 +103,14 @@ namespace Expenses.Api.CashFlows
             }
             var generalCategory = categories.First(x => x.Guid == dto.CategoryGuid);
             categoryDict[generalCategory] = dto.Amount.Amount;
-            foreach (var detail in dto.Details)
+            if (dto.Details != null)
             {
-                categoryDict[generalCategory] -= detail.Amount;
-                var detailCategory = categories.First(x => x.Guid == detail.CategoryGuid);
-                categoryDict[detailCategory] += detail.Amount;
+                foreach (var detail in dto.Details)
+                {
+                    categoryDict[generalCategory] -= detail.Amount;
+                    var detailCategory = categories.First(x => x.Guid == detail.CategoryGuid);
+                    categoryDict[detailCategory] += detail.Amount;
+                }
             }
             decimal amountForThisUser = 0;
             foreach (var category in categories)

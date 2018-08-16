@@ -4,6 +4,7 @@ using Expenses.Model.Dto;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -26,6 +27,19 @@ namespace Expenses.ApiRepository.Repositories
             {
                 httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
                 return await httpClient.PostAsync(uri, content);
+            }
+        }
+
+        public async Task<HttpResponseMessage> GetSummary(string householdId, string login, DateTime dateFrom, DateTime dateTo, string key)
+        {
+            var dateFormat = "yyyy.MM.dd";
+            var dateFromString = dateFrom.ToString(dateFormat, CultureInfo.InvariantCulture);
+            var dateToString = dateTo.ToString(dateFormat, CultureInfo.InvariantCulture);
+            var uri = BaseUri.Append("summary", householdId, login, dateFromString, dateToString);
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", key);
+                return await httpClient.GetAsync(uri);
             }
         }
     }

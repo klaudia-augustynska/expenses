@@ -68,6 +68,7 @@
     <Compile Include="Dto\AddCashFlowDto.cs" />
     <Compile Include="Dto\AddCategoryDto.cs" />
     <Compile Include="Dto\AddMessageToAddCashflowQueueDto.cs" />
+    <Compile Include="Dto\GetCashSummaryResponseDto.cs" />
     <Compile Include="Dto\GetCategoriesResponseDto.cs" />
     <Compile Include="Dto\GetMembersResponseDto.cs" />
     <Compile Include="Dto\GetNewMessagesDto.cs" />

@@ -31,6 +31,7 @@ namespace Expenses.Api.Households
             string rowKey,
             [Table("ExpensesApp")] CloudTable table,
             [Table("ExpensesApp", "household_{from}", "household_{from}")] Household household,
+            [Table("ExpensesApp", "user_{from}", "user_{from}")] UserLogInData invitersLogInData,
             [Table("ExpensesApp", "user_{to}", "user_{to}")] UserLogInData invitedUserLogInData,
             [Table("ExpensesApp", "household_{to}", "user_{to}")] UserDetails invitedUser,
             [Table("ExpensesApp", "message_{to}", "{rowKey}")] Message message,
@@ -51,7 +52,8 @@ namespace Expenses.Api.Households
                     value: "Please pass a receiver's login on the query string or in the request body");
             }
 
-            if (!(await SetThatReceiverIsConfirmedAndAddHisWalletsAndCategories(household, invitedUser, table, log))
+            if (!(await SetThatInvterHasAGroup(invitersLogInData, table, log))
+                || !(await SetThatReceiverIsConfirmedAndAddHisWalletsAndCategories(household, invitedUser, table, log))
                 || !(await SetUserBelongsToHousehold(household.PartitionKey, invitedUserLogInData, table, log))
                 || !(await DeleteInvitationMessage(message, table, log)))
             {
@@ -62,6 +64,23 @@ namespace Expenses.Api.Households
             }
 
             return req.CreateResponse(HttpStatusCode.OK, household.PartitionKey);
+        }
+
+        private static async Task<bool> SetThatInvterHasAGroup(UserLogInData invitersLogInData, CloudTable table, TraceWriter log)
+        {
+            try
+            {
+                log.Info("SetThatInvterHasAGroup");
+                invitersLogInData.BelongsToGroup = true;
+                var updateOp = TableOperation.Replace(invitersLogInData);
+                await table.ExecuteAsync(updateOp);
+            }
+            catch (Exception ex)
+            {
+                log.Error("Cannot set that invter has a group", ex);
+                return false;
+            }
+            return true;
         }
 
         private static async Task<bool> DeleteInvitationMessage(Message message, CloudTable table, TraceWriter log)

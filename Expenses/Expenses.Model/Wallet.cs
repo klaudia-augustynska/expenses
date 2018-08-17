@@ -13,7 +13,7 @@ namespace Expenses.Model
         {
             get
             {
-                if (_guid == null)
+                if (_guid == default(Guid))
                     _guid = Guid.NewGuid();
                 return _guid;
             }

@@ -26,6 +26,7 @@ namespace Expenses.Model.Entities
             Wallets = userDetails.Wallets;
             Categories = userDetails.Categories;
             Pal = userDetails.Pal;
+            Charges = userDetails.Charges;
         }
 
         public string Login { get; set; }
@@ -46,5 +47,9 @@ namespace Expenses.Model.Entities
         /// </summary>
         public string Categories { get; set; }
         public double? Pal { get; set; }
+        /// <summary>
+        /// Dictionary, where Key is string (login) and value is List of Money. Negative values indicate that the person has a debt.
+        /// </summary>
+        public string Charges { get; set; }
     }
 }

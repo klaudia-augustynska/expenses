@@ -73,7 +73,8 @@ namespace Expenses.Api.Users
                 Login = entity.Login,
                 Categories = JsonConvert.SerializeObject(DefaultCategoryUtils.GetDefaultCategories(entity.Login)),
                 DateOfBirth = dto.DateOfBirth,
-                Pal = dto.Pal
+                Pal = dto.Pal,
+                Charges = JsonConvert.SerializeObject(new Dictionary<string, List<Money>>())
             };
             TableOperation insertTableOperation = TableOperation.Insert(userDetails);
             await table.ExecuteAsync(insertTableOperation);

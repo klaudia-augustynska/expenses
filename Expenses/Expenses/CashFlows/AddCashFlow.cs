@@ -29,7 +29,7 @@ namespace Expenses.Api.CashFlows
             string login,
             [Table("ExpensesApp")]ICollector<Cashflow> outTable,
             [Table("ExpensesApp", "user_{login}", "user_{login}")] UserLogInData user,
-            [Queue("expensesaddcashflow")] CloudQueue queue,
+            [Queue("expenses-addcashflow")] CloudQueue queue,
             TraceWriter log)
         {
             AddCashFlowDto dto = null;

@@ -14,5 +14,7 @@ namespace Expenses.Model.Dto
         public Guid WalletGuid { get; set; }
         public Guid CategoryGuid { get; set; }
         public List<CashFlowDetail> Details { get; set; }
+        public bool UserBelongsToGroup { get; set; }
+        public string Login { get; set; }
     }
 }

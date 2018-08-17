@@ -15,5 +15,6 @@ namespace Expenses.Model.Entities
         /// PK of household
         /// </summary>
         public string HouseholdId { get; set; }
+        public bool BelongsToGroup { get; set; }
     }
 }

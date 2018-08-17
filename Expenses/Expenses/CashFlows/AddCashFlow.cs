@@ -71,14 +71,18 @@ namespace Expenses.Api.CashFlows
             var dateTimeInverted = RowKeyUtils.GetInvertedDateString(dto.DateTime);
             var guid = Guid.NewGuid();
 
-            var cashflowHousehold = new Cashflow(cashflowBase)
+            if (user.BelongsToGroup)
             {
-                PartitionKey = user.HouseholdId,
-                RowKey = $"householdCashflow_{dateTimeInverted}_{guid}"
-            };
-            outTable.Add(cashflowHousehold);
-            log.Info($"Added cashflowHousehold PK={cashflowHousehold.PartitionKey} RK={cashflowHousehold.RowKey}");
 
+                var cashflowHousehold = new Cashflow(cashflowBase)
+                {
+                    PartitionKey = user.HouseholdId,
+                    RowKey = $"householdCashflow_{dateTimeInverted}_{guid}"
+                };
+                outTable.Add(cashflowHousehold);
+                log.Info($"Added cashflowHousehold PK={cashflowHousehold.PartitionKey} RK={cashflowHousehold.RowKey}");
+
+            }
             var cashflowUser = new Cashflow(cashflowBase)
             {
                 PartitionKey = user.HouseholdId,
@@ -109,7 +113,9 @@ namespace Expenses.Api.CashFlows
                 HouseholdPk = user.HouseholdId,
                 HouseholdRk = user.HouseholdId,
                 WalletGuid = dto.WalletGuid,
-                CategoryGuid = dto.CategoryGuid
+                CategoryGuid = dto.CategoryGuid,
+                UserBelongsToGroup = user.BelongsToGroup,
+                Login = login
             };
             var message = JsonConvert.SerializeObject(addMessageDto);
             await queue.AddMessageAsync(new CloudQueueMessage(message));

@@ -38,48 +38,43 @@ namespace Expenses.Api.CashFlows
 
             if (householdId == null)
             {
-                log.Info("LogIn response: BadRequest - householdId is null");
+                log.Info("GetCashSummary response: BadRequest - householdId is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a householdId on the query string or in the request body");
             }
             if (login == null)
             {
-                log.Info("LogIn response: BadRequest - login is null");
+                log.Info("GetCashSummary response: BadRequest - login is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a login on the query string or in the request body");
             }
             if (dateFrom == null)
             {
-                log.Info("LogIn response: BadRequest - dateFrom is null");
+                log.Info("GetCashSummary response: BadRequest - dateFrom is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a dateFrom on the query string or in the request body");
             }
             if (dateTo == null)
             {
-                log.Info("LogIn response: BadRequest - login is null");
+                log.Info("GetCashSummary response: BadRequest - login is null");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a dateTo on the query string or in the request body");
             }
-            if (household == null)
-            {
-                log.Info($"LogIn response: BadRequest - given household does not exist");
-                return req.CreateResponse(
-                    statusCode: HttpStatusCode.BadRequest,
-                    value: "Given household does not exist"
-                    );
-            }
 
             var responseDto = new GetCashSummaryResponseDto()
             {
-                HouseholdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated),
-                HouseholdExpenses = GetHouseholdExpenses(dateFrom, dateTo, cashflows),
                 UserWallets = JsonConvert.DeserializeObject <List<Wallet>>(userDetails.Wallets),
                 UserExpenses = GetUserExpenses(dateFrom, dateTo, cashflows, login)
             };
+            if (household != null)
+            {
+                responseDto.HouseholdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
+                responseDto.HouseholdExpenses = GetHouseholdExpenses(dateFrom, dateTo, cashflows);
+            }
 
             return req.CreateResponse(HttpStatusCode.OK, responseDto);
         }

@@ -86,6 +86,7 @@ namespace Expenses.Api.Households
             {
                 log.Info("SetUserBelongsToHousehold");
                 invitedUser.HouseholdId = partitionKey;
+                invitedUser.BelongsToGroup = true;
                 var updateTableOperation = TableOperation.Replace(invitedUser);
                 await table.ExecuteAsync(updateTableOperation);
                 return true;

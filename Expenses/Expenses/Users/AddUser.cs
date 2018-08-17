@@ -80,7 +80,8 @@ namespace Expenses.Api.Users
                 PasswordHash = addUserDto.HashedPassword,
                 Key = key,
                 Salt = addUserDto.Salt,
-                HouseholdId = householdId
+                HouseholdId = householdId,
+                BelongsToGroup = false
             };
             outTable.Add(newUser);
 

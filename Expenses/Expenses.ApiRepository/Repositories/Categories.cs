@@ -30,7 +30,7 @@ namespace Expenses.ApiRepository.Repositories
 
         public async Task<HttpResponseMessage> Add(string login, string key, string categoryName, Dictionary<string,double> factor = null)
         {
-            var uri = BaseUri.Append("getall", login);
+            var uri = BaseUri.Append("add", login);
             var dto = new AddCategoryDto()
             {
                 Name = categoryName,

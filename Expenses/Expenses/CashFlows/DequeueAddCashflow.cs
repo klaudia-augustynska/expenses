@@ -24,28 +24,53 @@ namespace Expenses.Api.CashFlows
 
             var dto = JsonConvert.DeserializeObject<AddMessageToAddCashflowQueueDto>(myQueueItem);
 
-            var retrieveHousehold = TableOperation.Retrieve<Household>(dto.HouseholdPk, dto.HouseholdRk);
-            var operationResult = table.Execute(retrieveHousehold);
-            if (operationResult.Result != null && operationResult.Result is Household)
+
+
+
+            if (dto.UserBelongsToGroup)
             {
-                var household = operationResult.Result as Household;
-
-                log.Info("DequeueAddCashflow - household retreived");
+                log.Info("DequeueAddCashflow - user belongs to a group. His whole household will be updated");
 
 
-                TableBatchOperation tableOperations = new TableBatchOperation();
+                var retrieveHousehold = TableOperation.Retrieve<Household>(dto.HouseholdPk, dto.HouseholdRk);
+                var operationResult = table.Execute(retrieveHousehold);
+                if (operationResult.Result != null && operationResult.Result is Household)
+                {
+                    var household = operationResult.Result as Household;
 
-                UpdateHousehold(household, dto, log, tableOperations);
+                    log.Info("DequeueAddCashflow - household retreived");
 
-                log.Info("DequeueAddCashflow - household updated");
+                    TableBatchOperation tableOperations = new TableBatchOperation();
 
-                UpdateUsersDetails(household, dto, table, log, tableOperations);
-                
+                    UpdateHousehold(household, dto, log, tableOperations);
 
-                await table.ExecuteBatchAsync(tableOperations);
+                    UpdateUsersDetails(household, dto, table, log, tableOperations);
 
-                log.Info("DequeueAddCashflow - users from the household updated");
+                    await table.ExecuteBatchAsync(tableOperations);
+
+                    log.Info("DequeueAddCashflow - users from the household updated");
+                }
             }
+            else
+            {
+                log.Info("DequeueAddCashflow - user does not belong to a group. Only his wallet will be updated");
+
+                var retrievePersonWhoPay = TableOperation.Retrieve<UserDetails>(dto.HouseholdPk, $"user_{dto.Login}");
+                var operationResult = table.Execute(retrievePersonWhoPay);
+                if (operationResult.Result != null && operationResult.Result is UserDetails)
+                {
+                    var personWhoPay = operationResult.Result as UserDetails;
+
+                    log.Info("DequeueAddCashflow - user who pay retreived");
+                    UpdateWallets(personWhoPay, dto);
+                    var updateOperation = TableOperation.Replace(personWhoPay);
+                    await table.ExecuteAsync(updateOperation);
+                    log.Info("DequeueAddCashflow - updated wallets of person who pay");
+                }
+
+            }
+
+
             log.Info("end of DequeueAddCashflow");
         }
 
@@ -81,10 +106,7 @@ namespace Expenses.Api.CashFlows
 
 
             var personWhoPay = userDetailsList.First(x => x.Wallets.Contains(dto.WalletGuid.ToString()));
-            var wallets = JsonConvert.DeserializeObject<List<Wallet>>(personWhoPay.Wallets);
-            var wallet = wallets.First(x => x.Guid == dto.WalletGuid);
-            wallet.Money.Amount -= dto.Amount.Amount;
-            personWhoPay.Wallets = JsonConvert.SerializeObject(wallets);
+            UpdateWallets(personWhoPay, dto);
 
             foreach (var userDetails in userDetailsList)
             {
@@ -123,6 +145,14 @@ namespace Expenses.Api.CashFlows
                 }
             }
 
+        }
+
+        private static void UpdateWallets(UserDetails personWhoPay, AddMessageToAddCashflowQueueDto dto)
+        {
+            var wallets = JsonConvert.DeserializeObject<List<Wallet>>(personWhoPay.Wallets);
+            var wallet = wallets.First(x => x.Guid == dto.WalletGuid);
+            wallet.Money.Amount -= dto.Amount.Amount;
+            personWhoPay.Wallets = JsonConvert.SerializeObject(wallets);
         }
 
         private static List<UserDetails> GetUserDetailsList(string partitionKey, CloudTable table, TraceWriter log)

@@ -199,6 +199,17 @@ namespace Expenses.TestApp.ViewModels
             }
         }
 
+        private string _dlugiItp;
+        public string DlugiItp
+        {
+            get { return _dlugiItp; }
+            private set
+            {
+                _dlugiItp = value;
+                NotifyPropertyChanged(nameof(DlugiItp));
+            }
+        }
+
         public string Login
         {
             get { return RegistryPomocnik.NazwaZalogowanegoUzytkownika; }
@@ -229,6 +240,7 @@ namespace Expenses.TestApp.ViewModels
                                 WydatkiDomu = Formatuj(dto.HouseholdExpenses);
                                 PieniadzeUz = Formatuj(dto.UserWallets);
                                 WydatkiUz = Formatuj(dto.UserExpenses);
+                                DlugiItp = Formatuj(dto.UserCharges);
                                 CzyPobralo = true;
                                 CzyBlad = false;
                             });
@@ -252,6 +264,58 @@ namespace Expenses.TestApp.ViewModels
                     }
                     PokazProgress = false;
                 });
+        }
+
+        private string Formatuj(Dictionary<string, List<Money>> dict)
+        {
+            var sb = new StringBuilder();
+
+            if (dict == null || dict.Count == 0)
+            {
+                sb.Append("Nie masz żadnych zobowiązań");
+            }
+            else
+            {
+                var i = 0;
+                foreach (var keyvalue in dict)
+                {
+                    if (i++ > 0)
+                        sb.Append("; ");
+                    if (keyvalue.Value.Count > 0 
+                        && keyvalue.Value.FirstOrDefault(x => x.Amount > 0) != null)
+                    {
+                        sb.Append(keyvalue.Key);
+                        sb.Append(": ");
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    var j = 0;
+                    foreach (var money in keyvalue.Value)
+                    {
+                        if (money.Amount == 0)
+                            continue;
+                        if (j++ > 0)
+                            sb.Append(", ");
+                        if (money.Amount < 0)
+                        {
+                            sb.Append("wisisz ");
+                            sb.Append(money.Amount * -1);
+                            sb.Append(' ');
+                            sb.Append(money.Currency.ToString());
+                        }
+                        else
+                        {
+                            sb.Append("ma do oddania ");
+                            sb.Append(money.Amount);
+                            sb.Append(' ');
+                            sb.Append(money.Currency.ToString());
+                        }
+                    }
+                }
+            }
+            return sb.ToString();
         }
 
         private string Formatuj(List<Wallet> list)

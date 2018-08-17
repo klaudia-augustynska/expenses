@@ -12,5 +12,6 @@ namespace Expenses.Model.Dto
         public List<Money> HouseholdExpenses { get; set; }
         public List<Wallet> UserWallets { get; set; }
         public List<Money> UserExpenses { get; set; }
+        public Dictionary<string, List<Money>> UserCharges { get; set; }
     }
 }

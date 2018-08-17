@@ -115,6 +115,10 @@
                                 <Run Text="Stan twojego portfela: "/>
                                 <Run Text="{Binding PieniadzeUz, Mode=OneWay}" FontWeight="Bold"/>
                             </TextBlock>
+                            <TextBlock TextWrapping="Wrap">
+                                <Run Text="Czy ktoś ci wisi / komuś wisisz: "/>
+                                <Run Text="{Binding DlugiItp, Mode=OneWay}" FontWeight="Bold"/>
+                            </TextBlock>
                             
                         </StackPanel>
                         

@@ -68,7 +68,8 @@ namespace Expenses.Api.CashFlows
             var responseDto = new GetCashSummaryResponseDto()
             {
                 UserWallets = JsonConvert.DeserializeObject <List<Wallet>>(userDetails.Wallets),
-                UserExpenses = GetUserExpenses(dateFrom, dateTo, cashflows, login)
+                UserExpenses = GetUserExpenses(dateFrom, dateTo, cashflows, login),
+                UserCharges = JsonConvert.DeserializeObject<Dictionary<string, List<Money>>>(userDetails.Charges)
             };
             if (household != null)
             {

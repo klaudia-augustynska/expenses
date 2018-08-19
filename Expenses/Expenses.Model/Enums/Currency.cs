@@ -2,7 +2,8 @@
 {
     public enum Currency
     {
-        PLN,
-        EUR
+        Default = 0,
+        PLN = 1,
+        EUR = 2
     }
 }

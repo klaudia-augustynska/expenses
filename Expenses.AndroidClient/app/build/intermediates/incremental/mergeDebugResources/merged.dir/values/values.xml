@@ -871,7 +871,7 @@
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="app_name">Expenses App</string>
+    <string name="app_name">ExpensesApp</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
     <string name="character_counter_content_description">Character limit exceeded %1$d of %2$d</string>

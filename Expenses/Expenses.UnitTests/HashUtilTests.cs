@@ -44,5 +44,16 @@ namespace Expenses.UnitTests
                 });
             }
         }
+
+        //[Test]
+        /// <summary>
+        /// Method to compare values with Java implementation
+        /// </summary>
+        public void Hash_CheckValues()
+        {
+            var hash1 = HashUtil.Hash("haslo", "solniczka0123456");
+            var hash2 = HashUtil.Hash("pawel", "klaudia890123456");
+            var hash3 = HashUtil.Hash("torun", "bydgoszcz0123456");
+        }
     }
 }

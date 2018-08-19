@@ -8,12 +8,13 @@ namespace Expenses.Model.Enums
 {
     public enum DefaultCategory
     {
-        NormalFood,
-        UnhealthyFood,
-        Alcohol,
-        Transport,
-        Hygiene,
-        Bills,
-        Other
+        Default = 0,
+        NormalFood = 1,
+        UnhealthyFood = 2,
+        Alcohol = 3,
+        Transport = 4,
+        Hygiene = 5,
+        Bills = 6,
+        Other = 7
     }
 }

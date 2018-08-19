@@ -1,0 +1,174 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+MERGED from [com.android.support:design:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\design-28.0.0-rc01.aar\2d354e9cac4e6aceff245a9f98722399\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:appcompat-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0-rc01.aar\7ef5b796144bef3da27d43573ca1c96c\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-fragment-28.0.0-rc01.aar\caa176ddca08ff98ac44f1342440e1bc\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-28.0.0-rc01.aar\8b8894f44ec09df31578dd5be3c08585\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:recyclerview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-28.0.0-rc01.aar\60bf3e47e346abedf1c76a3451326445\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-ui-28.0.0-rc01.aar\f638391f558d9042936e046d670565a4\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-utils-28.0.0-rc01.aar\307b567bf7c6de0e083951e13af91199\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-28.0.0-rc01.aar\804cad872a1c4a23cec0eae087a21723\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:transition:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\transition-28.0.0-rc01.aar\8695d67019231f009221c6ea278b3f52\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:loader:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\loader-28.0.0-rc01.aar\64a121e0880e07d9cc35f42c84480c83\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:viewpager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewpager-28.0.0-rc01.aar\804ea99372aefb6bd7285a70e1d1e2cc\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:coordinatorlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-28.0.0-rc01.aar\20b1d8a7250d63120da39655b9794842\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:drawerlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\drawerlayout-28.0.0-rc01.aar\d9ac6e456cb853145c03c4d18c14da98\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:slidingpanelayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-28.0.0-rc01.aar\400381822f997ca5dd3575ae49662d12\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:customview:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\customview-28.0.0-rc01.aar\0040213818ae75552e499531166f0c02\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:swiperefreshlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-28.0.0-rc01.aar\29bd967486895acb543ceec06aa503ce\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:asynclayoutinflater:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-28.0.0-rc01.aar\9063c26686c31a1eeccbb24401ccf3b5\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:17:1-24:12
+MERGED from [com.android.support:versionedparcelable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0-rc01.aar\fc5eafbed1f4791aff0002bf5fcba15c\AndroidManifest.xml:17:1-25:12
+MERGED from [com.android.support:cursoradapter:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cursoradapter-28.0.0-rc01.aar\f9fe0b780d0c1dafc7737df213fe0a3a\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:cardview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cardview-v7-28.0.0-rc01.aar\74d87c0dda8c7e8a31f65fa66c04c275\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\8ee85dd2f36a7cd0055c942688d2adf9\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:documentfile:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\documentfile-28.0.0-rc01.aar\99a4dbdd6feae68b17dbfb3093562364\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:localbroadcastmanager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-28.0.0-rc01.aar\fab4a921d8696e4272f4156a50463e21\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:print:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\print-28.0.0-rc01.aar\f99d7699d850b857f050e9d072237cb6\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.1.aar\4e86640a816fdac61f886f3633f21fe2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:interpolator:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\interpolator-28.0.0-rc01.aar\dc5fb78e2e9f98653e79ca93db815a75\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\b9d244289e6dd86c843c60aa49d113e2\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\3cfd2ae67bb3360dda1ba7015566f883\AndroidManifest.xml:17:1-22:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+	package
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:3:5-64
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:1-27:12
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:5:5-71
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:5:22-68
+uses-permission#android.permission.READ_PROFILE
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:6:5-71
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:6:22-68
+uses-permission#android.permission.READ_CONTACTS
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:7:5-72
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:7:22-69
+application
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:9:5-25:19
+MERGED from [com.android.support:design:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\design-28.0.0-rc01.aar\2d354e9cac4e6aceff245a9f98722399\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\design-28.0.0-rc01.aar\2d354e9cac4e6aceff245a9f98722399\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:22:5-94
+MERGED from [com.android.support:versionedparcelable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0-rc01.aar\fc5eafbed1f4791aff0002bf5fcba15c\AndroidManifest.xml:22:5-23:19
+MERGED from [com.android.support:versionedparcelable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0-rc01.aar\fc5eafbed1f4791aff0002bf5fcba15c\AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:22:18-91
+	android:supportsRtl
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:14:9-35
+	android:label
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:12:9-41
+	android:roundIcon
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:13:9-54
+	android:icon
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:11:9-43
+	android:allowBackup
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:10:9-35
+	android:theme
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:15:9-40
+activity#net.azurewebsites.expenses_by_klaudia.expensesapp.LoginActivity
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:16:9-24:20
+	android:label
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:18:13-45
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:17:13-42
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:19:13-23:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:20:17-69
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:20:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:22:17-77
+	android:name
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml:22:27-74
+uses-sdk
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+MERGED from [com.android.support:design:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\design-28.0.0-rc01.aar\2d354e9cac4e6aceff245a9f98722399\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:design:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\design-28.0.0-rc01.aar\2d354e9cac4e6aceff245a9f98722399\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0-rc01.aar\7ef5b796144bef3da27d43573ca1c96c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0-rc01.aar\7ef5b796144bef3da27d43573ca1c96c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-fragment-28.0.0-rc01.aar\caa176ddca08ff98ac44f1342440e1bc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-fragment-28.0.0-rc01.aar\caa176ddca08ff98ac44f1342440e1bc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-28.0.0-rc01.aar\8b8894f44ec09df31578dd5be3c08585\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-28.0.0-rc01.aar\8b8894f44ec09df31578dd5be3c08585\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-28.0.0-rc01.aar\60bf3e47e346abedf1c76a3451326445\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-28.0.0-rc01.aar\60bf3e47e346abedf1c76a3451326445\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-ui-28.0.0-rc01.aar\f638391f558d9042936e046d670565a4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-ui-28.0.0-rc01.aar\f638391f558d9042936e046d670565a4\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-utils-28.0.0-rc01.aar\307b567bf7c6de0e083951e13af91199\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-core-utils-28.0.0-rc01.aar\307b567bf7c6de0e083951e13af91199\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-28.0.0-rc01.aar\804cad872a1c4a23cec0eae087a21723\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-28.0.0-rc01.aar\804cad872a1c4a23cec0eae087a21723\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\transition-28.0.0-rc01.aar\8695d67019231f009221c6ea278b3f52\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:transition:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\transition-28.0.0-rc01.aar\8695d67019231f009221c6ea278b3f52\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\loader-28.0.0-rc01.aar\64a121e0880e07d9cc35f42c84480c83\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:loader:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\loader-28.0.0-rc01.aar\64a121e0880e07d9cc35f42c84480c83\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewpager-28.0.0-rc01.aar\804ea99372aefb6bd7285a70e1d1e2cc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:viewpager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewpager-28.0.0-rc01.aar\804ea99372aefb6bd7285a70e1d1e2cc\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-28.0.0-rc01.aar\20b1d8a7250d63120da39655b9794842\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:coordinatorlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-28.0.0-rc01.aar\20b1d8a7250d63120da39655b9794842\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\drawerlayout-28.0.0-rc01.aar\d9ac6e456cb853145c03c4d18c14da98\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:drawerlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\drawerlayout-28.0.0-rc01.aar\d9ac6e456cb853145c03c4d18c14da98\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-28.0.0-rc01.aar\400381822f997ca5dd3575ae49662d12\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:slidingpanelayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-28.0.0-rc01.aar\400381822f997ca5dd3575ae49662d12\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\customview-28.0.0-rc01.aar\0040213818ae75552e499531166f0c02\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:customview:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\customview-28.0.0-rc01.aar\0040213818ae75552e499531166f0c02\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-28.0.0-rc01.aar\29bd967486895acb543ceec06aa503ce\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:swiperefreshlayout:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-28.0.0-rc01.aar\29bd967486895acb543ceec06aa503ce\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-28.0.0-rc01.aar\9063c26686c31a1eeccbb24401ccf3b5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:asynclayoutinflater:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-28.0.0-rc01.aar\9063c26686c31a1eeccbb24401ccf3b5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0-rc01.aar\61225cdeee0db39258fbabd7ff1f6626\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0-rc01.aar\fc5eafbed1f4791aff0002bf5fcba15c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:versionedparcelable:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0-rc01.aar\fc5eafbed1f4791aff0002bf5fcba15c\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cursoradapter-28.0.0-rc01.aar\f9fe0b780d0c1dafc7737df213fe0a3a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cursoradapter:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cursoradapter-28.0.0-rc01.aar\f9fe0b780d0c1dafc7737df213fe0a3a\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cardview-v7-28.0.0-rc01.aar\74d87c0dda8c7e8a31f65fa66c04c275\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:cardview-v7:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\cardview-v7-28.0.0-rc01.aar\74d87c0dda8c7e8a31f65fa66c04c275\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\8ee85dd2f36a7cd0055c942688d2adf9\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\8ee85dd2f36a7cd0055c942688d2adf9\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\documentfile-28.0.0-rc01.aar\99a4dbdd6feae68b17dbfb3093562364\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:documentfile:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\documentfile-28.0.0-rc01.aar\99a4dbdd6feae68b17dbfb3093562364\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-28.0.0-rc01.aar\fab4a921d8696e4272f4156a50463e21\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:localbroadcastmanager:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-28.0.0-rc01.aar\fab4a921d8696e4272f4156a50463e21\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\print-28.0.0-rc01.aar\f99d7699d850b857f050e9d072237cb6\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:print:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\print-28.0.0-rc01.aar\f99d7699d850b857f050e9d072237cb6\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.1.aar\4e86640a816fdac61f886f3633f21fe2\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.1.aar\4e86640a816fdac61f886f3633f21fe2\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\interpolator-28.0.0-rc01.aar\dc5fb78e2e9f98653e79ca93db815a75\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:interpolator:28.0.0-rc01] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\interpolator-28.0.0-rc01.aar\dc5fb78e2e9f98653e79ca93db815a75\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\b9d244289e6dd86c843c60aa49d113e2\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\b9d244289e6dd86c843c60aa49d113e2\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\3cfd2ae67bb3360dda1ba7015566f883\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.1] C:\Users\klaudia\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\3cfd2ae67bb3360dda1ba7015566f883\AndroidManifest.xml:20:5-44
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\klaudia\expenses\Expenses.AndroidClient\app\src\main\AndroidManifest.xml

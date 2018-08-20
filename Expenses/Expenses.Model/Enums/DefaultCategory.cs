@@ -15,6 +15,7 @@ namespace Expenses.Model.Enums
         Transport = 4,
         Hygiene = 5,
         Bills = 6,
-        Other = 7
+        Other = 7,
+        Pawełek = 69
     }
 }

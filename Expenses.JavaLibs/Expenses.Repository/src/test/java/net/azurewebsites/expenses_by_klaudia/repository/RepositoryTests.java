@@ -12,7 +12,7 @@ public class RepositoryTests {
 
         try {
             //r.GetUsersRepository().Add("klaudia", "aaaaa", "aaaa");
-            r.GetUsersRepository().
+            //r.GetUsersRepository().
             doesNotThrow = true;
         }
         catch (Exception ex) {

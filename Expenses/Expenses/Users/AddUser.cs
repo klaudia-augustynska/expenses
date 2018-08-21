@@ -103,51 +103,71 @@ namespace Expenses.Api.Users
             var username = "klaudiaaugustynska";
             var password = "malybiednymis123";
             var base64Auth = Convert.ToBase64String(Encoding.Default.GetBytes($"{username}:{password}"));
-            var apiUrl = new Uri($"https://{site}.scm.azurewebsites.net/api");
-            var siteUrl = new Uri($"https://{site}.azurewebsites.net");
-            string JWT;
+            var siteUrl = new Uri(protocol + Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME"));
+            string JWT = null;
 
-            try
+            if (!FunctionRunsLocally)
             {
-                using (var httpClient = new HttpClient())
+                var apiUrl = new Uri($"https://{site}.scm.azurewebsites.net/api");
+
+                try
                 {
-                    log.Info("Request to Kudu API for a token");
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {base64Auth}");
-                    var result = httpClient.GetAsync($"{apiUrl}/functions/admin/token").Result;
-                    JWT = result.Content.ReadAsStringAsync().Result.Trim('"');
+                    using (var httpClient = new HttpClient())
+                    {
+                        log.Info("Request to Kudu API for a token");
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {base64Auth}");
+                        var response = await httpClient.GetAsync($"{apiUrl}/functions/admin/token");
+                        if (response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.OK)
+                        {
+                            JWT = response.Content.ReadAsStringAsync().Result.Trim('"');
+                        }
+                        else
+                        {
+                            throw new Exception($"Status code = {response.StatusCode}, message = {response.RequestMessage}");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Failed to get token at endpoint " + $"{apiUrl}/functions/admin/token", ex);
+                    throw;
+                }
+
+                if (string.IsNullOrEmpty(JWT))
+                {
+                    log.Error("Downloaded JWT token but it's empty");
+                    throw new Exception("Downloaded JWT token but it's empty");
                 }
             }
-            catch (Exception ex)
-            {
-                log.Error("Failed to get token at endpoint " + $"{apiUrl}/functions/admin/token", ex);
-                throw;
-            }
 
-            if (string.IsNullOrEmpty(JWT))
-            {
-                log.Error("Downloaded JWT token but it's empty");
-                throw new Exception("Downloaded JWT token but it's empty");
-            }
-
+            Uri endpoint = siteUrl.Append($"/admin/host/keys/{keyname}");
             try
             {
                 using (var httpClient = new HttpClient())
                 {
                     log.Info("Request to Key management API for a new key");
-                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + JWT);
-                    var result = httpClient.GetAsync($"{siteUrl}/admin/functions/test/keys").Result;
-                    var responseDto = await result.Content.ReadAsDeserializedJson<ResponseForCreatingOrUpdatingTheKey>();
-                    return responseDto.value;
+                    if (!FunctionRunsLocally)
+                        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + JWT);
+                    var response = await httpClient.PostAsync(endpoint, null);
+                    if (response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var responseDto = await response.Content.ReadAsDeserializedJson<ResponseForCreatingOrUpdatingTheKey>();
+                        return responseDto.value;
+                    }
+                    else
+                    {
+                        throw new Exception($"Status code = {response.StatusCode}, message = {response.RequestMessage}");
+                    }
                 }
             } catch (Exception ex)
             {
-                log.Error("Failed to get a new key at endpoint " + $"{siteUrl}/admin/functions/test/keys", ex);
+                log.Error("Failed to get a new key at endpoint " + $"{endpoint}", ex);
                 throw;
             }
         }
 
         private static bool FunctionRunsLocally => 
-            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID"));
+            string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID"));
 
         /// <summary>
         /// http://json2csharp.com/

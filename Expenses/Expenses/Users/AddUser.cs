@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Expenses.Common;
 using Expenses.Model.Dto;
@@ -96,38 +97,57 @@ namespace Expenses.Api.Users
         /// <returns></returns>
         private static async Task<string> RequestANewKeyForUser(string dbUser, TraceWriter log)
         {
-            var hostAddress = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
+            var protocol = FunctionRunsLocally ? "http://" : "https://";
+            var site = Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME");
             var keyname = $"key_{dbUser}";
-            var uri = new Uri("http://" + hostAddress)
-                .Append($"/admin/host/keys/{keyname}");
+            var username = "klaudiaaugustynska";
+            var password = "malybiednymis123";
+            var base64Auth = Convert.ToBase64String(Encoding.Default.GetBytes($"{username}:{password}"));
+            var apiUrl = new Uri($"https://{site}.scm.azurewebsites.net/api");
+            var siteUrl = new Uri($"https://{site}.azurewebsites.net");
+            string JWT;
+
             try
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.PostAsync(uri, content: null);
-                    if (response.StatusCode == HttpStatusCode.Created
-                        || response.StatusCode == HttpStatusCode.OK)
-                    {
-                        return await Task.Run(async () =>
-                        {
-                            var content = await response.Content
-                                .ReadAsDeserializedJson<ResponseForCreatingOrUpdatingTheKey>();
-                            return content.value;
-                        });
-                    }
-                    else
-                    {
-                        throw new Exception($"Service responsible for generating keys responded with StatusCode = {response.StatusCode.ToString()}");
-                    }
+                    log.Info("Request to Kudu API for a token");
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {base64Auth}");
+                    var result = httpClient.GetAsync($"{apiUrl}/functions/admin/token").Result;
+                    JWT = result.Content.ReadAsStringAsync().Result.Trim('"');
                 }
-                throw new Exception("Unspecified error occured while generating new key");
             }
             catch (Exception ex)
             {
-                log.Error($"An error occured while generating a new key for the user {dbUser}", ex);
+                log.Error("Failed to get token at endpoint " + $"{apiUrl}/functions/admin/token", ex);
+                throw;
+            }
+
+            if (string.IsNullOrEmpty(JWT))
+            {
+                log.Error("Downloaded JWT token but it's empty");
+                throw new Exception("Downloaded JWT token but it's empty");
+            }
+
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    log.Info("Request to Key management API for a new key");
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + JWT);
+                    var result = httpClient.GetAsync($"{siteUrl}/admin/functions/test/keys").Result;
+                    var responseDto = await result.Content.ReadAsDeserializedJson<ResponseForCreatingOrUpdatingTheKey>();
+                    return responseDto.value;
+                }
+            } catch (Exception ex)
+            {
+                log.Error("Failed to get a new key at endpoint " + $"{siteUrl}/admin/functions/test/keys", ex);
                 throw;
             }
         }
+
+        private static bool FunctionRunsLocally => 
+            !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID"));
 
         /// <summary>
         /// http://json2csharp.com/

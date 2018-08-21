@@ -100,9 +100,7 @@ namespace Expenses.Api.Users
             var protocol = FunctionRunsLocally ? "http://" : "https://";
             var site = Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME");
             var keyname = $"key_{dbUser}";
-            var username = "klaudiaaugustynska";
-            var password = "malybiednymis123";
-            var base64Auth = Convert.ToBase64String(Encoding.Default.GetBytes($"{username}:{password}"));
+            var base64Auth = Convert.ToBase64String(Encoding.Default.GetBytes($"{Credentials.Username}:{Credentials.Password}"));
             var siteUrl = new Uri(protocol + Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME"));
             string JWT = null;
 

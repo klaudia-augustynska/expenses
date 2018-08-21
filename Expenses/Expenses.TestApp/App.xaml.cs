@@ -37,7 +37,7 @@ namespace Expenses.TestApp
             container.RegisterSingleton<DodajParagonVm>();
             container.RegisterSingleton<MainWindowVm>();
             container.RegisterType<Repository>(
-                new InjectionConstructor("http://localhost:7071/"));
+                new InjectionConstructor("https://expenses-by-klaudia.azurewebsites.net"));
             
             var czyZalogowany = RegistryPomocnik.CzyZalogowany;
             var czySkonfigurowany = RegistryPomocnik.CzySkonfigurowany;

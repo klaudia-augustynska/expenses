@@ -110,13 +110,14 @@ namespace Expenses.Api.Users
             {
                 var apiUrl = new Uri($"https://{site}.scm.azurewebsites.net/api");
 
+                Uri jwtEndpoint = apiUrl.Append("functions", "admin", "token");
                 try
                 {
                     using (var httpClient = new HttpClient())
                     {
                         log.Info("Request to Kudu API for a token");
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {base64Auth}");
-                        var response = await httpClient.GetAsync($"{apiUrl}/functions/admin/token");
+                        var response = await httpClient.GetAsync(jwtEndpoint);
                         if (response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.OK)
                         {
                             JWT = response.Content.ReadAsStringAsync().Result.Trim('"');
@@ -129,7 +130,7 @@ namespace Expenses.Api.Users
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Failed to get token at endpoint " + $"{apiUrl}/functions/admin/token", ex);
+                    log.Error($"Failed to get token at endpoint {jwtEndpoint}", ex);
                     throw;
                 }
 
@@ -161,7 +162,7 @@ namespace Expenses.Api.Users
                 }
             } catch (Exception ex)
             {
-                log.Error("Failed to get a new key at endpoint " + $"{endpoint}", ex);
+                log.Error($"Failed to get a new key at endpoint {endpoint}", ex);
                 throw;
             }
         }

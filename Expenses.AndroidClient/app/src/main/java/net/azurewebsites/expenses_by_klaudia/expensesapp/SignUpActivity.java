@@ -11,9 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.ProgressHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.BindRulesToActivityHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationUseCases;
-import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationResult;
 import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 import net.azurewebsites.expenses_by_klaudia.repository.RepositoryException;
 import net.azurewebsites.expenses_by_klaudia.utils.HashUtil;
@@ -28,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     public static final String EXTRA_LOGIN = "net.azurewebsites.expenses_by_klaudia.expensesapp.LOGIN";
 
-    private AddUserTask mAuthTask = null;
+    private AddUserTask mAddUserTask = null;
 
     // UI references.
     private EditText mLoginView;
@@ -36,31 +37,27 @@ public class SignUpActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     Button mSignUpButton;
-    Button mGoToLogInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        mSignUpButton = findViewById(R.id.sign_up_button);
-        mSignUpButton.setOnClickListener(view -> attemptSignUp());
-
         mLoginView = findViewById(R.id.sign_up_login);
         mPasswordView = findViewById(R.id.sign_up_password);
-
-        ValidationUseCases useCases = new ValidationUseCases(x ->
-                getString(x == null ? R.string.error_other : x.intValue()));
-        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mSignUpButton);
-        b.add(mLoginView, x -> useCases.isLoginValid(x));
-        b.add(mPasswordView, x -> useCases.isPasswordValid(x));
-        b.validateForm();
-
-        mGoToLogInButton = findViewById(R.id.go_to_log_in_button);
-        mGoToLogInButton.setOnClickListener(view -> goToLogIn());
-
         mLoginFormView = findViewById(R.id.sign_up_form_scrollview);
         mProgressView = findViewById(R.id.sign_up_progress);
+        mSignUpButton = findViewById(R.id.sign_up_button);
+        mSignUpButton.setOnClickListener(view -> attemptSignUp());
+        Button goToLogInButton = findViewById(R.id.go_to_log_in_button);
+        goToLogInButton.setOnClickListener(view -> goToLogIn());
+
+        ValidationUseCases useCases = new ValidationUseCases(x ->
+                getString(x == null ? R.string.error_other : x));
+        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mSignUpButton);
+        b.add(mLoginView, useCases::isLoginValid);
+        b.add(mPasswordView, useCases::isPasswordValid);
+        b.validateForm();
     }
 
     private void goToLogIn() {
@@ -74,16 +71,15 @@ public class SignUpActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptSignUp() {
-        if (mAuthTask != null) {
+        if (mAddUserTask != null) {
             return;
         }
 
         String login = mLoginView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        showProgress(true);
-        mAuthTask = new AddUserTask(login, password, this);
-        mAuthTask.execute((Void) null);
+        mAddUserTask = new AddUserTask(login, password);
+        mAddUserTask.execute((Void) null);
     }
 
     private void showProgress(final boolean show) {
@@ -98,16 +94,19 @@ public class SignUpActivity extends AppCompatActivity {
 
         private final String mLogin;
         private final String mPassword;
-        private final Activity mActivity;
         private final Repository mRepository;
 
-        AddUserTask(String login, String password, Activity activity) {
+        AddUserTask(String login, String password) {
             mLogin = login;
             mPassword = password;
-            mActivity = activity;
 
             String repositoryHost = getString(R.string.repository_host);
             mRepository = new Repository(repositoryHost);
+        }
+
+        @Override
+        protected void onPreExecute (){
+            showProgress(true);
         }
 
         @Override
@@ -115,28 +114,22 @@ public class SignUpActivity extends AppCompatActivity {
             String salt = HashUtil.GenerateSalt();
             String hashedPassword = HashUtil.Hash(mPassword, salt);
 
-            HttpURLConnection connection = null;
-            Integer response;
-            try {
-                connection = mRepository.GetUsersRepository().Add(mLogin, hashedPassword, salt);
-                response = connection.getResponseCode();
-            } catch (RepositoryException|IOException ex) {
-                response = null;
-            }
-            finally {
-                if (connection != null)
-                    connection.disconnect();
-            }
-            return response;
+            return HttpResponder.ask(() -> {
+                try {
+                    return mRepository.GetUsersRepository().Add(mLogin, hashedPassword, salt);
+                } catch (RepositoryException ex) {
+                    return null;
+                }
+            });
         }
 
         @Override
         protected void onPostExecute(final Integer success) {
-            mAuthTask = null;
+            mAddUserTask = null;
 
             if (success != null
                     && success == HttpURLConnection.HTTP_CREATED) {
-                Intent intent = new Intent(mActivity, LogInActivity.class);
+                Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
                 intent.putExtra(EXTRA_LOGIN, mLogin);
                 startActivity(intent);
                 finish();
@@ -154,7 +147,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
+            mAddUserTask = null;
             showProgress(false);
         }
     }

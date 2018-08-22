@@ -1,4 +1,4 @@
-package net.azurewebsites.expenses_by_klaudia.expensesapp;
+package net.azurewebsites.expenses_by_klaudia.expensesapp.helpers;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

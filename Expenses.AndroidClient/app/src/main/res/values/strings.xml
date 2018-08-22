@@ -2,15 +2,20 @@
     <string name="app_name">ExpensesApp</string>
     <string name="repository_host">https://expenses-by-klaudia.azurewebsites.net</string>
 
-    <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_up">Sign in or register</string>
+    <string name="action_sign_up">Sign up</string>
     <string name="error_invalid_login">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_credentials">The login or password is incorrect</string>
+    <string name="error_user_already_exists">This login already exists</string>
+    <string name="error_other">An unexpected error has occurred</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_field_too_short">This field should contain at least %d characters</string>
+    <string name="error_login_bad_format">This field can contain only letters, digits and one of the following characters: - ._~</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="action_go_to_log_in">Go to log in</string>
+    <string name="action_go_to_sign_up">Go to sign up</string>
 </resources>

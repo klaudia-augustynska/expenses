@@ -1,14 +1,16 @@
 package net.azurewebsites.expenses_by_klaudia.expensesapp;
 
-import android.app.Activity;
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.ProgressHelper;
@@ -19,12 +21,11 @@ import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 import net.azurewebsites.expenses_by_klaudia.repository.RepositoryException;
 import net.azurewebsites.expenses_by_klaudia.utils.HashUtil;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity extends AccountAuthenticatorActivity {
 
-    private LogInTask mAuthTask = null;
+    private LogInTask mLogInTask = null;
 
     private EditText mLoginView;
     private EditText mPasswordView;
@@ -61,9 +62,20 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void goToSignUp() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
     private void attemptLogIn() {
+        if (mLogInTask != null) {
+            return;
+        }
+
+        String login = mLoginView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        mLogInTask = new LogInActivity.LogInTask(login, password);
+        mLogInTask.execute((Void) null);
     }
 
     private void showProgress(final boolean show) {
@@ -118,12 +130,59 @@ public class LogInActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final HttpResponse<LogInResponseDto> response) {
+            mLogInTask = null;
 
+            if (response != null
+                    && response.getCode() == HttpURLConnection.HTTP_OK
+                    && response.getObject() != null) {
+                LogInResponseDto dto = response.getObject();
+                saveCredentialsToAccountManager(dto);
+                goToHomepage(dto.Key);
+            }
+            else if (response != null
+                    && response.getCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
+                mLoginView.setError(getString(R.string.error_incorrect_credentials));
+                mLoginView.requestFocus();
+            }
+            else {
+                mLogInButton.setError(getString(R.string.error_other));
+            }
+            showProgress(false);
+        }
+
+        private void goToHomepage(String key) {
+            Intent intent = new Intent(LogInActivity.this, HomepageActivity.class);
+            intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            startActivity(intent);
+        }
+
+        private void saveCredentialsToAccountManager(LogInResponseDto dto) {
+            String accountName = mLogin;
+            String accountType = getString(R.string.account_type);
+            String tokenType = getString(R.string.main_token_type);
+            String key = dto.Key;
+
+            AccountManager accountManager = AccountManager.get(LogInActivity.this);
+            boolean accountExists = checkAccountExists(accountManager, accountName, accountType);
+            final Account account = new Account(accountName, accountType);
+            if (!accountExists) {
+                accountManager.addAccountExplicitly(account, "", null);
+            }
+            accountManager.setAuthToken(account, tokenType, key);
+        }
+
+        private boolean checkAccountExists(AccountManager accountManager, String accountName, String accountType) {
+            final Account[] accounts = accountManager.getAccountsByType(accountType);
+            for (Account account : accounts) {
+                if (account.name.equals(accountName))
+                    return true;
+            }
+            return false;
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
+            mLogInTask = null;
             showProgress(false);
         }
     }

@@ -1,6 +1,5 @@
 package net.azurewebsites.expenses_by_klaudia.expensesapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 

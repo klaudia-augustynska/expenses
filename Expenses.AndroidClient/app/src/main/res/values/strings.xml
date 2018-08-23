@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ExpensesApp</string>
     <string name="repository_host">https://expenses-by-klaudia.azurewebsites.net</string>
+    <string name="account_type">net.azurewebsites.expenses_by_klaudia</string>
+    <string name="main_token_type">Manage your expenses</string>
 
     <string name="prompt_login">Login</string>
     <string name="prompt_password">Password</string>

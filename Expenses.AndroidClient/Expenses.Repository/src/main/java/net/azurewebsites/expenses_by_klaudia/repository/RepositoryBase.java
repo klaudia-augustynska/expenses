@@ -37,30 +37,9 @@ public abstract class RepositoryBase {
         }
     }
 
-    protected HttpURLConnection SendJsonPostWithAuthorisation(String uri, Object dto, String key) throws RepositoryException {
-        try {
-            HttpURLConnectionBuilder builder = new HttpURLConnectionBuilder(uri, true);
-            builder.setJsonInput(dto);
-            builder.setAuthorization(key);
-            return builder.build();
-        } catch (BuildHttpURLConnectionException ex) {
-            throw new RepositoryException(ex);
-        }
-    }
-
     protected HttpURLConnection SendGet(String uri) throws RepositoryException {
         try {
             HttpURLConnectionBuilder builder = new HttpURLConnectionBuilder(uri, false);
-            return builder.build();
-        } catch (BuildHttpURLConnectionException ex) {
-            throw new RepositoryException(ex);
-        }
-    }
-
-    protected HttpURLConnection SendGetWithAuthorisation(String uri, String key) throws RepositoryException {
-        try {
-            HttpURLConnectionBuilder builder = new HttpURLConnectionBuilder(uri, false);
-            builder.setAuthorization(key);
             return builder.build();
         } catch (BuildHttpURLConnectionException ex) {
             throw new RepositoryException(ex);

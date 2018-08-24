@@ -19,10 +19,11 @@
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".HomepageActivity" />
 
@@ -38,6 +39,8 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+
+        <activity android:name=".InitialConfigurationActivity"></activity>
     </application>
 
 </manifest>

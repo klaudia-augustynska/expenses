@@ -37,6 +37,17 @@ public class Users extends RepositoryBase {
         return SendJsonPost(uri, dto);
     }
 
+    public HttpURLConnection LogInWithKey(String login, String key) throws RepositoryException {
+        String uri = GetBaseUriBuilder()
+                .appendPath("loginwithkey")
+                .appendPath(login)
+                .appendQueryParameter("code", key)
+                .build()
+                .toString();
+
+        return SendGet(uri);
+    }
+
     public HttpURLConnection GetSalt(String login) throws RepositoryException {
         String uri = GetBaseUriBuilder()
                 .appendPath("salt")
@@ -50,18 +61,20 @@ public class Users extends RepositoryBase {
         String uri = GetBaseUriBuilder()
                 .appendPath("delete")
                 .appendPath(login)
+                .appendQueryParameter("code", key)
                 .build()
                 .toString();
-        return SendGetWithAuthorisation(uri, key);
+        return SendGet(uri);
     }
 
     public HttpURLConnection ConfigureUser(String login, String key, ConfigureUserDto configureUserDto) throws RepositoryException {
         String uri = GetBaseUriBuilder()
                 .appendPath("configure")
                 .appendPath(login)
+                .appendQueryParameter("code", key)
                 .build()
                 .toString();
-        return SendJsonPostWithAuthorisation(uri, configureUserDto, key);
+        return SendJsonPost(uri, configureUserDto);
     }
 
     public HttpURLConnection GetWallets(String login, String householdId, String key) throws RepositoryException {
@@ -69,8 +82,9 @@ public class Users extends RepositoryBase {
                 .appendPath("wallets")
                 .appendPath(householdId)
                 .appendPath(login)
+                .appendQueryParameter("code", key)
                 .build()
                 .toString();
-        return SendGetWithAuthorisation(uri, key);
+        return SendGet(uri);
     }
 }

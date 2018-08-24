@@ -137,7 +137,10 @@ public class LogInActivity extends AccountAuthenticatorActivity {
                     && response.getObject() != null) {
                 LogInResponseDto dto = response.getObject();
                 saveCredentialsToAccountManager(dto);
-                goToHomepage(dto.Key);
+                if (dto.Configured)
+                    goToHomepage(dto.Key);
+                else
+                    goToConfiguration(dto.Key);
             }
             else if (response != null
                     && response.getCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
@@ -148,6 +151,12 @@ public class LogInActivity extends AccountAuthenticatorActivity {
                 mLogInButton.setError(getString(R.string.error_other));
             }
             showProgress(false);
+        }
+
+        private void goToConfiguration(String key) {
+            Intent intent = new Intent(LogInActivity.this, InitialConfigurationActivity.class);
+            intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            startActivity(intent);
         }
 
         private void goToHomepage(String key) {
@@ -168,6 +177,9 @@ public class LogInActivity extends AccountAuthenticatorActivity {
             if (!accountExists) {
                 accountManager.addAccountExplicitly(account, "", null);
             }
+            accountManager.setUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED, dto.Configured ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
+            accountManager.setUserData(account, AppAuthenticator.ACCOUNT_BELONGS_TO_HOUSEHOLD, dto.BelongsToHousehold ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
+            accountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, dto.HouseholdId);
             accountManager.setAuthToken(account, tokenType, key);
         }
 

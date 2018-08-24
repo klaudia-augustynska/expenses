@@ -5,10 +5,18 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
+
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
+import net.azurewebsites.expenses_by_klaudia.model.LogInResponseDto;
+import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +50,6 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         routeToAppropriatePage();
-        finish();
     }
 
     @Override
@@ -75,29 +82,94 @@ public class SplashActivity extends AppCompatActivity {
 
     private void tryToGetKeyFromAccount(Account account) {
         final AccountManagerFuture<Bundle> future = mAccountManager.getAuthToken(account, mAccountTokenType, null, this, null, null);
-        try {
-            Bundle bundle = future.getResult(5, TimeUnit.SECONDS);
-            String key = bundle.getString(AccountManager.KEY_AUTHTOKEN);
-            if (!TextUtils.isEmpty(key)) {
-                routeToHomepage(key);
-                return;
+
+        new Thread(() -> {
+            try {
+                Bundle bundle = future.getResult(5, TimeUnit.SECONDS);
+                String key = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+                if (!TextUtils.isEmpty(key)) {
+                    // will route to homepage or user initial configuration page
+                    checkIfUserWasConfigured(account, key);
+                    return;
+                }
+                runOnUiThread(() -> {
+                    Intent intent = bundle.getParcelable(AccountManager.KEY_INTENT);
+                    startActivity(intent);
+                });
+            } catch (Exception ex) {
+                routeToSignUp();
             }
-            Intent intent = bundle.getParcelable(AccountManager.KEY_INTENT);
-            startActivity(intent);
-        } catch (Exception ex) {
-            routeToSignUp();
+        }).start();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void checkIfUserWasConfigured(Account account, String key) {
+        String accountConfiguredInfo = mAccountManager.getUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED);
+        if (accountConfiguredInfo != null
+                && accountConfiguredInfo == AppAuthenticator.ACCOUNT_VALUE_TRUE) {
+            routeToHomepage(key);
+            return;
         }
+
+        new Thread(() -> {
+//            Repository repository = new Repository(getString(R.string.repository_host));
+//            HttpResponse<LogInResponseDto> response = HttpResponder.askForDtoFromJson(() -> {
+//                try {
+//                    return repository.GetUsersRepository().LogInWithKey(account.name, key);
+//                } catch (Exception ex) {
+//                    return null;
+//                }
+//            },LogInResponseDto.class);
+
+
+//            if (response == null || response.getObject() == null) {
+//                routeToSignUp();
+//                return;
+//            }
+
+//            LogInResponseDto dto = response.getObject();
+            LogInResponseDto dto = new LogInResponseDto();
+            dto.Configured = false;
+            dto.BelongsToHousehold = false;
+            dto.HouseholdId = "household_qwerty";
+
+            mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED, dto.Configured ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
+            mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_BELONGS_TO_HOUSEHOLD, dto.BelongsToHousehold ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
+            mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, dto.HouseholdId);
+
+            if (dto.Configured) {
+                routeToHomepage(key);
+            }
+            else {
+                routeToConfiguration(key);
+            }
+        }).start();
+    }
+
+    private void routeToConfiguration(String key) {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, InitialConfigurationActivity.class);
+            intent.putExtra(EXTRA_KEY, key);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void routeToHomepage(String key) {
-        Intent intent = new Intent(this, HomepageActivity.class);
-        intent.putExtra(EXTRA_KEY, key);
-        startActivity(intent);
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, HomepageActivity.class);
+            intent.putExtra(EXTRA_KEY, key);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void routeToSignUp() {
-        Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
+        runOnUiThread(() -> {
+            Intent intent = new Intent(this, SignUpActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void showAccountPicker(Account[] accounts) {

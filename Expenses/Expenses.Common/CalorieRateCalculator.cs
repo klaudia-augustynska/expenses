@@ -27,7 +27,7 @@ namespace Expenses.Common
         /// Total Metabolic Rate
         /// </summary>
         /// <param name="bmr">Basal Metabolic Rate</param>
-        /// <param name="pal">Phisical Activity Level, in range [1.4-2.4]</param>
+        /// <param name="pal">Physical Activity Level, in range [1.4-2.4]</param>
         /// <returns></returns>
         public static double Tmr(double bmr, double pal)
         {

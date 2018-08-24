@@ -20,4 +20,28 @@
     </string>
     <string name="action_go_to_log_in">Go to log in</string>
     <string name="action_go_to_sign_up">Go to sign up</string>
+    <string name="prompt_weight">Weight (kg)</string>
+    <string name="prompt_height">Height (cm)</string>
+    <string name="spinner_female">female</string>
+    <string name="spinner_male">male</string>
+    <string name="prompt_gender">Gender</string>
+    <string name="prompt_name">Name</string>
+    <string name="action_pick_date">Pick a date</string>
+    <string name="prompt_pal">Physical Activity Level</string>
+    <string name="pal_description">please rate your activity:\n
+    0 - sedentary\n
+    3 - physical work / running 1h a day\n
+    6 - hard physical work / swimming 2h a day\n
+    10 - athlete</string>
+    <string name="prompt_how_much_money">How much money you have in your bank account, cash etc.</string>
+    <string name="prompt_wallet_name">Name, eg. \"Cash EUR\"</string>
+    <string name="prompt_wallet_money">Money</string>
+    <string name="action_add_wallet">Add wallet</string>
+    <string name="action_configure">Configure</string>
+    <string name="error_field_not_decimal">Field should contain a decimal value, eg. 5.90</string>
+    <string name="error_field_not_in_range">The value should be in range %f and %f</string>
+    <string name="error_field_min_value">The minimal value for this field is %f</string>
+    <string name="error_field_max_value">The maximal value for this field is %f</string>
+    <string name="error_invalid_name">The name can contain only letters on the baginning and then also spaces and hypen (-) character</string>
+    <string name="error_invalid_date">The date should match YYYY-MM-DD pattern</string>
 </resources>

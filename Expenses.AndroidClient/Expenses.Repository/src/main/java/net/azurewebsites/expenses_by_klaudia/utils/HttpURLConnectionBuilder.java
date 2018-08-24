@@ -34,10 +34,6 @@ public class HttpURLConnectionBuilder {
         mIsJson = true;
     }
 
-    public void setAuthorization(String key) {
-        mConnection.setRequestProperty("x-functions-key", key);
-    }
-
     public HttpURLConnection build() throws BuildHttpURLConnectionException {
         if (mWasBuilt) {
             return mConnection;

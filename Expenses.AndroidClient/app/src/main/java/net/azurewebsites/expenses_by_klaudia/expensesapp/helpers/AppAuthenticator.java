@@ -18,6 +18,11 @@ public class AppAuthenticator extends AbstractAccountAuthenticator {
 
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
     public final static String ARG_TOKEN_TYPE = "AUTH_TYPE";
+    public final static String ACCOUNT_CONFIGURED = "ACCOUNT_CONFIGURED";
+    public final static String ACCOUNT_VALUE_TRUE = "true";
+    public final static String ACCOUNT_VALUE_FALSE = "false";
+    public final static String ACCOUNT_HOUSEHOLD_ID = "ACCOUNT_HOUSEHOLD_ID";
+    public final static String ACCOUNT_BELONGS_TO_HOUSEHOLD = "ACCOUNT_BELONGS_TO_HOUSEHOLD";
 
     public AppAuthenticator(Context context) {
         super(context);

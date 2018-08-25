@@ -2,18 +2,24 @@ package net.azurewebsites.expenses_by_klaudia.expensesapp.validation;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class BindRulesToActivityHelper {
 
     private HashMap<TextView, Function<String,ValidationResult>> mBindings;
+    private List<Function<Object,ValidationResult>> mCheckAfter;
     private Button mButton;
 
     public BindRulesToActivityHelper(Button button){
         mBindings = new HashMap<>();
+        mCheckAfter = new ArrayList<>();
         mButton = button;
     }
 
@@ -54,7 +60,24 @@ public class BindRulesToActivityHelper {
                     break;
             }
         }
+
+        mButton.setError(null);
+        if (mCheckAfter != null) {
+            for (Function<Object,ValidationResult> func : mCheckAfter) {
+                ValidationResult result = func.apply(null);
+                if (!result.getSuccess() && showErrors) {
+                    success = false;
+                    if (showErrors) {
+                        mButton.setError(result.getErrorMsg());
+                    }
+                    break;
+                }
+            }
+        }
         mButton.setEnabled(success);
     }
 
+    public void addRule(Function<Object,ValidationResult> func) {
+        mCheckAfter.add(func);
+    }
 }

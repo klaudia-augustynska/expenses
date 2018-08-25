@@ -29,6 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private static final String STATE_DIALOG = "state_dialog";
     public static final String EXTRA_KEY = "net.azurewebsites.expenses_by_klaudia.expensesapp.TOKEN";
+    public static String EXTRA_LOGIN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,15 +142,16 @@ public class SplashActivity extends AppCompatActivity {
                 routeToHomepage(key);
             }
             else {
-                routeToConfiguration(key);
+                routeToConfiguration(account.name, key);
             }
         }).start();
     }
 
-    private void routeToConfiguration(String key) {
+    private void routeToConfiguration(String login, String key) {
         runOnUiThread(() -> {
             Intent intent = new Intent(this, InitialConfigurationActivity.class);
             intent.putExtra(EXTRA_KEY, key);
+            intent.putExtra(EXTRA_LOGIN, login);
             startActivity(intent);
             finish();
         });

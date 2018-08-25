@@ -98,7 +98,7 @@ public class ValidationUseCases {
         if (rules == null) {
             rules = new ArrayList<>();
             rules.add(new RequiredRule(mGetStringDelegate));
-            rules.add(new PatternRule(mGetStringDelegate, "^\\d{4}-\\d{1,2}-\\d{1,2}$", R.string.error_invalid_date));
+            rules.add(new PatternRule(mGetStringDelegate, "^\\d{4}-(?:0?\\d|10|11|12)-(?:0?\\d|1\\d|2\\d|3[01])$", R.string.error_invalid_date));
         }
         return performValidation(rules, value);
     }

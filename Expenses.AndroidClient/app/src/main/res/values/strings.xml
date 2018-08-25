@@ -44,4 +44,6 @@
     <string name="error_field_max_value">The maximal value for this field is %f</string>
     <string name="error_invalid_name">The name can contain only letters on the baginning and then also spaces and hypen (-) character</string>
     <string name="error_invalid_date">The date should match YYYY-MM-DD pattern</string>
+    <string name="error_incorrect_date">The value is not a correct date, please check if such a date exists in a calendar...</string>
+    <string name="error_no_wallets">Please add at least one wallet</string>
 </resources>

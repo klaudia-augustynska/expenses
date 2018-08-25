@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ExpensesApp</string>
+    <string name="app_name">Expenses by Klaudia</string>
     <string name="repository_host">https://expenses-by-klaudia.azurewebsites.net</string>
     <string name="account_type">net.azurewebsites.expenses_by_klaudia</string>
     <string name="main_token_type">Manage your expenses</string>
@@ -44,6 +44,22 @@
     <string name="error_field_max_value">The maximal value for this field is %f</string>
     <string name="error_invalid_name">The name can contain only letters on the baginning and then also spaces and hypen (-) character</string>
     <string name="error_invalid_date">The date should match YYYY-MM-DD pattern</string>
-    <string name="error_incorrect_date">The value is not a correct date, please check if such a date exists in a calendar...</string>
+    <string name="error_incorrect_date">The value is not a correct date, please check if such a date exists in a calendar.</string>
     <string name="error_no_wallets">Please add at least one wallet</string>
+    <string name="title_activity_homepage">HomepageActivity</string>
+    <string name="title_section_profile">Profile</string>
+    <string name="title_section_household">Household</string>
+    <string name="title_section_categories">Categories</string>
+    <string name="title_section_summary">Summary</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_logout">Logout</string>
 </resources>

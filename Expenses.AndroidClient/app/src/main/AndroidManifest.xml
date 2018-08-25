@@ -25,7 +25,6 @@
         </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LogInActivity" />
-        <activity android:name=".HomepageActivity" />
 
         <service
             android:name=".helpers.AppAuthenticatorService"
@@ -40,7 +39,11 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <activity android:name=".InitialConfigurationActivity"></activity>
+        <activity android:name=".InitialConfigurationActivity" />
+        <activity
+            android:name=".HomepageActivity"
+            android:label="@string/title_activity_homepage" />
+        <activity android:name=".AddExpensesActivity"></activity>
     </application>
 
 </manifest>

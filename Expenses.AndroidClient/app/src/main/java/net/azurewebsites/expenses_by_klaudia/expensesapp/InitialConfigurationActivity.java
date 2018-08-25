@@ -183,7 +183,7 @@ public class InitialConfigurationActivity extends AppCompatActivity {
     private CURRENCY_CODE getEnumValue(String selectedItem) {
         CURRENCY_CODE[] values = CURRENCY_CODE.values();
         for (CURRENCY_CODE item : values) {
-            if (item.toString() == selectedItem)
+            if (item.toString().equals(selectedItem))
                 return item;
         }
         return CURRENCY_CODE.Default;

@@ -5,18 +5,13 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
-import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
-import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
 import net.azurewebsites.expenses_by_klaudia.model.LogInResponseDto;
-import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 
 import java.util.concurrent.TimeUnit;
 
@@ -107,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
     private void checkIfUserWasConfigured(Account account, String key) {
         String accountConfiguredInfo = mAccountManager.getUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED);
         if (accountConfiguredInfo != null
-                && accountConfiguredInfo == AppAuthenticator.ACCOUNT_VALUE_TRUE) {
+                && accountConfiguredInfo.equals(AppAuthenticator.ACCOUNT_VALUE_TRUE)) {
             routeToHomepage(key);
             return;
         }

@@ -9,11 +9,10 @@
 
         <bitmap
             android:src="@drawable/launch_screen_img"
-            android:gravity="center"
-            android:adjustViewBounds="true"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitXY"/>
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="false"
+            android:scaleType="centerCrop"/>
 
     </item>
 

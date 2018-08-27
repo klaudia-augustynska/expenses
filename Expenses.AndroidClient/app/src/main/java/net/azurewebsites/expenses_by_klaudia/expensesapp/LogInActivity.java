@@ -39,7 +39,7 @@ public class LogInActivity extends AccountAuthenticatorActivity {
         setContentView(R.layout.activity_log_in);
 
         Intent intent = getIntent();
-        String login = intent.getStringExtra(SignUpActivity.EXTRA_LOGIN);
+        String login = intent.getStringExtra(SplashActivity.EXTRA_LOGIN);
         
         mLoginView = findViewById(R.id.log_in_login);
         if (login != null) {
@@ -55,7 +55,7 @@ public class LogInActivity extends AccountAuthenticatorActivity {
 
         ValidationUseCases useCases = new ValidationUseCases(x ->
                 getString(x == null ? R.string.error_other : x));
-        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mLogInButton);
+        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mLogInButton, getApplicationContext());
         b.add(mLoginView, useCases::isLoginValid);
         b.add(mPasswordView, useCases::isPasswordValid);
         b.validateForm();
@@ -138,9 +138,9 @@ public class LogInActivity extends AccountAuthenticatorActivity {
                 LogInResponseDto dto = response.getObject();
                 saveCredentialsToAccountManager(dto);
                 if (dto.Configured)
-                    goToHomepage(dto.Key);
+                    goToHomepage(dto.Key, dto.HouseholdId);
                 else
-                    goToConfiguration(dto.Key);
+                    goToConfiguration(dto.Key, dto.HouseholdId);
             }
             else if (response != null
                     && response.getCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
@@ -153,15 +153,17 @@ public class LogInActivity extends AccountAuthenticatorActivity {
             showProgress(false);
         }
 
-        private void goToConfiguration(String key) {
+        private void goToConfiguration(String key, String householdId) {
             Intent intent = new Intent(LogInActivity.this, InitialConfigurationActivity.class);
             intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            intent.putExtra(SplashActivity.EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
         }
 
-        private void goToHomepage(String key) {
+        private void goToHomepage(String key, String householdId) {
             Intent intent = new Intent(LogInActivity.this, HomepageActivity.class);
             intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            intent.putExtra(SplashActivity.EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
         }
 

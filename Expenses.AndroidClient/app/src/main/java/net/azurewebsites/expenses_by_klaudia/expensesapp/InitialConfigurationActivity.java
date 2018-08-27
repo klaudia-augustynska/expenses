@@ -115,14 +115,14 @@ public class InitialConfigurationActivity extends AppCompatActivity {
         ValidationUseCases useCases = new ValidationUseCases(x ->
                 getString(x == null ? R.string.error_other : x));
 
-        BindRulesToActivityHelper bWallet = new BindRulesToActivityHelper(mBtnAddWallet);
+        BindRulesToActivityHelper bWallet = new BindRulesToActivityHelper(mBtnAddWallet, getApplicationContext());
         bWallet.add(mTxtWalletName, useCases::isWalletNameValid);
         bWallet.add(mTxtWalletMoney, useCases::isMoneyValid);
         bWallet.validateForm();
 
         mBtnConfigure = findViewById(R.id.configuration_configure);
         mBtnConfigure.setOnClickListener((x) -> attemptConfigure());
-        BindRulesToActivityHelper bForm = new BindRulesToActivityHelper(mBtnConfigure);
+        BindRulesToActivityHelper bForm = new BindRulesToActivityHelper(mBtnConfigure, getApplicationContext());
         bForm.add(mTxtWeight, useCases::isWeightValid);
         bForm.add(mTxtHeight, useCases::isHeightValid);
         bForm.add(mTxtName, useCases::isNameValid);

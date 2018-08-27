@@ -26,8 +26,6 @@ import java.net.HttpURLConnection;
  */
 public class SignUpActivity extends AppCompatActivity {
 
-    public static final String EXTRA_LOGIN = "net.azurewebsites.expenses_by_klaudia.expensesapp.LOGIN";
-
     private AddUserTask mAddUserTask = null;
 
     // UI references.
@@ -53,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         ValidationUseCases useCases = new ValidationUseCases(x ->
                 getString(x == null ? R.string.error_other : x));
-        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mSignUpButton);
+        BindRulesToActivityHelper b = new BindRulesToActivityHelper(mSignUpButton, getApplicationContext());
         b.add(mLoginView, useCases::isLoginValid);
         b.add(mPasswordView, useCases::isPasswordValid);
         b.validateForm();
@@ -129,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
             if (success != null
                     && success == HttpURLConnection.HTTP_CREATED) {
                 Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
-                intent.putExtra(EXTRA_LOGIN, mLogin);
+                intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
                 startActivity(intent);
                 finish();
             }

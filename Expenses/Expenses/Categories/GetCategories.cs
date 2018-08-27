@@ -46,34 +46,14 @@ namespace Expenses.Api.Categories
                     );
             }
 
-            var dtoResponse = new GetCategoriesResponseDto();
-            var householdId = entity.HouseholdId;
-            var retrieveHouseholdOperation = TableOperation.Retrieve<Household>(householdId, householdId);
-            var householdResult = await table.ExecuteAsync(retrieveHouseholdOperation);
-            if (householdResult.Result != null)
+            var dtoResponse = await GetCategoriesDtoBuilder.Build(entity, table);
+            if (dtoResponse == null)
             {
-                var household = householdResult.Result as Household;
-                var categories = JsonConvert.DeserializeObject<List<Category>>(household.CategoriesAggregated);
-                dtoResponse.Categories = categories;
-            }
-            else
-            {
-                var retrieveUsersOwnCategories = TableOperation.Retrieve<UserDetails>(householdId, entity.PartitionKey);
-                var userDetailsResult = await table.ExecuteAsync(retrieveUsersOwnCategories);
-                if (userDetailsResult.Result != null)
-                {
-                    var userDetails = userDetailsResult.Result as UserDetails;
-                    var categories = JsonConvert.DeserializeObject<List<Category>>(userDetails.Categories);
-                    dtoResponse.Categories = categories;
-                }
-                else
-                {
-                    log.Info($"GetCategories response: InternalServerError - user does not have categories neither in household nor in user detailed info");
-                    return req.CreateResponse(
-                        statusCode: HttpStatusCode.InternalServerError,
-                        value: "Cannot get categories"
-                        );
-                }
+                log.Info($"GetCategories response: InternalServerError - user does not have categories neither in household nor in user detailed info");
+                return req.CreateResponse(
+                    statusCode: HttpStatusCode.InternalServerError,
+                    value: "Cannot get categories"
+                    );
             }
 
             return req.CreateResponse(HttpStatusCode.OK, dtoResponse);

@@ -11,7 +11,10 @@ import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
 import net.azurewebsites.expenses_by_klaudia.model.LogInResponseDto;
+import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +27,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private static final String STATE_DIALOG = "state_dialog";
     public static final String EXTRA_KEY = "net.azurewebsites.expenses_by_klaudia.expensesapp.TOKEN";
-    public static String EXTRA_LOGIN;
+    public static final String EXTRA_LOGIN = "net.azurewebsites.expenses_by_klaudia.expensesapp.LOGIN";
+    public static final String EXTRA_HOUSEHOLD_ID = "net.azurewebsites.expenses_by_klaudia.expensesapp.HOUSEHOLD_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,59 +107,59 @@ public class SplashActivity extends AppCompatActivity {
         String accountConfiguredInfo = mAccountManager.getUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED);
         if (accountConfiguredInfo != null
                 && accountConfiguredInfo.equals(AppAuthenticator.ACCOUNT_VALUE_TRUE)) {
-            routeToHomepage(key);
+            String householdId = mAccountManager.getUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID);
+            routeToHomepage(account.name, key, householdId);
             return;
         }
 
         new Thread(() -> {
-//            Repository repository = new Repository(getString(R.string.repository_host));
-//            HttpResponse<LogInResponseDto> response = HttpResponder.askForDtoFromJson(() -> {
-//                try {
-//                    return repository.GetUsersRepository().LogInWithKey(account.name, key);
-//                } catch (Exception ex) {
-//                    return null;
-//                }
-//            },LogInResponseDto.class);
+            Repository repository = new Repository(getString(R.string.repository_host));
+            HttpResponse<LogInResponseDto> response = HttpResponder.askForDtoFromJson(() -> {
+                try {
+                    return repository.GetUsersRepository().LogInWithKey(account.name, key);
+                } catch (Exception ex) {
+                    return null;
+                }
+            },LogInResponseDto.class);
 
 
-//            if (response == null || response.getObject() == null) {
-//                routeToSignUp();
-//                return;
-//            }
+            if (response == null || response.getObject() == null) {
+                routeToSignUp();
+                return;
+            }
 
-//            LogInResponseDto dto = response.getObject();
-            LogInResponseDto dto = new LogInResponseDto();
-            dto.Configured = false;
-            dto.BelongsToHousehold = false;
-            dto.HouseholdId = "household_qwerty";
+            LogInResponseDto dto = response.getObject();
 
             mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_CONFIGURED, dto.Configured ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
             mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_BELONGS_TO_HOUSEHOLD, dto.BelongsToHousehold ? AppAuthenticator.ACCOUNT_VALUE_TRUE : AppAuthenticator.ACCOUNT_VALUE_FALSE);
             mAccountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, dto.HouseholdId);
 
             if (dto.Configured) {
-                routeToHomepage(key);
+                routeToHomepage(account.name, key, dto.HouseholdId);
             }
             else {
-                routeToConfiguration(account.name, key);
+                routeToConfiguration(account.name, key, dto.HouseholdId);
             }
         }).start();
     }
 
-    private void routeToConfiguration(String login, String key) {
+    private void routeToConfiguration(String login, String key, String householdId) {
         runOnUiThread(() -> {
             Intent intent = new Intent(this, InitialConfigurationActivity.class);
             intent.putExtra(EXTRA_KEY, key);
             intent.putExtra(EXTRA_LOGIN, login);
+            intent.putExtra(EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
             finish();
         });
     }
 
-    private void routeToHomepage(String key) {
+    private void routeToHomepage(String login, String key, String householdId) {
         runOnUiThread(() -> {
             Intent intent = new Intent(this, HomepageActivity.class);
             intent.putExtra(EXTRA_KEY, key);
+            intent.putExtra(EXTRA_LOGIN, login);
+            intent.putExtra(EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
             finish();
         });

@@ -62,4 +62,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_logout">Logout</string>
+    <string name="prompt_date_of_birth">Date of birth</string>
+    <string name="prompt_date">Date</string>
+    <string name="prompt_category">Category</string>
+    <string name="prompt_wallet">Wallet</string>
+    <string name="add_expenses_choosen_expenses">Please specify choosen expenses from this bill</string>
+    <string name="prompt_comment">Comment (optionally)</string>
+    <string name="action_add_detail">Add detailed info</string>
+    <string name="action_add_bill">Add bill</string>
+    <string name="error_add_expenses_cannot_download_data">Unable to add expenses - cannot download categories and wallets. Please check your network connection or log out and log in.</string>
+    <string name="error_add_expenses_wrong_details">Your detailed list has greater sum than declared sum on the bill</string>
 </resources>

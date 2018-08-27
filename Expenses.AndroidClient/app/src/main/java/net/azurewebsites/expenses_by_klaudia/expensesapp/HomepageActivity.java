@@ -26,14 +26,19 @@ public class HomepageActivity extends AppCompatActivity
      */
     private CharSequence mTitle;
 
+    String mLogin;
+    String mKey;
+    String mHouseholdId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
         Intent intent = getIntent();
-        String key = intent.getStringExtra(SplashActivity.EXTRA_KEY);
-        String login = intent.getStringExtra(SplashActivity.EXTRA_LOGIN);
+        mKey = intent.getStringExtra(SplashActivity.EXTRA_KEY);
+        mLogin = intent.getStringExtra(SplashActivity.EXTRA_LOGIN);
+        mHouseholdId = intent.getStringExtra(SplashActivity.EXTRA_HOUSEHOLD_ID);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -48,9 +53,15 @@ public class HomepageActivity extends AppCompatActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+
+        Intent intent = getIntent();
+        mKey = intent.getStringExtra(SplashActivity.EXTRA_KEY);
+        mLogin = intent.getStringExtra(SplashActivity.EXTRA_LOGIN);
+        mHouseholdId = intent.getStringExtra(SplashActivity.EXTRA_HOUSEHOLD_ID);
+
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, HomepageFragment.newInstance(position))
+                .replace(R.id.container, HomepageFragment.newInstance(position, mLogin, mKey, mHouseholdId))
                 .commit();
     }
 

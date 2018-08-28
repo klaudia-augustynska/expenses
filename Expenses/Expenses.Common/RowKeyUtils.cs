@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 
 namespace Expenses.Common
 {
@@ -28,6 +29,21 @@ namespace Expenses.Common
         {
             TimeSpan timeSpan = dateToInvert - StartDate;
             return DateTime.MaxValue - timeSpan;
+        }
+
+        public static string ConvertInvertedDateToDateFrom(string invertedDate)
+        {
+            var date = DateTime.ParseExact(invertedDate, DateFormat, CultureInfo.InvariantCulture);
+            var dateWithZeroTime = new DateTime(date.Year, date.Month, date.Day);
+            var dateADayEarlier = dateWithZeroTime.AddDays(1);
+            return dateADayEarlier.ToString(DateFormat, CultureInfo.InvariantCulture);
+        }
+
+        public static string ConvertInvertedDateToDateTo(string invertedDate)
+        {
+            var date = DateTime.ParseExact(invertedDate, DateFormat, CultureInfo.InvariantCulture);
+            var dateWithZeroTime = new DateTime(date.Year, date.Month, date.Day);
+            return dateWithZeroTime.ToString(DateFormat, CultureInfo.InvariantCulture);
         }
     }
 }

@@ -227,8 +227,8 @@ public class AddExpensesActivity extends AppCompatActivity {
     public class GetDataTask extends AsyncTask<Void, Void, HttpResponse<GetDataForAddCashFlowResponseDto>> {
         private final Repository mRepository;
 
-        String PREF_ADD_EXPENSES_DATA = "PREF_ADD_EXPENSES_DATA";
-        String PREF_ADD_EXPENSES_DATA_LAST_TIME = "PREF_ADD_EXPENSES_DATA_LAST_TIME";
+        public final static String PREF_ADD_EXPENSES_DATA = "PREF_ADD_EXPENSES_DATA";
+        public final static String PREF_ADD_EXPENSES_DATA_LAST_TIME = "PREF_ADD_EXPENSES_DATA_LAST_TIME";
 
         public GetDataTask() {
             String repositoryHost = getString(R.string.repository_host);

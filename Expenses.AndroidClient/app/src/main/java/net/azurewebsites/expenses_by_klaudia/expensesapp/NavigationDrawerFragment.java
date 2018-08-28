@@ -1,8 +1,11 @@
 package net.azurewebsites.expenses_by_klaudia.expensesapp;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -116,15 +119,18 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    private String mLogin;
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, String login) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+        mLogin = login;
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -249,12 +255,37 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-//        if (item.getItemId() == R.id.action_example) {
-//            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
+        if (item.getItemId() == R.id.action_logout) {
+            clearKeyFromAccountManager();
+            clearCacheFromPreferences();
+            goToLogInPage();
+            getActivity().finish();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goToLogInPage() {
+        Intent intent = new Intent(getActivity(), LogInActivity.class);
+        intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
+        startActivity(intent);
+    }
+
+    private void clearCacheFromPreferences() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sp.edit()
+                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA)
+                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME)
+                .remove(HomepageFragment.PREF_SUMMARY_LAST_TIME)
+                .remove(HomepageFragment.PREF_SUMMARY_DATA)
+                .apply();
+    }
+
+    private void clearKeyFromAccountManager() {
+        AccountManager accountManager = AccountManager.get(getContext());
+        Account account = new Account(mLogin, getString(R.string.account_type));
+        accountManager.removeAccount(account, null, null);
     }
 
     /**

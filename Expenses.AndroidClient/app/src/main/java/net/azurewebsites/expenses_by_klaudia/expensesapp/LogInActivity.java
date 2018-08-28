@@ -156,6 +156,7 @@ public class LogInActivity extends AccountAuthenticatorActivity {
         private void goToConfiguration(String key, String householdId) {
             Intent intent = new Intent(LogInActivity.this, InitialConfigurationActivity.class);
             intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
             intent.putExtra(SplashActivity.EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
         }
@@ -163,6 +164,7 @@ public class LogInActivity extends AccountAuthenticatorActivity {
         private void goToHomepage(String key, String householdId) {
             Intent intent = new Intent(LogInActivity.this, HomepageActivity.class);
             intent.putExtra(SplashActivity.EXTRA_KEY, key);
+            intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
             intent.putExtra(SplashActivity.EXTRA_HOUSEHOLD_ID, householdId);
             startActivity(intent);
         }

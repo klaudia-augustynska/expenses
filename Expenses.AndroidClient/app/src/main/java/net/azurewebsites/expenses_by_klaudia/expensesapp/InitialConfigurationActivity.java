@@ -39,6 +39,7 @@ import java.util.List;
 public class InitialConfigurationActivity extends AppCompatActivity {
     String mKey;
     String mLogin;
+    String mHouseholdId;
 
     EditText mTxtDateView;
     EditText mTxtWeight;
@@ -66,6 +67,7 @@ public class InitialConfigurationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mKey = intent.getStringExtra(SplashActivity.EXTRA_KEY);
         mLogin = intent.getStringExtra(SplashActivity.EXTRA_LOGIN);
+        mHouseholdId = intent.getStringExtra(SplashActivity.EXTRA_HOUSEHOLD_ID);
 
         mGenderSpinner = findViewById(R.id.configuration_gender);
         List<String> genders = new ArrayList<>();
@@ -230,6 +232,7 @@ public class InitialConfigurationActivity extends AppCompatActivity {
                 Intent intent = new Intent(InitialConfigurationActivity.this, HomepageActivity.class);
                 intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
                 intent.putExtra(SplashActivity.EXTRA_KEY, mKey);
+                intent.putExtra(SplashActivity.EXTRA_HOUSEHOLD_ID, mHouseholdId);
                 startActivity(intent);
                 finish();
             }

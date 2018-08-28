@@ -44,8 +44,8 @@ public class HomepageFragment extends Fragment {
     static final String ARG_HOUSEHOLD_ID = "householdId";
     static final String ARG_BILL_ADDED = "billAdded";
     static final String ARG_BILL_CURRENCY = "billAddedCurrency";
-    static final String PREF_SUMMARY_LAST_TIME = "PREF_SUMMARY_LAST_TIME";
-    static final String PREF_SUMMARY_DATA = "PREF_SUMMARY_DATA";
+    public static final String PREF_SUMMARY_LAST_TIME = "PREF_SUMMARY_LAST_TIME";
+    public static final String PREF_SUMMARY_DATA = "PREF_SUMMARY_DATA";
 
     TextView mTxtHouseholdExpenses;
     TextView mTxtHouseholdMoney;

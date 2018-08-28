@@ -15,11 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.DateHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponder;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.ProgressHelper;
@@ -36,22 +36,16 @@ import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 import net.azurewebsites.expenses_by_klaudia.repository.RepositoryException;
 
 import java.net.HttpURLConnection;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
+import static net.azurewebsites.expenses_by_klaudia.expensesapp.HomepageActivity.EXTRA_BILL_ADDED;
+import static net.azurewebsites.expenses_by_klaudia.expensesapp.HomepageActivity.EXTRA_BILL_CURRENCY;
 import static net.azurewebsites.expenses_by_klaudia.expensesapp.SplashActivity.EXTRA_HOUSEHOLD_ID;
 import static net.azurewebsites.expenses_by_klaudia.expensesapp.SplashActivity.EXTRA_KEY;
 import static net.azurewebsites.expenses_by_klaudia.expensesapp.SplashActivity.EXTRA_LOGIN;
@@ -257,18 +251,7 @@ public class AddExpensesActivity extends AppCompatActivity {
             if (lastTimeStr.equals("")) {
                 shouldDownload = true;
             } else {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
-                    Calendar startDate = new GregorianCalendar();
-                    startDate.setTimeInMillis(sdf.parse(lastTimeStr).getTime());
-                    Calendar endDate = Calendar.getInstance();
-                    long totalMillis = endDate.getTimeInMillis() - startDate.getTimeInMillis();
-                    int hours = (int)(totalMillis / 1000) / 3600;
-                    if (hours > 0)
-                        shouldDownload = true;
-                } catch (ParseException ex) {
-                    shouldDownload = true;
-                }
+                shouldDownload = DateHelper.shouldRefresh(lastTimeStr);
             }
 
             if (!shouldDownload) {
@@ -302,9 +285,7 @@ public class AddExpensesActivity extends AppCompatActivity {
                     && response.getObject() != null) {
                 Gson gson = new Gson();
                 String serialized = gson.toJson(response.getObject());
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
-                Date d = new Date();
-                String date = sdf.format(d);
+                String date = DateHelper.getCurrentDate();
                 sp.edit().putString(PREF_ADD_EXPENSES_DATA_LAST_TIME, date)
                         .putString(PREF_ADD_EXPENSES_DATA, serialized)
                         .apply();
@@ -393,6 +374,8 @@ public class AddExpensesActivity extends AppCompatActivity {
                 intent.putExtra(EXTRA_LOGIN, mLogin);
                 intent.putExtra(EXTRA_KEY, mKey);
                 intent.putExtra(EXTRA_HOUSEHOLD_ID, mHouseholdId);
+                intent.putExtra(EXTRA_BILL_ADDED, mDto.Amount.Amount);
+                intent.putExtra(EXTRA_BILL_CURRENCY, mDto.Amount.Currency);
                 startActivity(intent);
                 finish();
             }

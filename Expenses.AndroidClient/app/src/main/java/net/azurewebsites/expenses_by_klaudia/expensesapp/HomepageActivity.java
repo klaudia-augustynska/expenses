@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+
+import net.azurewebsites.expenses_by_klaudia.model.CURRENCY_CODE;
 
 public class HomepageActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -29,6 +32,9 @@ public class HomepageActivity extends AppCompatActivity
     String mLogin;
     String mKey;
     String mHouseholdId;
+
+    public final static String EXTRA_BILL_ADDED = "net.azurewebsites.expenses_by_klaudia.expensesapp.BILL_ADDED";
+    public final static String EXTRA_BILL_CURRENCY = "net.azurewebsites.expenses_by_klaudia.expensesapp.BILL_CURRENCY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +66,16 @@ public class HomepageActivity extends AppCompatActivity
         mHouseholdId = intent.getStringExtra(SplashActivity.EXTRA_HOUSEHOLD_ID);
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, HomepageFragment.newInstance(position, mLogin, mKey, mHouseholdId))
-                .commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        switch (position) {
+            case 0:
+            default:
+                double billAdded = intent.getDoubleExtra(EXTRA_BILL_ADDED, 0);
+                CURRENCY_CODE billAddedCurrency = (CURRENCY_CODE) intent.getSerializableExtra(EXTRA_BILL_CURRENCY);
+                transaction.replace(R.id.container, HomepageFragment.newInstance(position, mLogin, mKey, mHouseholdId, billAdded, billAddedCurrency));
+                break;
+        }
+        transaction.commit();
     }
 
     public void onSectionAttached(int number) {

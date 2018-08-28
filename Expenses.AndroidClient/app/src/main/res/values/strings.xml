@@ -72,4 +72,14 @@
     <string name="action_add_bill">Add bill</string>
     <string name="error_add_expenses_cannot_download_data">Unable to add expenses - cannot download categories and wallets. Please check your network connection or log out and log in.</string>
     <string name="error_add_expenses_wrong_details">Your detailed list has greater sum than declared sum on the bill</string>
+    <string name="action_log_in">Log in</string>
+    <string name="homepage_household_expenses">Household\'s expenses</string>
+    <string name="homepage_household_money">Household\'s money</string>
+    <string name="homepage_user_expenses">User\'s expenses</string>
+    <string name="homepage_user_money">User\'s money</string>
+    <string name="summary_info_no_debts">Congratulations! You have no debts.</string>
+    <string name="summary_info_debt">You have debt of</string>
+    <string name="summary_info_lending">has lent</string>
+    <string name="homepage_user_charges">User\'s charges</string>
+    <string name="summary_info_no_expenses">You don\'t have any expenses yet</string>
 </resources>

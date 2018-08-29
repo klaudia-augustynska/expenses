@@ -68,17 +68,22 @@ public class HomepageActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment fragment;
         switch (position) {
+            case 3:
+                fragment = CategoriesFragment.newInstance(position, mLogin, mKey);
+                break;
             case 1:
-                transaction.replace(R.id.container, ProfileFragment.newInstance(position, mLogin, mKey));
+                fragment = ProfileFragment.newInstance(position, mLogin, mKey);
                 break;
             case 0:
             default:
                 double billAdded = intent.getDoubleExtra(EXTRA_BILL_ADDED, 0);
                 CURRENCY_CODE billAddedCurrency = (CURRENCY_CODE) intent.getSerializableExtra(EXTRA_BILL_CURRENCY);
-                transaction.replace(R.id.container, HomepageFragment.newInstance(position, mLogin, mKey, mHouseholdId, billAdded, billAddedCurrency));
+                fragment = HomepageFragment.newInstance(position, mLogin, mKey, mHouseholdId, billAdded, billAddedCurrency);
                 break;
         }
+        transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
 

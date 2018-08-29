@@ -41,4 +41,10 @@ public class DateHelper {
         currentTime.set(Calendar.DAY_OF_MONTH, lastDay);
         return currentTime.getTime();
     }
+
+    public static String getMinDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+        Date d = new Date(Long.MIN_VALUE);
+        return sdf.format(d);
+    }
 }

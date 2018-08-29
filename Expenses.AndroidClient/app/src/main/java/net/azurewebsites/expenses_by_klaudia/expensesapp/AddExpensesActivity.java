@@ -29,6 +29,8 @@ import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationUs
 import net.azurewebsites.expenses_by_klaudia.model.AddCashFlowDto;
 import net.azurewebsites.expenses_by_klaudia.model.CashFlowDetail;
 import net.azurewebsites.expenses_by_klaudia.model.Category;
+import net.azurewebsites.expenses_by_klaudia.model.GetCashSummaryResponseDto;
+import net.azurewebsites.expenses_by_klaudia.model.GetCategoriesResponseDto;
 import net.azurewebsites.expenses_by_klaudia.model.GetDataForAddCashFlowResponseDto;
 import net.azurewebsites.expenses_by_klaudia.model.Money;
 import net.azurewebsites.expenses_by_klaudia.model.Wallet;
@@ -246,7 +248,7 @@ public class AddExpensesActivity extends AppCompatActivity {
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(AddExpensesActivity.this);
 
-            String lastTimeStr = sp.getString(PREF_ADD_EXPENSES_DATA_LAST_TIME, "DEFAULT");
+            String lastTimeStr = sp.getString(PREF_ADD_EXPENSES_DATA_LAST_TIME, "");
             boolean shouldDownload = false;
             if (lastTimeStr.equals("")) {
                 shouldDownload = true;
@@ -261,7 +263,8 @@ public class AddExpensesActivity extends AppCompatActivity {
                 if (dataSerialized != null) {
                     Gson gson = new Gson();
                     GetDataForAddCashFlowResponseDto dto = gson.fromJson(dataSerialized, GetDataForAddCashFlowResponseDto.class);
-                    return new HttpResponse<>(HttpURLConnection.HTTP_OK, dto);
+                    if (dto != null)
+                        return new HttpResponse<>(HttpURLConnection.HTTP_OK, dto);
                 }
             }
 
@@ -274,20 +277,18 @@ public class AddExpensesActivity extends AppCompatActivity {
                 }
             }, GetDataForAddCashFlowResponseDto.class);
 
-            if (response == null)
-                return null;
-
-//            Gson gson2 = new Gson();
-//            GetDataForAddCashFlowResponseDto data = gson2.fromJson("{\"Categories\":[{\"Guid\":\"f40f27d3-8630-4804-8ed9-8f4353389ee3\",\"DefaultCategory\":1,\"Name\":\"Jedzenie\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"232146cf-be29-4418-9065-f75ea928f6be\",\"DefaultCategory\":2,\"Name\":\"Niezdrowa żywność\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"addea61e-0c4f-48c8-baac-8785e655226f\",\"DefaultCategory\":3,\"Name\":\"Alkohol\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"0a04c0e6-db08-4526-bc06-1ab18443d19f\",\"DefaultCategory\":5,\"Name\":\"Higiena\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"a153a88e-e5d4-4e0b-8bb2-cb88f357751f\",\"DefaultCategory\":6,\"Name\":\"Opłaty\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"c57b3340-f55c-4923-ae9d-49e067e8b9e3\",\"DefaultCategory\":4,\"Name\":\"Transport\",\"Factor\":{\"qwerty\":100.0}},{\"Guid\":\"eca180ef-692d-490e-8b02-ed5f795d6c52\",\"DefaultCategory\":7,\"Name\":\"Różne\",\"Factor\":{\"qwerty\":100.0}}],\"Wallets\":[{\"Guid\":\"75ea0409-ee35-47b8-982e-4b0e64becd6c\",\"Name\":\"cash pln\",\"Money\":{\"Amount\":9999.0,\"Currency\":1,\"ExchangeRate\":null}}]}\n", GetDataForAddCashFlowResponseDto.class);
-//            HttpResponse<GetDataForAddCashFlowResponseDto> response = new HttpResponse<>(HttpURLConnection.HTTP_OK, data);
-
             if (response.getCode() == HttpURLConnection.HTTP_OK
                     && response.getObject() != null) {
                 Gson gson = new Gson();
                 String serialized = gson.toJson(response.getObject());
                 String date = DateHelper.getCurrentDate();
+                GetCategoriesResponseDto categoriesDto = new GetCategoriesResponseDto();
+                categoriesDto.Categories = response.getObject().Categories;
+                String serializedCategories = gson.toJson(categoriesDto);
                 sp.edit().putString(PREF_ADD_EXPENSES_DATA_LAST_TIME, date)
                         .putString(PREF_ADD_EXPENSES_DATA, serialized)
+                        .putString(CategoriesFragment.GetCategoriesTask.PREF_CATEGORIES_DATA_LAST_TIME, date)
+                        .putString(CategoriesFragment.GetCategoriesTask.PREF_CATEGORIES_DATA, serializedCategories)
                         .apply();
             }
 
@@ -330,6 +331,8 @@ public class AddExpensesActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(AddExpensesActivity.this, getString(R.string.error_add_expenses_cannot_download_data), Toast.LENGTH_SHORT).show();
                 mFatalError = true;
+                mbDetail.validateForm(true);
+                bCf.validateForm(true);
             }
             showProgress(false);
         }

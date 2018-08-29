@@ -84,4 +84,8 @@
     <string name="summary_info_no_expenses">You don\'t have any expenses yet</string>
     <string name="action_delete_account">Delete account</string>
     <string name="profile_info_account_deleted">Your accout has been removed.</string>
+    <string name="prompt_add_category">Add a category</string>
+    <string name="action_add_category">Add category</string>
+    <string name="error_categories_cant_download">Can\'t download list of categories.</string>
+    <string name="error_invalid_category_name">The category name should begin with at least 3 word characters.</string>
 </resources>

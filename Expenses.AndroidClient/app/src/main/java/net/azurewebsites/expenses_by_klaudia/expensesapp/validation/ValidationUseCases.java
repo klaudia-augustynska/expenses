@@ -105,6 +105,19 @@ public class ValidationUseCases {
     }
 
 
+    private List<ValidationRule> mCategoryRules;
+    public ValidationResult isCategoryValid(String value) {
+        List<ValidationRule> rules = mCategoryRules;
+        if (rules == null) {
+            rules = new ArrayList<>();
+            rules.add(new RequiredRule(mGetStringDelegate));
+            rules.add(new MinLengthRule(mGetStringDelegate, 3));
+            rules.add(new PatternRule(mGetStringDelegate, "^\\w{3,}", R.string.error_invalid_category_name));
+        }
+        return performValidation(rules, value);
+    }
+
+
     private ValidationResult performValidation(List<ValidationRule> rules, String value) {
         for (ValidationRule rule : rules) {
             if (!rule.validate(value))

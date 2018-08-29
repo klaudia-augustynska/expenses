@@ -26,6 +26,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
+
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
@@ -256,36 +258,12 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_logout) {
-            clearKeyFromAccountManager();
-            clearCacheFromPreferences();
-            goToLogInPage();
+            AppAuthenticator.LogOut(getContext(), mLogin);
             getActivity().finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void goToLogInPage() {
-        Intent intent = new Intent(getActivity(), LogInActivity.class);
-        intent.putExtra(SplashActivity.EXTRA_LOGIN, mLogin);
-        startActivity(intent);
-    }
-
-    private void clearCacheFromPreferences() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
-        sp.edit()
-                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA)
-                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME)
-                .remove(HomepageFragment.PREF_SUMMARY_LAST_TIME)
-                .remove(HomepageFragment.PREF_SUMMARY_DATA)
-                .apply();
-    }
-
-    private void clearKeyFromAccountManager() {
-        AccountManager accountManager = AccountManager.get(getContext());
-        Account account = new Account(mLogin, getString(R.string.account_type));
-        accountManager.removeAccount(account, null, null);
     }
 
     /**

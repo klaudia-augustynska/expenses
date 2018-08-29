@@ -7,10 +7,16 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import net.azurewebsites.expenses_by_klaudia.expensesapp.AddExpensesActivity;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.HomepageFragment;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.LogInActivity;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.R;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.SplashActivity;
 
 public class AppAuthenticator extends AbstractAccountAuthenticator {
 
@@ -90,5 +96,33 @@ public class AppAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] strings) {
         return null;
+    }
+
+    public static void LogOut(Context context, String login) {
+        clearKeyFromAccountManager(context, login);
+        clearCacheFromPreferences(context);
+        goToLogInPage(context, login);
+    }
+
+    private static void goToLogInPage(Context context, String login) {
+        Intent intent = new Intent(context, LogInActivity.class);
+        intent.putExtra(SplashActivity.EXTRA_LOGIN, login);
+        context.startActivity(intent);
+    }
+
+    private static void clearCacheFromPreferences(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit()
+                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA)
+                .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME)
+                .remove(HomepageFragment.PREF_SUMMARY_LAST_TIME)
+                .remove(HomepageFragment.PREF_SUMMARY_DATA)
+                .apply();
+    }
+
+    private static void clearKeyFromAccountManager(Context context, String login) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account account = new Account(login, context.getString(R.string.account_type));
+        accountManager.removeAccount(account, null, null);
     }
 }

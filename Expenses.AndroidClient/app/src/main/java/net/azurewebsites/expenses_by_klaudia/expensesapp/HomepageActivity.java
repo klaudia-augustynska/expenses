@@ -69,6 +69,9 @@ public class HomepageActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         switch (position) {
+            case 1:
+                transaction.replace(R.id.container, ProfileFragment.newInstance(position, mLogin, mKey));
+                break;
             case 0:
             default:
                 double billAdded = intent.getDoubleExtra(EXTRA_BILL_ADDED, 0);

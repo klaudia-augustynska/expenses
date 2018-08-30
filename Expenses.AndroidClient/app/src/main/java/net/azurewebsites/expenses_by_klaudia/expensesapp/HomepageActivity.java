@@ -70,8 +70,14 @@ public class HomepageActivity extends AppCompatActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment fragment;
         switch (position) {
-            case 3:
+            case 4:
                 fragment = CategoriesFragment.newInstance(position, mLogin, mKey);
+                break;
+            case 3:
+                fragment = InvitationsFragment.newInstance(position, mLogin, mKey);
+                break;
+            case 2:
+                fragment = HouseholdFragment.newInstance(position, mLogin, mKey);
                 break;
             case 1:
                 fragment = ProfileFragment.newInstance(position, mLogin, mKey);
@@ -99,6 +105,8 @@ public class HomepageActivity extends AppCompatActivity
                 mTitle = getString(R.string.title_section_household);
                 break;
             case 3:
+                mTitle = getString(R.string.title_section_invitations);
+            case 4:
                 mTitle = getString(R.string.title_section_categories);
                 break;
         }

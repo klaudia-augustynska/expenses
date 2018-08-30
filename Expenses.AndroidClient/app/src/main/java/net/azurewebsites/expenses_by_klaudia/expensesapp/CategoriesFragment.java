@@ -24,19 +24,13 @@ import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.ProgressHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.BindRulesToActivityHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationResult;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationUseCases;
-import net.azurewebsites.expenses_by_klaudia.model.AddCategoryDto;
 import net.azurewebsites.expenses_by_klaudia.model.Category;
 import net.azurewebsites.expenses_by_klaudia.model.GetCategoriesResponseDto;
-import net.azurewebsites.expenses_by_klaudia.model.GetDataForAddCashFlowResponseDto;
-import net.azurewebsites.expenses_by_klaudia.repository.Categories;
 import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 import net.azurewebsites.expenses_by_klaudia.repository.RepositoryException;
 
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
 
 
 /**
@@ -247,9 +241,9 @@ public class CategoriesFragment extends Fragment {
                 GetCategoriesResponseDto dto = new GetCategoriesResponseDto();
                 dto.Categories = mCategoriesValues;
                 String json = gson.toJson(dto);
-                sp.edit().putString(GetCategoriesTask.PREF_CATEGORIES_DATA_LAST_TIME, DateHelper.getMinDate())
+                sp.edit().putString(GetCategoriesTask.PREF_CATEGORIES_DATA_LAST_TIME, DateHelper.getMinDateString())
                         .putString(GetCategoriesTask.PREF_CATEGORIES_DATA, json)
-                        .putString(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME, DateHelper.getMinDate())
+                        .putString(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME, DateHelper.getMinDateString())
                         .apply();
             } else {
                 Toast.makeText(getContext(), getString(R.string.error_other), Toast.LENGTH_SHORT).show();

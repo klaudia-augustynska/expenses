@@ -88,4 +88,14 @@
     <string name="action_add_category">Add category</string>
     <string name="error_categories_cant_download">Can\'t download list of categories.</string>
     <string name="error_invalid_category_name">The category name should begin with at least 3 word characters.</string>
+    <string name="title_section_invitations">Invitations</string>
+    <string name="invitations_invite_to_household">Invite to household</string>
+    <string name="action_invite">Invite this person</string>
+    <string name="household_info_no_members">You don\'t belong to any household yet. Why don\'t you invite someone?</string>
+    <string name="action_go_to_invitations">Go to invitations</string>
+    <string name="action_accept_invitation">Accept invitation</string>
+    <string name="error_cant_download_invitations">An error occured while trying to download new invitations</string>
+    <string name="info_accepted">Successfully accepted the invitation. Now you belong to the household</string>
+    <string name="into_invitation_sent">Successfully sent the invitation. Now please wait for acceptation</string>
+    <string name="action_reject_invitation">Reject invitation</string>
 </resources>

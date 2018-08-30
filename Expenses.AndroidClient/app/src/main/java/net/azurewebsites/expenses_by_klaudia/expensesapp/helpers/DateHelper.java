@@ -42,9 +42,33 @@ public class DateHelper {
         return currentTime.getTime();
     }
 
-    public static String getMinDate() {
+    public static String getMinDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
         Date d = new Date(Long.MIN_VALUE);
         return sdf.format(d);
+    }
+
+    public static Date getMinDate(){
+        return new Date(Long.MIN_VALUE);
+    }
+
+    public static boolean shouldRefreshMessages(String lastTimeStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+            Calendar startDate = new GregorianCalendar();
+            startDate.setTimeInMillis(sdf.parse(lastTimeStr).getTime());
+            Calendar endDate = Calendar.getInstance();
+            long totalMillis = endDate.getTimeInMillis() - startDate.getTimeInMillis();
+            int minutes = (int) (totalMillis / 1000) / 60;
+            return minutes >= 5;
+        } catch (ParseException ex) {
+            return true;
+        }
+    }
+
+    public static Date stringToDate(String date) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+        return sdf.parse(date);
     }
 }

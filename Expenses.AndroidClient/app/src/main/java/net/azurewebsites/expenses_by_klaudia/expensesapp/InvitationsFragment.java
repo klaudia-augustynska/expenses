@@ -7,7 +7,6 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.AppAuthenticator;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.DateHelper;
@@ -27,15 +27,14 @@ import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.HttpResponse;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.helpers.ProgressHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.BindRulesToActivityHelper;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.validation.ValidationUseCases;
-import net.azurewebsites.expenses_by_klaudia.model.GetCategoriesResponseDto;
-import net.azurewebsites.expenses_by_klaudia.model.GetNewMessagesDto;
 import net.azurewebsites.expenses_by_klaudia.model.GetNewMessagesResponseDto;
-import net.azurewebsites.expenses_by_klaudia.model.ListOfGetNewMessagesResponseDto;
 import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 import net.azurewebsites.expenses_by_klaudia.repository.RepositoryException;
 
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +56,7 @@ public class InvitationsFragment extends Fragment {
     EditText mTxtPersonToInviteLogin;
     Button mBtnInvite;
     GetInvitationsTask mGetInvitationsTask;
-    ListOfGetNewMessagesResponseDto mListOfGetNewMessagesResponseDto;
+    List<GetNewMessagesResponseDto> mListOfGetNewMessagesResponseDto;
     AcceptInvitationTask mAcceptInvitationTask;
     InviteToHouseholdTask mInviteToHouseholdTask;
     Button mBtnRejectInvitation;
@@ -109,7 +108,7 @@ public class InvitationsFragment extends Fragment {
         ProgressHelper.showProgress(show, mFormView, mProgressView);
     }
 
-    public class GetInvitationsTask extends AsyncTask<Void, Void, HttpResponse<ListOfGetNewMessagesResponseDto>> {
+    public class GetInvitationsTask extends AsyncTask<Void, Void, HttpResponse<List<GetNewMessagesResponseDto>>> {
 
         private final Repository mRepository;
 
@@ -129,7 +128,7 @@ public class InvitationsFragment extends Fragment {
 
         @Override
         @SuppressWarnings("unchecked")
-        protected HttpResponse<ListOfGetNewMessagesResponseDto> doInBackground(Void... voids) {
+        protected HttpResponse<List<GetNewMessagesResponseDto>> doInBackground(Void... voids) {
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -137,7 +136,7 @@ public class InvitationsFragment extends Fragment {
             boolean shouldRefresh = false;
             Date dateFromToRefresh = new Date();
 
-            if (lastTimeStr.equals("")) {
+            if (TextUtils.isEmpty(lastTimeStr)) {
                 shouldRefresh = true;
                 dateFromToRefresh = DateHelper.getMinDate();
             } else if (DateHelper.shouldRefreshMessages(lastTimeStr)) {
@@ -150,8 +149,9 @@ public class InvitationsFragment extends Fragment {
 
             if (shouldRefresh) {
                 final Date date = dateFromToRefresh;
+                Type listType = new TypeToken<List<GetNewMessagesResponseDto>>(){}.getType();
 
-                return HttpResponder.askForDtoFromJson(() -> {
+                return HttpResponder.askForDtoFromJsonArray(() -> {
                     try {
                         final String login = getArguments().getString(ARG_LOGIN);
                         final String key = getArguments().getString(ARG_KEY);
@@ -159,7 +159,7 @@ public class InvitationsFragment extends Fragment {
                     } catch (RepositoryException ex) {
                         return null;
                     }
-                }, ListOfGetNewMessagesResponseDto.class);
+                }, listType, new ArrayList<GetNewMessagesResponseDto>());
 
 
             }
@@ -167,15 +167,16 @@ public class InvitationsFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(final HttpResponse<ListOfGetNewMessagesResponseDto> success) {
+        protected void onPostExecute(final HttpResponse<List<GetNewMessagesResponseDto>> success) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
 
             String dataSerialized = sp.getString(PREF_INVITATIONS_DATA, "");
-            ListOfGetNewMessagesResponseDto workingList = new ListOfGetNewMessagesResponseDto();
+            List<GetNewMessagesResponseDto> workingList = new ArrayList<>();
 
             if (!TextUtils.isEmpty(dataSerialized)) {
                 Gson gson = new Gson();
-                workingList.addAll(gson.fromJson(dataSerialized, ListOfGetNewMessagesResponseDto.class));
+                Type listType = new TypeToken<List<GetNewMessagesResponseDto>>(){}.getType();
+                workingList.addAll(gson.fromJson(dataSerialized, listType));
             }
 
             if (success != null && success.getCode() == HttpURLConnection.HTTP_OK) {
@@ -190,8 +191,24 @@ public class InvitationsFragment extends Fragment {
 
             mListOfGetNewMessagesResponseDto = workingList;
 
+            saveListToCache();
+
+
+            updateView();
+
 
             showProgress(false);
+        }
+
+        private void saveListToCache() {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+            Gson gson = new Gson();
+            String serialized = gson.toJson(mListOfGetNewMessagesResponseDto);
+            String date = DateHelper.getCurrentDate();
+            sp.edit().putString(PREF_INVITATIONS_DATA_LAST_TIME, date)
+                    .putString(PREF_INVITATIONS_DATA, serialized)
+                    .apply();
         }
 
         private void updateView() {
@@ -211,9 +228,10 @@ public class InvitationsFragment extends Fragment {
             }
         }
 
-        private void rejectInvitation(GetNewMessagesResponseDto top) {
+        public void rejectInvitation(GetNewMessagesResponseDto top) {
             if (mListOfGetNewMessagesResponseDto != null && top != null) {
                 mListOfGetNewMessagesResponseDto.remove(top);
+                saveListToCache();
                 updateView();
             }
 
@@ -223,14 +241,18 @@ public class InvitationsFragment extends Fragment {
             if (mAcceptInvitationTask != null)
                 return;
 
-            Pattern pattern = Pattern.compile("\\/[a-z]+\\/households\\/accept\\/([a-z_]+)\\/([a-z]+)\\/([0-9\\._:]+)");
+            Pattern pattern = Pattern.compile("/[a-z]+/households/accept/([a-z_]+)/([a-z]+)/([0-9._:]+)");
             Matcher matcher = pattern.matcher(content);
-            String from = matcher.group(1);
-            String to = matcher.group(2);
-            String rowkey = matcher.group(3);
+            if (matcher.find()){
+                String from = matcher.group(1);
+                String to = matcher.group(2);
+                String rowkey = matcher.group(3);
 
-            mAcceptInvitationTask = new AcceptInvitationTask(from, to, rowkey);
-            mAcceptInvitationTask.execute();
+                mAcceptInvitationTask = new AcceptInvitationTask(from, to, rowkey);
+                mAcceptInvitationTask.execute();
+            } else {
+                Toast.makeText(getContext(), getString(R.string.error_other), Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -283,12 +305,25 @@ public class InvitationsFragment extends Fragment {
                 Account account = new Account(accountName, accountType);
                 accountManager.setUserData(account, AppAuthenticator.ACCOUNT_BELONGS_TO_HOUSEHOLD, AppAuthenticator.ACCOUNT_VALUE_TRUE);
                 accountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, success.getObject());
+                deleteFromList();
+
                 Toast.makeText(getContext(), getString(R.string.info_accepted), Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getContext(), getString(R.string.error_other), Toast.LENGTH_SHORT).show();
             }
             showProgress(false);
+        }
+
+        private void deleteFromList() {
+            GetNewMessagesResponseDto itemToDelete = null;
+            if (mListOfGetNewMessagesResponseDto != null)
+                for (GetNewMessagesResponseDto item : mListOfGetNewMessagesResponseDto)
+                    if (item.RowKey == mRowKey)
+                        itemToDelete = item;
+            if (itemToDelete != null) {
+                mGetInvitationsTask.rejectInvitation(itemToDelete);
+            }
         }
 
         @Override

@@ -117,6 +117,14 @@
                 android:id="@+id/summary_user_charges_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/summary_button_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_refresh_summary"/>
         </LinearLayout>
 
     </LinearLayout>

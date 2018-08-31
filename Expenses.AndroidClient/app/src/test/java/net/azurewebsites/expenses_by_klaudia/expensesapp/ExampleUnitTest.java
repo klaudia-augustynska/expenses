@@ -2,20 +2,26 @@ package net.azurewebsites.expenses_by_klaudia.expensesapp;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import net.azurewebsites.expenses_by_klaudia.model.DEFAULT_CATEGORY_CODE;
 import net.azurewebsites.expenses_by_klaudia.model.GetDataForAddCashFlowResponseDto;
+import net.azurewebsites.expenses_by_klaudia.model.GetNewMessagesResponseDto;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -56,5 +62,29 @@ public class ExampleUnitTest {
         public UUID Guid;
         public DEFAULT_CATEGORY_CODE DefaultCategory;
         public HashMap<String, Double> Factor;
+    }
+
+    @Test
+    public void deserializeMessageTest(){
+        String json = "[{\"From\":{\"Name\":\"Vbnm\",\"Login\":\"vbnm\"},\"Topic\":\"Vbnm invites you to household\",\"Content\":\"/api/households/accept/vbnm/zxcv/7982.05.03_09:21:56\",\"RowKey\":\"7982.05.03_09:21:56\"}]";
+
+        Type listType = new TypeToken<List<GetNewMessagesResponseDto>>(){}.getType();
+
+
+        Gson gson = new Gson();
+        List<GetNewMessagesResponseDto> dto = gson.fromJson(json, listType);
+
+    }
+
+    @Test
+    public void patternTest(){
+
+        Pattern pattern = Pattern.compile("/[a-z]+/households/accept/([a-z_]+)/([a-z]+)/([0-9._:]+)");
+        String content = "/api/households/accept/vbnm/zxcv/7982.05.03_09:21:56";
+        Matcher matcher = pattern.matcher(content);
+        boolean s1 = matcher.find();
+        String from = matcher.group(1);
+        String to = matcher.group(2);
+        String rowkey = matcher.group(3);
     }
 }

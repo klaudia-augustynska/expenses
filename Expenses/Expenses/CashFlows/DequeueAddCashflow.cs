@@ -247,7 +247,9 @@ namespace Expenses.Api.CashFlows
             {
                 var category = keyValuePair.Key;
                 var value = keyValuePair.Value;
-                var factor = (decimal)category.Factor[login];
+                decimal factor = 0;
+                if (category.Factor.ContainsKey(login))
+                    factor = (decimal)category.Factor[login];
                 amountForThisUser += value * factor / oneHundred;
             }
             return amountForThisUser;

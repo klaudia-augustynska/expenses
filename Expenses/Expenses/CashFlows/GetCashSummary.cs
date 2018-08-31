@@ -94,8 +94,8 @@ namespace Expenses.Api.CashFlows
 
         private static List<Money> GetExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string prefix, TraceWriter log)
         {
-            var dateFromInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateFrom(InvertDateString(dateFrom))}";
-            var dateToInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateTo(InvertDateString(dateTo))}";
+            var dateFromInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateFrom(RowKeyUtils.InvertDateString(dateFrom))}";
+            var dateToInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateTo(RowKeyUtils.InvertDateString(dateTo))}";
             log.Info($"GetCashSummary: getting expenses with prefix: {prefix} from date {dateFromInverted} to date {dateToInverted}");
 
             var list = cashflows
@@ -113,13 +113,6 @@ namespace Expenses.Api.CashFlows
             log.Info($"GetCashSummary: for prefix {prefix} result contains {result.Count} rows.");
 
             return result;
-        }
-
-        private static string InvertDateString(string date)
-        {
-            var dateTimeFormt = "yyyy.MM.dd";
-            DateTime dateTimeFrom = DateTime.ParseExact(date, dateTimeFormt, CultureInfo.InvariantCulture);
-            return RowKeyUtils.GetInvertedDateString(dateTimeFrom);
         }
     }
 }

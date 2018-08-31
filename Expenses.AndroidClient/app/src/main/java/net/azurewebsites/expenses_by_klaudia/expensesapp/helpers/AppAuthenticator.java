@@ -13,7 +13,10 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import net.azurewebsites.expenses_by_klaudia.expensesapp.AddExpensesActivity;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.CategoriesFragment;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.HomepageFragment;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.HouseholdFragment;
+import net.azurewebsites.expenses_by_klaudia.expensesapp.InvitationsFragment;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.LogInActivity;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.R;
 import net.azurewebsites.expenses_by_klaudia.expensesapp.SplashActivity;
@@ -117,6 +120,12 @@ public class AppAuthenticator extends AbstractAccountAuthenticator {
                 .remove(AddExpensesActivity.GetDataTask.PREF_ADD_EXPENSES_DATA_LAST_TIME)
                 .remove(HomepageFragment.PREF_SUMMARY_LAST_TIME)
                 .remove(HomepageFragment.PREF_SUMMARY_DATA)
+                .remove(CategoriesFragment.GetCategoriesTask.PREF_CATEGORIES_DATA)
+                .remove(CategoriesFragment.GetCategoriesTask.PREF_CATEGORIES_DATA_LAST_TIME)
+                .remove(InvitationsFragment.GetInvitationsTask.PREF_INVITATIONS_DATA)
+                .remove(InvitationsFragment.GetInvitationsTask.PREF_INVITATIONS_DATA_LAST_TIME)
+                .remove(HouseholdFragment.GetMembersTask.PREF_MEMBERS_DATA_LAST_TIME)
+                .remove(HouseholdFragment.GetMembersTask.PREF_MEMBERS_DATA)
                 .apply();
     }
 

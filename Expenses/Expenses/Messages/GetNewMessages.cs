@@ -21,10 +21,12 @@ namespace Expenses.Api.Messages
         public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(
                 AuthorizationLevel.Function, 
+                "get",
                 "post", 
-                Route = "messages/getnew/{login}")
+                Route = "messages/getnew/{login}/{dateFrom}")
             ]HttpRequestMessage req, 
             string login,
+            string dateFrom,
             [Table("ExpensesApp", "message_{login}")] IQueryable<Message> messages,
             TraceWriter log)
         {
@@ -35,28 +37,20 @@ namespace Expenses.Api.Messages
                     statusCode: HttpStatusCode.BadRequest,
                     value: "Please pass a login on the query string or in the request body");
             }
-
-            GetNewMessagesDto dto = null;
-            try
+            if (dateFrom == null)
             {
-                dto = await req.Content.ReadAsDeserializedJson<GetNewMessagesDto>();
-                if (dto == null)
-                    throw new Exception("dto is null");
-            }
-            catch
-            {
-                log.Info("GetNewMessages response: BadRequest - cannot read dto object");
+                log.Info("GetNewMessages response: BadRequest - no datefrom specified");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: "Please pass a valid dto object in the request content");
+                    value: "No datefrom specified");
             }
-
-            log.Info($"GetNewMessages: loading list of messages newer than {dto.DateTime}");
 
             try
             {
-                var dateToCompare = RowKeyUtils.GetInvertedDateString(dto.DateTime);
+                var dateToCompare = RowKeyUtils.ConvertInvertedDateToDateFrom(RowKeyUtils.InvertDateTimeString(dateFrom));
+                log.Info("GetNewMessages, date to compare is " + dateToCompare);
                 var list = messages.Where(x => x.RowKey.CompareTo(dateToCompare) < 0).ToList();
+                log.Info($"GetNewMessages, found {list.Count} items");
                 var listDto = list.Select(x => new GetNewMessagesResponseDto()
                 {
                     From = JsonConvert.DeserializeObject<UserShort>(x.From),

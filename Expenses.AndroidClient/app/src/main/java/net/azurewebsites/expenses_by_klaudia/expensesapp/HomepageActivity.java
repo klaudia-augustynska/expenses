@@ -119,4 +119,8 @@ public class HomepageActivity extends AppCompatActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
+
+    public void selectFragment(int number) {
+        mNavigationDrawerFragment.selectItem(number);
+    }
 }

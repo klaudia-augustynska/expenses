@@ -98,4 +98,8 @@
     <string name="info_accepted">Successfully accepted the invitation. Now you belong to the household</string>
     <string name="into_invitation_sent">Successfully sent the invitation. Now please wait for acceptation</string>
     <string name="action_reject_invitation">Reject invitation</string>
+    <string name="error_cant_download_members">An unspecified error occured while trying to download household\'s members</string>
+    <string name="action_refresh_summary">Sync</string>
+    <string name="summary_info_charges">Wait for charges to be recalculated.</string>
+    <string name="summary_info_sync">Please sync to see results</string>
 </resources>

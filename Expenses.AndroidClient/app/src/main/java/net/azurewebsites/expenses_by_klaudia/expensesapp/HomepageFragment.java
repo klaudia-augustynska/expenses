@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class HomepageFragment extends Fragment {
     View mHouseholdExpensesGroup;
     View mHouseholdMoneyGroup;
     View mUserChargesGroup;
+    Button mBtnSync;
 
     public static HomepageFragment newInstance(int sectionNumber, String login, String key, String householdId, double billAdded, CURRENCY_CODE billCurrency) {
         HomepageFragment fragment = new HomepageFragment();
@@ -89,6 +91,9 @@ public class HomepageFragment extends Fragment {
         mHouseholdExpensesGroup = mFragment.findViewById(R.id.summary_household_expenses_group);
         mHouseholdMoneyGroup = mFragment.findViewById(R.id.summary_household_money_group);
         mUserChargesGroup = mFragment.findViewById(R.id.summary_user_charges_group);
+        mBtnSync = mFragment.findViewById(R.id.summary_button_refresh);
+        mBtnSync.setOnClickListener((x) -> attemptSync());
+
 
         double billAdded = getArguments().getDouble(ARG_BILL_ADDED, 0);
         CURRENCY_CODE billAddedCurrency = (CURRENCY_CODE) getArguments().getSerializable(ARG_BILL_CURRENCY);
@@ -122,6 +127,13 @@ public class HomepageFragment extends Fragment {
         return mFragment;
     }
 
+    private void attemptSync() {
+        if (mGetCashSummaryTask != null)
+            return;
+        mGetCashSummaryTask = new GetCashSummaryTask();
+        mGetCashSummaryTask.execute();
+    }
+
     /**
      * @return false if couldn't read from preferences
      */
@@ -142,7 +154,8 @@ public class HomepageFragment extends Fragment {
             Gson gson = new Gson();
             GetCashSummaryResponseDto dto = gson.fromJson(dataSerialized, GetCashSummaryResponseDto.class);
 
-            if (billAdded > 0 && billCurrency != null) {
+            boolean billWasAdded = billAdded > 0 && billCurrency != null;
+            if (billWasAdded) {
                 if (dto.HouseholdExpenses != null)
                     for (Money money : dto.HouseholdExpenses)
                         if (money.Currency.equals(billCurrency))
@@ -161,7 +174,7 @@ public class HomepageFragment extends Fragment {
                             wallet.Money.Amount -= billAdded;
             }
 
-            setDto(dto);
+            setDto(dto, billWasAdded);
             return true;
         }
         return false;
@@ -193,12 +206,14 @@ public class HomepageFragment extends Fragment {
         ProgressHelper.showProgress(show, mFormView, mProgressView);
     }
 
-    private void setDto(GetCashSummaryResponseDto dto) {
+    private void setDto(GetCashSummaryResponseDto dto, boolean wasBillAdded) {
         mTxtHouseholdExpenses.setText(formatMoneyList(dto.HouseholdExpenses));
         mTxtHouseholdMoney.setText(formatMoneyList(dto.HouseholdMoney));
         mTxtUserMoney.setText(formatWalletList(dto.UserWallets));
         mTxtUserExpenses.setText(formatMoneyList(dto.UserExpenses));
         mTxtUserCharges.setText(formatDictOfListOfMoney(dto.UserCharges));
+        if (wasBillAdded)
+            mTxtUserCharges.setText(getString(R.string.summary_info_charges));
     }
 
     private String formatMoneyList(List<Money> list) {
@@ -222,7 +237,7 @@ public class HomepageFragment extends Fragment {
 
     private String formatWalletList(List<Wallet> list) {
         StringBuilder sb = new StringBuilder();
-        if (list != null) {
+        if (list != null && list.size() > 0) {
             int i = 0;
             for (Wallet item : list) {
                 if (i++ > 0)
@@ -233,23 +248,25 @@ public class HomepageFragment extends Fragment {
                 sb.append(' ');
                 sb.append(item.Money.Currency.toString());
             }
+        } else {
+            sb.append(getString(R.string.summary_info_sync));
         }
         return sb.toString();
     }
 
     private String formatDictOfListOfMoney(HashMap<String, List<Money>> dict) {
         StringBuilder sb = new StringBuilder();
-        if (dict == null || dict.size() == 0)
-            sb.append(getString(R.string.summary_info_no_debts));
-        else {
+        boolean wasSth = false;
+        if (dict != null && dict.size() > 0) {
             int i = 0;
             for (Map.Entry<String, List<Money>> keyvalue : dict.entrySet()) {
                 if (i++ > 0)
-                    sb.append("; ");
+                    sb.append("\n");
                 if (keyvalue.getValue().size() > 0
                         && firstOrDefaultWhereAmountGreaterThanZero(keyvalue.getValue()) != null) {
                     sb.append(keyvalue.getKey());
                     sb.append(": ");
+                    wasSth = true;
                 } else {
                     continue;
                 }
@@ -262,6 +279,7 @@ public class HomepageFragment extends Fragment {
                     if (money.Amount < 0)
                     {
                         sb.append(getString(R.string.summary_info_debt));
+                        sb.append(' ');
                         sb.append(money.Amount * -1);
                         sb.append(' ');
                         sb.append(money.Currency.toString());
@@ -269,6 +287,7 @@ public class HomepageFragment extends Fragment {
                     else
                     {
                         sb.append(getString(R.string.summary_info_lending));
+                        sb.append(' ');
                         sb.append(money.Amount);
                         sb.append(' ');
                         sb.append(money.Currency.toString());
@@ -276,6 +295,8 @@ public class HomepageFragment extends Fragment {
                 }
             }
         }
+        if (!wasSth)
+            sb.append(getString(R.string.summary_info_no_debts));
         return sb.toString();
     }
 
@@ -325,7 +346,7 @@ public class HomepageFragment extends Fragment {
         protected void onPostExecute(final HttpResponse<GetCashSummaryResponseDto> success) {
             if (success != null
                     && success.getCode() == HttpURLConnection.HTTP_OK) {
-                setDto(success.getObject());
+                setDto(success.getObject(), false);
 
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 Gson gson = new Gson();
@@ -338,6 +359,7 @@ public class HomepageFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.error_other), Toast.LENGTH_SHORT).show();
             }
             showProgress(false);
+            mGetCashSummaryTask = null;
         }
 
         @Override

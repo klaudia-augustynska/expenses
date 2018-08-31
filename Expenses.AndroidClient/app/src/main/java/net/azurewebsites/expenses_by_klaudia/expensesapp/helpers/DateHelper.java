@@ -49,7 +49,9 @@ public class DateHelper {
     }
 
     public static Date getMinDate(){
-        return new Date(Long.MIN_VALUE);
+        Calendar currentTime = Calendar.getInstance();
+        currentTime.set(Calendar.YEAR, 1900);
+        return currentTime.getTime();
     }
 
     public static boolean shouldRefreshMessages(String lastTimeStr) {

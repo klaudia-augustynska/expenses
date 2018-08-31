@@ -35,8 +35,17 @@ namespace Expenses.Common
         {
             var date = DateTime.ParseExact(invertedDate, DateFormat, CultureInfo.InvariantCulture);
             var dateWithZeroTime = new DateTime(date.Year, date.Month, date.Day);
-            var dateADayEarlier = dateWithZeroTime.AddDays(1);
-            return dateADayEarlier.ToString(DateFormat, CultureInfo.InvariantCulture);
+            DateTime resultDate;
+            if (Math.Abs((DateTime.MaxValue - dateWithZeroTime).Days) >= 1)
+            {
+                var dateADayEarlier = dateWithZeroTime.AddDays(1);
+                resultDate = dateADayEarlier;
+            }
+            else
+            {
+                resultDate = dateWithZeroTime;
+            }
+            return resultDate.ToString(DateFormat, CultureInfo.InvariantCulture);
         }
 
         public static string ConvertInvertedDateToDateTo(string invertedDate)
@@ -44,6 +53,20 @@ namespace Expenses.Common
             var date = DateTime.ParseExact(invertedDate, DateFormat, CultureInfo.InvariantCulture);
             var dateWithZeroTime = new DateTime(date.Year, date.Month, date.Day);
             return dateWithZeroTime.ToString(DateFormat, CultureInfo.InvariantCulture);
+        }
+
+        public static string InvertDateString(string date)
+        {
+            var dateTimeFormt = "yyyy.MM.dd";
+            DateTime dateTimeFrom = DateTime.ParseExact(date, dateTimeFormt, CultureInfo.InvariantCulture);
+            return RowKeyUtils.GetInvertedDateString(dateTimeFrom);
+        }
+
+        public static string InvertDateTimeString(string dateTime)
+        {
+            var dateTimeFormt = DateFormat;
+            DateTime dateTimeFrom = DateTime.ParseExact(dateTime, dateTimeFormt, CultureInfo.InvariantCulture);
+            return RowKeyUtils.GetInvertedDateString(dateTimeFrom);
         }
     }
 }

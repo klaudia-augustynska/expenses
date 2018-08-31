@@ -35,6 +35,7 @@ namespace Expenses.Api.CashFlows
             AddCashFlowDto dto = null;
             try
             {
+                log.Info($"json dto: " + req.Content);
                 dto = await req.Content.ReadAsDeserializedJson<AddCashFlowDto>();
             }
             catch

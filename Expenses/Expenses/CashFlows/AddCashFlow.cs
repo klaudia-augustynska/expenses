@@ -30,6 +30,7 @@ namespace Expenses.Api.CashFlows
             [Table("ExpensesApp")]ICollector<Cashflow> outTable,
             [Table("ExpensesApp", "user_{login}", "user_{login}")] UserLogInData user,
             [Queue("expenses-addcashflow")] CloudQueue queue,
+            [Table("ExpensesApp")] CloudTable table,
             TraceWriter log)
         {
             AddCashFlowDto dto = null;
@@ -118,11 +119,36 @@ namespace Expenses.Api.CashFlows
                 UserBelongsToGroup = user.BelongsToGroup,
                 Login = login
             };
-            var message = JsonConvert.SerializeObject(addMessageDto);
-            await queue.AddMessageAsync(new CloudQueueMessage(message));
-            log.Info($"Enqueued message {message}");
+
+            if (user.BelongsToGroup)
+            {
+                var message = JsonConvert.SerializeObject(addMessageDto);
+                await queue.AddMessageAsync(new CloudQueueMessage(message));
+                log.Info($"Enqueued message {message}");
+            }
+            else
+            {
+                log.Info("User does not belong to a group. Only his wallet will be updated");
+                await UpdateUsersWallet(addMessageDto, table, log);
+            }
 
             return req.CreateResponse(HttpStatusCode.OK);
+        }
+
+        private static async Task UpdateUsersWallet(AddMessageToAddCashflowQueueDto dto, CloudTable table, TraceWriter log)
+        {
+            var retrievePersonWhoPay = TableOperation.Retrieve<UserDetails>(dto.HouseholdPk, $"user_{dto.Login}");
+            var operationResult = table.Execute(retrievePersonWhoPay);
+            if (operationResult.Result != null && operationResult.Result is UserDetails)
+            {
+                var personWhoPay = operationResult.Result as UserDetails;
+
+                log.Info($"DequeueAddCashflow - user who pay retreived. Wallets: {JsonConvert.SerializeObject(personWhoPay.Wallets)}");
+                DequeueAddCashflow.UpdateWallets(personWhoPay, dto, log);
+                var updateOperation = TableOperation.Replace(personWhoPay);
+                await table.ExecuteAsync(updateOperation);
+                log.Info($"DequeueAddCashflow - updated wallets of person who pay. Wallets: {JsonConvert.SerializeObject(personWhoPay.Wallets)}");
+            }
         }
     }
 }

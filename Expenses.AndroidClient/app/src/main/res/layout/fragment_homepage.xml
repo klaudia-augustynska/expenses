@@ -23,17 +23,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/summary_household_hello"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:layout_marginBottom="@dimen/field_margin_bottom"/>
+
         <LinearLayout
             android:id="@+id/summary_household_expenses_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/field_margin_bottom">
 
             <TextView
                 android:id="@+id/summary_household_expenses_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/homepage_household_expenses" />
+                android:text="@string/homepage_household_expenses"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/summary_household_expenses_content"
@@ -46,13 +56,15 @@
             android:id="@+id/summary_household_money_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/field_margin_bottom">
 
             <TextView
                 android:id="@+id/summary_household_money_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/homepage_household_money" />
+                android:text="@string/homepage_household_money"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/summary_household_money_content"
@@ -67,13 +79,15 @@
             android:id="@+id/summary_user_money_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/field_margin_bottom">
 
             <TextView
                 android:id="@+id/summary_user_money_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/homepage_user_money" />
+                android:text="@string/homepage_user_money"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/summary_user_money_content"
@@ -86,13 +100,15 @@
             android:id="@+id/summary_user_expenses_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/field_margin_bottom">
 
             <TextView
                 android:id="@+id/summary_user_expenses_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/homepage_user_expenses" />
+                android:text="@string/homepage_user_expenses"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/summary_user_expenses_content"
@@ -105,13 +121,15 @@
             android:id="@+id/summary_user_charges_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/field_margin_bottom">
 
             <TextView
                 android:id="@+id/summary_user_charges_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/homepage_user_charges" />
+                android:text="@string/homepage_user_charges"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/summary_user_charges_content"

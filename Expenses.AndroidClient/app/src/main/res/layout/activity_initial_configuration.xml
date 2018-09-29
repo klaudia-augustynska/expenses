@@ -17,6 +17,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
@@ -53,7 +54,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/field_margin_bottom">
 
                 <EditText
                     android:id="@+id/configuration_height"
@@ -94,7 +96,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/field_margin_bottom">
 
                 <EditText
                     android:id="@+id/configuration_date"
@@ -137,7 +140,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/pal_description" />
+                android:text="@string/pal_description"
+                android:layout_marginBottom="5pt"/>
 
             <SeekBar
                 android:id="@+id/configuration_pal"
@@ -145,7 +149,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="10"
-                android:progress="0" />
+                android:progress="0"
+                android:layout_marginBottom="@dimen/field_margin_bottom" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -201,7 +206,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/configuration_list_of_wallets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/field_margin_bottom" />
 
             <Button
                 android:id="@+id/configuration_configure"

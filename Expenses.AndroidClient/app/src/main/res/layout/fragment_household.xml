@@ -17,6 +17,7 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
@@ -37,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/household_info_no_members"
-                android:text="@string/household_info_no_members"/>
+                android:text="@string/household_info_no_members"
+                android:layout_marginBottom="@dimen/field_margin_bottom"/>
 
             <Button
                 android:id="@+id/household_btn_go_to_invitations"

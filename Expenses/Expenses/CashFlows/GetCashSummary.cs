@@ -68,37 +68,38 @@ namespace Expenses.Api.CashFlows
             var responseDto = new GetCashSummaryResponseDto()
             {
                 UserWallets = JsonConvert.DeserializeObject <List<Wallet>>(userDetails.Wallets),
-                UserExpenses = GetUserExpenses(dateFrom, dateTo, cashflows, login, log),
+                UserExpenses = GetUserExpenses(dateFrom, dateTo, cashflows, login, householdId, log),
                 UserCharges = JsonConvert.DeserializeObject<Dictionary<string, List<Money>>>(userDetails.Charges)
             };
             if (household != null)
             {
                 responseDto.HouseholdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
-                responseDto.HouseholdExpenses = GetHouseholdExpenses(dateFrom, dateTo, cashflows, log);
+                responseDto.HouseholdExpenses = GetHouseholdExpenses(dateFrom, dateTo, cashflows, householdId, log);
             }
 
             return req.CreateResponse(HttpStatusCode.OK, responseDto);
         }
 
-        private static List<Money> GetUserExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string login, TraceWriter log)
+        private static List<Money> GetUserExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string login, string pk, TraceWriter log)
         {
             var prefix = $"userCashflow_{login}";
-            return GetExpenses(dateFrom, dateTo, cashflows, prefix, log);
+            return GetExpenses(dateFrom, dateTo, cashflows, prefix, pk, log);
         }
 
-        private static List<Money> GetHouseholdExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, TraceWriter log)
+        private static List<Money> GetHouseholdExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string pk, TraceWriter log)
         {
             var prefix = "householdCashflow";
-            return GetExpenses(dateFrom, dateTo, cashflows, prefix, log);
+            return GetExpenses(dateFrom, dateTo, cashflows, prefix, pk, log);
         }
 
-        private static List<Money> GetExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string prefix, TraceWriter log)
+        static List<Money> GetExpenses(string dateFrom, string dateTo, IQueryable<Cashflow> cashflows, string prefix, string pk, TraceWriter log)
         {
             var dateFromInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateFrom(RowKeyUtils.InvertDateString(dateFrom))}";
             var dateToInverted = $"{prefix}_{RowKeyUtils.ConvertInvertedDateToDateTo(RowKeyUtils.InvertDateString(dateTo))}";
             log.Info($"GetCashSummary: getting expenses with prefix: {prefix} from date {dateFromInverted} to date {dateToInverted}");
 
             var list = cashflows
+                .Where(x => x.PartitionKey.Equals(pk))
                 .Where(x => x.RowKey.CompareTo(dateFromInverted) < 0)
                 .Where(x => x.RowKey.CompareTo(dateToInverted) > 0)
                 .ToList();

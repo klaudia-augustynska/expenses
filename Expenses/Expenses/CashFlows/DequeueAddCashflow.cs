@@ -51,25 +51,6 @@ namespace Expenses.Api.CashFlows
                     log.Info("DequeueAddCashflow - users from the household updated");
                 }
             }
-            else
-            {
-                log.Info("DequeueAddCashflow - user does not belong to a group. Only his wallet will be updated");
-
-                var retrievePersonWhoPay = TableOperation.Retrieve<UserDetails>(dto.HouseholdPk, $"user_{dto.Login}");
-                var operationResult = table.Execute(retrievePersonWhoPay);
-                if (operationResult.Result != null && operationResult.Result is UserDetails)
-                {
-                    var personWhoPay = operationResult.Result as UserDetails;
-
-                    log.Info("DequeueAddCashflow - user who pay retreived");
-                    UpdateWallets(personWhoPay, dto);
-                    var updateOperation = TableOperation.Replace(personWhoPay);
-                    await table.ExecuteAsync(updateOperation);
-                    log.Info("DequeueAddCashflow - updated wallets of person who pay");
-                }
-
-            }
-
 
             log.Info("end of DequeueAddCashflow");
         }
@@ -83,7 +64,9 @@ namespace Expenses.Api.CashFlows
         {
             var moneyList = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
             var money = moneyList.First(x => x.Currency == dto.Amount.Currency);
+            log.Info($"Update Household - money was {JsonConvert.SerializeObject(money)}");
             money.Amount -= dto.Amount.Amount;
+            log.Info($"Update Household - money after update should be {JsonConvert.SerializeObject(money)}");
             household.MoneyAggregated = JsonConvert.SerializeObject(moneyList);
 
             var updateOperation = TableOperation.Replace(household);
@@ -101,12 +84,13 @@ namespace Expenses.Api.CashFlows
             var categories = JsonConvert.DeserializeObject<List<Category>>(household.CategoriesAggregated);
 
             List<UserDetails> userDetailsList = GetUserDetailsList(household.PartitionKey, table, log);
+            log.Info($"User detail list contains users: {userDetailsList.Select(x=>x.Login).Aggregate((x,y)=>x + ", " + y)}");
 
             Dictionary<string, Dictionary<string, decimal>> result = WhoPaysToWho(dto, categories, userDetailsList, log);
-
+            log.Info($"Who pays to who: {JsonConvert.SerializeObject(result)}");
 
             var personWhoPay = userDetailsList.First(x => x.Wallets.Contains(dto.WalletGuid.ToString()));
-            UpdateWallets(personWhoPay, dto);
+            UpdateWallets(personWhoPay, dto, log);
 
             foreach (var userDetails in userDetailsList)
             {
@@ -115,15 +99,23 @@ namespace Expenses.Api.CashFlows
                     var dictWithUpdates = result[userDetails.Login];
                     var chargesList = JsonConvert.DeserializeObject<Dictionary<string, List<Money>>>(userDetails.Charges);
                     bool anyChange = false;
+                    log.Info($"Proceeding update for user {userDetails.Login}, with updates given by: {JsonConvert.SerializeObject(dictWithUpdates)}, using earlier charges value: {JsonConvert.SerializeObject(chargesList)}");
                     foreach (var keyvalue in dictWithUpdates)
                     {
+                        if (chargesList == null)
+                        {
+                            log.Info("ChargesList was null, creating one");
+                            chargesList = new Dictionary<string, List<Money>>();
+                        }
                         if (!chargesList.ContainsKey(keyvalue.Key))
                         {
+                            log.Info($"ChargesList didnt contain the key {keyvalue.Key} before. Creating one");
                             chargesList.Add(keyvalue.Key, new List<Money>());
                         }
                         var listItem = chargesList[keyvalue.Key].FirstOrDefault(x => x.Currency == dto.Amount.Currency);
                         if (listItem == null)
                         {
+                            log.Info($"chargesList[{keyvalue.Key}] didnt contain currency {dto.Amount.Currency}. Adding the currency with amount {keyvalue.Value}");
                             chargesList[keyvalue.Key].Add(new Money()
                             {
                                 Amount = keyvalue.Value,
@@ -132,6 +124,7 @@ namespace Expenses.Api.CashFlows
                         }
                         else
                         {
+                            log.Info($"chargesList[{keyvalue.Key}] did contain currency {dto.Amount.Currency}. Adding {keyvalue.Value} to {listItem.Amount}");
                             listItem.Amount += keyvalue.Value;
                         }
                         anyChange = true;
@@ -139,6 +132,7 @@ namespace Expenses.Api.CashFlows
                     if (anyChange || userDetails == personWhoPay)
                     {
                         userDetails.Charges = JsonConvert.SerializeObject(chargesList);
+                        log.Info($"Updating {userDetails.Login} with charges list {userDetails.Charges}");
                         var operation = TableOperation.Replace(userDetails);
                         tableOperations.Add(operation);
                     }
@@ -147,10 +141,11 @@ namespace Expenses.Api.CashFlows
 
         }
 
-        private static void UpdateWallets(UserDetails personWhoPay, AddMessageToAddCashflowQueueDto dto)
+        internal static void UpdateWallets(UserDetails personWhoPay, AddMessageToAddCashflowQueueDto dto, TraceWriter log)
         {
             var wallets = JsonConvert.DeserializeObject<List<Wallet>>(personWhoPay.Wallets);
             var wallet = wallets.First(x => x.Guid == dto.WalletGuid);
+            log.Info($"Person who pay is {personWhoPay.Login} and the wallet: {wallet.Name} that contain {JsonConvert.SerializeObject(wallet.Money)} will be updated by substracting {dto.Amount.Amount}");
             wallet.Money.Amount -= dto.Amount.Amount;
             personWhoPay.Wallets = JsonConvert.SerializeObject(wallets);
         }

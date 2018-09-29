@@ -36,7 +36,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/field_margin_bottom">
 
                 <EditText
                     android:id="@+id/add_expenses_date"
@@ -68,13 +69,15 @@
                 android:id="@+id/add_expenses_categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/field_margin_bottom" />
 
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7">
+                android:layout_weight=".7"
+                android:layout_marginBottom="@dimen/field_margin_bottom">
 
                 <EditText
                     android:id="@+id/add_expenses_money"
@@ -96,13 +99,15 @@
                 android:id="@+id/add_expenses_wallets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/field_margin_bottom" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_expenses_choosen_expenses" />
+                android:text="@string/add_expenses_choosen_expenses"
+                android:textStyle="bold"/>
 
 
             <Spinner
@@ -129,7 +134,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".7">
+                android:layout_weight=".7"
+                android:layout_marginBottom="@dimen/field_margin_bottom">
 
                 <EditText
                     android:id="@+id/add_expenses_comment"

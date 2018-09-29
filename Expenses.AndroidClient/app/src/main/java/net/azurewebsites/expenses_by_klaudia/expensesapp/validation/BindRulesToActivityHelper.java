@@ -2,6 +2,7 @@ package net.azurewebsites.expenses_by_klaudia.expensesapp.validation;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +78,18 @@ public class BindRulesToActivityHelper {
 
     public void validateForm(boolean showErrors) {
         boolean success = true;
+        boolean allEmpty = true;
+
+        for (TextView key : mBindings.keySet()) {
+            key.setError(null);
+            if (!TextUtils.isEmpty(key.getText())) {
+                allEmpty = false;
+                break;
+            }
+        }
+        if (allEmpty)
+            showErrors = false;
+
         for (TextView key : mBindings.keySet()) {
             ValidationResult result = validateField(key, showErrors);
             if (!result.getSuccess()) {

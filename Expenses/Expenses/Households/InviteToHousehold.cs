@@ -57,13 +57,21 @@ namespace Expenses.Api.Households
             }
             if (receiverEntity == null)
             {
-                log.Info($"InviteToHousehold response: BadRequest - no such user: {receiverEntity}");
+                log.Info($"InviteToHousehold response: BadRequest - no such user: {receiverLogin}");
                 return req.CreateResponse(
                     statusCode: HttpStatusCode.BadRequest,
-                    value: $"User with login {receiverEntity} does not exist"
+                    value: $"User with login {receiverLogin} does not exist"
                     );
             }
-            
+            if (receiverEntity.BelongsToGroup)
+            {
+                log.Info($"InviteToHousehold response: BadRequest - user {receiverLogin} already belongs to a group");
+                return req.CreateResponse(
+                    statusCode: HttpStatusCode.BadRequest,
+                    value: $"User with login {receiverLogin} already belongs to a group"
+                    );
+            }
+
             var retrieveTableOperation = TableOperation.Retrieve<UserDetails>(invitersEntity.HouseholdId, invitersEntity.PartitionKey);
             var retrieveResult = await table.ExecuteAsync(retrieveTableOperation);
             var userDetails = retrieveResult.Result as UserDetails;

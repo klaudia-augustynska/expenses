@@ -155,7 +155,7 @@ namespace Expenses.Api.Households
             }
             catch (Exception ex)
             {
-                log.Error("Cannot add user to a household", ex);
+                log.Error($"Cannot add user to a household. Exception: {ex.ToString()}", ex);
                 return false;
             }
         }

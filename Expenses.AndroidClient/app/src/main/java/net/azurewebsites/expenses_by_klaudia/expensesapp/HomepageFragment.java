@@ -33,6 +33,7 @@ import net.azurewebsites.expenses_by_klaudia.model.Wallet;
 import net.azurewebsites.expenses_by_klaudia.repository.Repository;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,7 @@ public class HomepageFragment extends Fragment {
     public static final String PREF_SUMMARY_LAST_TIME = "PREF_SUMMARY_LAST_TIME";
     public static final String PREF_SUMMARY_DATA = "PREF_SUMMARY_DATA";
 
+    TextView mTxtHelloLogin;
     TextView mTxtHouseholdExpenses;
     TextView mTxtHouseholdMoney;
     TextView mTxtUserMoney;
@@ -81,8 +83,11 @@ public class HomepageFragment extends Fragment {
         // Inflate the layout for this fragment
         mFragment = inflater.inflate(R.layout.fragment_homepage, container, false);
 
+        String login = getArguments().getString(ARG_LOGIN);
         mFormView = mFragment.findViewById(R.id.summary_form);
         mProgressView = mFragment.findViewById(R.id.summary_progress);
+        mTxtHelloLogin = mFragment.findViewById(R.id.summary_household_hello);
+        mTxtHelloLogin.setText(String.format(getString(R.string.summary_hello_login), login));
         mTxtHouseholdExpenses = mFragment.findViewById(R.id.summary_household_expenses_content);
         mTxtHouseholdMoney = mFragment.findViewById(R.id.summary_household_money_content);
         mTxtUserMoney = mFragment.findViewById(R.id.summary_user_money_content);
@@ -97,7 +102,6 @@ public class HomepageFragment extends Fragment {
 
         double billAdded = getArguments().getDouble(ARG_BILL_ADDED, 0);
         CURRENCY_CODE billAddedCurrency = (CURRENCY_CODE) getArguments().getSerializable(ARG_BILL_CURRENCY);
-        String login = getArguments().getString(ARG_LOGIN);
 
         AccountManager accountManager = AccountManager.get(getActivity());
         String accountType = getString(R.string.account_type);
@@ -160,6 +164,13 @@ public class HomepageFragment extends Fragment {
                     for (Money money : dto.HouseholdExpenses)
                         if (money.Currency.equals(billCurrency))
                             money.Amount += billAdded;
+                else {
+                    dto.HouseholdExpenses = new ArrayList<>();
+                    Money m = new Money();
+                    m.Amount = billAdded;
+                    m.Currency = billCurrency;
+                    dto.HouseholdExpenses.add(m);
+                        }
                 if (dto.HouseholdMoney != null)
                     for (Money money : dto.HouseholdMoney)
                         if (money.Currency.equals(billCurrency))
@@ -168,6 +179,13 @@ public class HomepageFragment extends Fragment {
                     for (Money money : dto.UserExpenses)
                         if (money.Currency.equals(billCurrency))
                             money.Amount += billAdded;
+                else {
+                    dto.UserExpenses = new ArrayList<>();
+                    Money m = new Money();
+                    m.Amount = billAdded;
+                    m.Currency = billCurrency;
+                    dto.UserExpenses.add(m);
+                        }
                 if (dto.UserWallets != null)
                     for (Wallet wallet : dto.UserWallets)
                         if (wallet.Money.Currency.equals(billCurrency))
@@ -218,18 +236,17 @@ public class HomepageFragment extends Fragment {
 
     private String formatMoneyList(List<Money> list) {
         StringBuilder sb = new StringBuilder();
-        if (list != null) {
-            if (list.size() == 0)
-                sb.append(getString(R.string.summary_info_no_expenses));
-            else {
-                int i = 0;
-                for (Money item : list) {
-                    if (i++ > 0)
-                        sb.append(", ");
-                    sb.append(item.Amount);
-                    sb.append(' ');
-                    sb.append(item.Currency.toString());
-                }
+        if (list == null || list.size() == 0){
+            sb.append(getString(R.string.summary_info_no_expenses));
+        }
+        else {
+            int i = 0;
+            for (Money item : list) {
+                if (i++ > 0)
+                    sb.append(", ");
+                sb.append(item.Amount);
+                sb.append(' ');
+                sb.append(item.Currency.toString());
             }
         }
         return sb.toString();
@@ -263,7 +280,7 @@ public class HomepageFragment extends Fragment {
                 if (i++ > 0)
                     sb.append("\n");
                 if (keyvalue.getValue().size() > 0
-                        && firstOrDefaultWhereAmountGreaterThanZero(keyvalue.getValue()) != null) {
+                        && firstOrDefaultWhereAmountOtherThanZero(keyvalue.getValue()) != null) {
                     sb.append(keyvalue.getKey());
                     sb.append(": ");
                     wasSth = true;
@@ -300,9 +317,9 @@ public class HomepageFragment extends Fragment {
         return sb.toString();
     }
 
-    private Money firstOrDefaultWhereAmountGreaterThanZero(List<Money> list) {
+    private Money firstOrDefaultWhereAmountOtherThanZero(List<Money> list) {
         for (Money item : list) {
-            if (item.Amount > 0)
+            if (item.Amount != 0)
                 return item;
         }
         return null;

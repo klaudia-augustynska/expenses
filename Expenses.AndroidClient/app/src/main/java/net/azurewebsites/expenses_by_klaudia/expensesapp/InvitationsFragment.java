@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +62,8 @@ public class InvitationsFragment extends Fragment {
     AcceptInvitationTask mAcceptInvitationTask;
     InviteToHouseholdTask mInviteToHouseholdTask;
     Button mBtnRejectInvitation;
+
+    public Consumer<String> notifyHouseholdChanged;
 
     public static InvitationsFragment newInstance(int sectionNumber, String login, String key) {
         InvitationsFragment fragment = new InvitationsFragment();
@@ -304,7 +308,10 @@ public class InvitationsFragment extends Fragment {
                 String accountType = getString(R.string.account_type);
                 Account account = new Account(accountName, accountType);
                 accountManager.setUserData(account, AppAuthenticator.ACCOUNT_BELONGS_TO_HOUSEHOLD, AppAuthenticator.ACCOUNT_VALUE_TRUE);
-                accountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, success.getObject());
+                String newHouseholdId = success.getObject();
+                accountManager.setUserData(account, AppAuthenticator.ACCOUNT_HOUSEHOLD_ID, newHouseholdId);
+                if (notifyHouseholdChanged != null)
+                    notifyHouseholdChanged.accept(newHouseholdId);
                 deleteFromList();
 
                 Toast.makeText(getContext(), getString(R.string.info_accepted), Toast.LENGTH_SHORT).show();

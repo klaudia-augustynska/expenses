@@ -132,25 +132,30 @@ namespace Expenses.Api.Households
                 member.WalletSummary = walletAggregated;
                 member.Tmr = CalorieRateCalculator.Tmr(to.Sex.Value, to.Weight.Value, to.Height.Value, AgeUtil.GetAge(to.DateOfBirth.Value), to.Pal.Value);
                 household.Members = JsonConvert.SerializeObject(members);
+                log.Info($"No problem with editing new member in household. His wallet summary is: {member.WalletSummary} and TMR is {member.Tmr}");
 
                 // wallets
                 var householdMoney = JsonConvert.DeserializeObject<List<Money>>(household.MoneyAggregated);
                 var merged = Aggregation.MergeWallets(householdMoney, userWallets);
                 household.MoneyAggregated = JsonConvert.SerializeObject(merged);
+                log.Info($"No problem with aggregating wallets. BEFORE: household - {household.MoneyAggregated}; new member - {to.Wallets}; AFTER: {household.MoneyAggregated}");
 
                 // categories
                 var householdCategories = JsonConvert.DeserializeObject<List<Category>>(household.CategoriesAggregated);
                 var newUserCategories = JsonConvert.DeserializeObject<List<Category>>(to.Categories);
                 var categoriesMerged = Aggregation.MergeCategories(members, householdCategories, newUserCategories);
                 household.CategoriesAggregated = JsonConvert.SerializeObject(categoriesMerged);
+                log.Info($"No problem with aggregating categories. BEFORE: household - {household.CategoriesAggregated}; new member - {to.Categories}; AFTER: {household.CategoriesAggregated}");
 
                 var updateTableOperation = TableOperation.Replace(household);
                 await table.ExecuteAsync(updateTableOperation);
+                log.Info($"Updated household with id {household.PartitionKey}");
 
                 var userAsHouseholdMember = new UserDetails(to);
                 userAsHouseholdMember.PartitionKey = household.PartitionKey;
                 var insertTableOperation = TableOperation.Insert(userAsHouseholdMember);
                 await table.ExecuteAsync(insertTableOperation);
+                log.Info("Inserted user details as household member's details");
                 return true;
             }
             catch (Exception ex)

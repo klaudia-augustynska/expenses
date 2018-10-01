@@ -74,7 +74,9 @@ public class HomepageActivity extends AppCompatActivity
                 fragment = CategoriesFragment.newInstance(position, mLogin, mKey);
                 break;
             case 3:
-                fragment = InvitationsFragment.newInstance(position, mLogin, mKey);
+                InvitationsFragment invitationsFragment = InvitationsFragment.newInstance(position, mLogin, mKey);
+                invitationsFragment.notifyHouseholdChanged = this::setNewHouseholdId;
+                fragment = invitationsFragment;
                 break;
             case 2:
                 fragment = HouseholdFragment.newInstance(position, mLogin, mKey);
@@ -91,6 +93,10 @@ public class HomepageActivity extends AppCompatActivity
         }
         transaction.replace(R.id.container, fragment);
         transaction.commit();
+    }
+
+    private void setNewHouseholdId(String householdId) {
+        mHouseholdId = householdId;
     }
 
     public void onSectionAttached(int number) {
